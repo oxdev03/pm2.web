@@ -162,11 +162,11 @@ Once pm2.web is installed and running, you can perform the following actions:
 
 I have a lot of ideas for this project, but I don't have the time to implement them all due to my busy schedule. Nor the less the project will be maintained even if it doesn't reach the milestones.
 
-[x] 0 Stars - Active Maintenance/Bug Fixes
-[] 20 Stars - Server Management
-[] 50 Stars - Alert Setup
-[] 100 Stars - Change Database to PostgreSQL for better performance
-[] 150 Stars - Live Monitoring (Websocket)
+- [x] 0 Stars - Active Maintenance/Bug Fixes
+- [ ] 20 Stars - Server Management
+- [ ] 50 Stars - Alert Setup
+- [ ] 100 Stars - Change Database to PostgreSQL for better performance
+- [ ] 150 Stars - Live Monitoring (Websocket)
 
 ## Contributing
 
