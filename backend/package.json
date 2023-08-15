@@ -1,25 +1,35 @@
 {
-  "devDependencies": {
-    "@types/bcrypt": "^5.0.0",
-    "typescript": "^5.1.6"
-  },
-  "name": "backend-ts",
+  "name": "backend",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "description": "Dashboard for PM2",
+  "author": {
+    "name": "oxdev03"
+  },
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/oxdev03/pm2.web"
+  },
+  "bugs": {
+    "url": "https://github.com/oxdev03/pm2.web/issues"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc",
+    "build": "tsc --build --clean && tsc",
     "start": "node dist/index.js",
     "prestart": "tsc --build --clean && tsc"
   },
-  "author": "",
-  "license": "ISC",
-  "description": "",
+  "license": "LGPL-3.0-or-later",
   "dependencies": {
     "bcrypt": "^5.1.0",
     "dotenv": "^16.3.1",
     "mongoose": "^7.4.3",
     "pm2": "^5.3.0",
     "systeminformation": "^5.18.15"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
+    "typescript": "^5.1.6"
   }
 }
