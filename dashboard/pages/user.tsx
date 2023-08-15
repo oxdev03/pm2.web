@@ -67,6 +67,10 @@ const useStyles = createStyles((theme) => ({
   content: {
     padding: 0,
     paddingLeft: rem(60),
+
+    [theme.fn.smallerThan('xs')]: {
+      paddingLeft: rem(10),
+    },
   },
 }));
 
@@ -293,7 +297,7 @@ export default function User({ users, servers }: InferGetServerSidePropsType<typ
       </Head>
       <Dashboard>
         <Grid h={'102%'}>
-          <Grid.Col lg={5} md={12}>
+          <Grid.Col lg={6} md={12}>
             {/* 3/5 2/5 */}
             <Paper shadow="sm" radius="md" p={'sm'} style={{ height: '100%' }}>
               <ScrollArea>
@@ -354,7 +358,7 @@ export default function User({ users, servers }: InferGetServerSidePropsType<typ
               </ScrollArea>
             </Paper>{' '}
           </Grid.Col>
-          <Grid.Col lg={7} md={12}>
+          <Grid.Col lg={6} md={12}>
             <Paper shadow="sm" radius="md" style={{ height: '100%' }} p={'lg'} px={'md'} pb={'sm'}>
               <Flex direction={'column'} h="100%">
                 <Title order={4} style={{ marginBottom: '1rem' }}>
@@ -370,7 +374,18 @@ export default function User({ users, servers }: InferGetServerSidePropsType<typ
                     >
                       {servers.map((item) => (
                         <Accordion.Item value={item._id} key={item._id}>
-                          <Flex align={'center'} direction={'row'} justify={'space-between'}>
+                          <Flex
+                            align={'center'}
+                            direction={'row'}
+                            justify={{
+                              base: 'start',
+                              sm: 'space-between',
+                            }}
+                            wrap={{
+                              base: 'wrap',
+                              sm: 'nowrap',
+                            }}
+                          >
                             <Accordion.Control>
                               <Flex align={'center'} direction={'row'} gap={rem(4)}>
                                 <IconCircleFilled
@@ -397,14 +412,28 @@ export default function User({ users, servers }: InferGetServerSidePropsType<typ
                               variant="filled"
                               radius={'md'}
                               size="sm"
-                              w="24rem"
+                              w={{
+                                sm: '24rem',
+                              }}
+                              pl={{
+                                base: '3rem',
+                                sm: 'unset',
+                              }}
                             />
                           </Flex>
                           <Accordion.Panel p={'0px'}>
                             {item.processes?.map((process) => (
                               <div key={process._id}>
                                 <Box py={'xs'}>
-                                  <Flex align={'center'} direction={'row'} justify={'space-between'}>
+                                  <Flex
+                                    align={'center'}
+                                    direction={'row'}
+                                    justify={'space-between'}
+                                    wrap={{
+                                      base: 'wrap',
+                                      sm: 'nowrap',
+                                    }}
+                                  >
                                     <Flex align={'center'} direction={'row'} gap={rem(4)}>
                                       <IconCircleFilled
                                         size={10}
