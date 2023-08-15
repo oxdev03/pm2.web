@@ -2,7 +2,7 @@ import { signIn, signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
-import { Center, createStyles, Navbar, rem, Stack, Tooltip, UnstyledButton, useMantineColorScheme } from '@mantine/core';
+import { Center, createStyles, getStylesRef, Navbar, rem, Stack, Tooltip, UnstyledButton, useMantineColorScheme } from '@mantine/core';
 import { IconBellCog, IconGauge, IconLayoutDashboard, IconLogout, IconMoonStars, IconServerBolt, IconSettings, IconSun, IconUser } from '@tabler/icons-react';
 
 const useStyles = createStyles((theme) => ({
@@ -17,6 +17,21 @@ const useStyles = createStyles((theme) => ({
 
     '&:hover': {
       backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[0],
+    },
+
+    [theme.fn.smallerThan('xs')]: {
+      width: rem(20),
+      height: rem(20),
+    },
+  },
+
+  icon: {
+    width: rem(24),
+    height: rem(24),
+
+    [theme.fn.smallerThan('xs')]: {
+      width: rem(20),
+      height: rem(20),
     },
   },
 
@@ -40,7 +55,7 @@ function NavbarBtn({ icon: Icon, label, active, onClick }: NavbarBtnProps) {
   return (
     <Tooltip label={label} position="right" transitionProps={{ duration: 0 }}>
       <UnstyledButton onClick={onClick} className={cx(classes.link, { [classes.active]: active })}>
-        <Icon size="1.2rem" stroke={1.5} />
+        <Icon className={classes.icon} stroke={1.5} />
       </UnstyledButton>
     </Tooltip>
   );
@@ -58,7 +73,7 @@ function NavbarLink({ icon: Icon, label, active, href }: NavbarLinkProps) {
   return (
     <Tooltip label={label} position="right" transitionProps={{ duration: 0 }}>
       <Link href={href || ''} className={cx(classes.link, { [classes.active]: active })}>
-        <Icon size="1.2rem" stroke={1.5} />
+        <Icon stroke={1.5} className={classes.icon} />
       </Link>
     </Tooltip>
   );
@@ -83,14 +98,30 @@ export function Nav() {
   const links = navLinks.map((link, index) => <NavbarLink {...link} key={link.label} active={index === active} />);
 
   return (
-    <Navbar width={{ base: 75 }} p="sm">
+    <Navbar width={{ base: 40, xs: 75 }} p="sm">
       <Navbar.Section grow mt={20}>
-        <Stack justify="center" spacing={0}>
+        <Stack
+          justify="center"
+          spacing={0}
+          sx={(theme) => ({
+            [theme.fn.smallerThan('xs')]: {
+              gap: rem(10),
+            },
+          })}
+        >
           {links}
         </Stack>
       </Navbar.Section>
       <Navbar.Section>
-        <Stack justify="center" spacing={0}>
+        <Stack
+          justify="center"
+          spacing={0}
+          sx={(theme) => ({
+            [theme.fn.smallerThan('xs')]: {
+              gap: rem(15),
+            },
+          })}
+        >
           <NavbarBtn icon={dark ? IconSun : IconMoonStars} label="Toggle Theme" onClick={() => toggleColorScheme()} />
           <NavbarBtn icon={IconLogout} label="Logout" onClick={() => signOut()} />
         </Stack>

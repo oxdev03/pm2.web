@@ -46,10 +46,15 @@ export function Head() {
   };
 
   return (
-    <Header height={{ base: 50, md: 60 }}>
+    <Header height={{ base: 40, xs: 60 }}>
       <Flex h={'100%'} justify={'space-between'}>
         <Group h={'100%'}>
-          <Center w={rem(70)}>
+          <Center
+            w={{
+              base: rem(42),
+              xs: rem(70),
+            }}
+          >
             <Image alt="logo" src="/logo.png" width={25} height={25} />
           </Center>
         </Group>
