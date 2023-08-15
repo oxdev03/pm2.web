@@ -23,6 +23,7 @@ import {
   createStyles,
   Divider,
   Flex,
+  Grid,
   Group,
   MultiSelect,
   NativeSelect,
@@ -291,170 +292,174 @@ export default function User({ users, servers }: InferGetServerSidePropsType<typ
         <link rel="icon" type="image/png" href="/logo.png" />
       </Head>
       <Dashboard>
-        <Flex direction={'row'} gap={'lg'} h={'100%'} mah={'100%'}>
-          {/* 3/5 2/5 */}
-          <Paper shadow="sm" radius="md" p={'sm'} style={{ width: '45%' }}>
-            <ScrollArea>
-              <Table miw={600} verticalSpacing="sm">
-                <thead>
-                  <tr>
-                    <th style={{ width: rem(40) }}>
-                      <Checkbox onChange={toggleAll} checked={selection.length === users.length} indeterminate={selection.length > 0 && selection.length !== users.length} transitionDuration={0} />
-                    </th>
-                    <th style={{ fontSize: rem(17) }}>User</th>
-                    <th style={{ fontSize: rem(17) }}>Email</th>
-                    <th style={{ fontSize: rem(17) }}>Permission</th>
-                    <th style={{ width: rem(50) }}></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {users.map((item) => {
-                    const selected = selection.includes(item._id);
-                    return (
-                      <tr key={item._id} className={cx({ [classes.rowSelected]: selected })}>
-                        <td>
-                          <Checkbox checked={selection.includes(item._id)} onChange={() => toggleRow(item._id)} transitionDuration={0} disabled={item.acl.admin || item.acl.owner} />
-                        </td>
-                        <td>
-                          <Group spacing="sm">
-                            <>
-                              {!item.oauth2 && <IconMail />}
-                              {item?.oauth2?.provider == 'github' && <GithubIcon />}
-                              {item.oauth2?.provider == 'google' && <GoogleIcon />}
-                            </>
-                            <Text size="sm" weight={500}>
-                              {item.name}
-                            </Text>
-                          </Group>
-                        </td>
-                        <td>{item.email}</td>
-                        <td>
-                          <NativeSelect
-                            data={['Owner', 'Admin', 'Custom', 'None'].map((x) => {
-                              return { label: x, value: x.toLowerCase(), disabled: x == 'Custom' };
-                            })}
-                            placeholder="Select"
-                            variant="filled"
-                            value={item.acl?.owner ? 'owner' : item.acl?.admin ? 'admin' : item.acl?.servers?.length ? 'custom' : 'none'}
-                            onChange={(e) => updateRole(item._id, e.currentTarget.value)}
-                          />
-                        </td>
-                        <td>
-                          <ActionIcon variant="light" color="red.4" radius="sm" size={'lg'} onClick={() => deleteUser(item._id)}>
-                            <IconTrash size="1.4rem" />
-                          </ActionIcon>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </Table>
-            </ScrollArea>
-          </Paper>
-          <Paper shadow="sm" radius="md" style={{ width: '55%' }} p={'lg'} px={'md'} pb={'sm'}>
-            <Flex direction={'column'} h="100%">
-              <Title order={4} style={{ marginBottom: '1rem' }}>
-                Custom Permissions
-              </Title>
-              <Flex direction={'column'} justify={'space-between'} h="100%">
-                <ScrollArea h={490}>
-                  <Accordion
-                    chevronPosition="left"
-                    classNames={{
-                      content: classes.content,
-                    }}
-                  >
-                    {servers.map((item) => (
-                      <Accordion.Item value={item._id} key={item._id}>
-                        <Flex align={'center'} direction={'row'} justify={'space-between'}>
-                          <Accordion.Control>
-                            <Flex align={'center'} direction={'row'} gap={rem(4)}>
-                              <IconCircleFilled
-                                size={12}
-                                style={{
-                                  color: new Date(item.updatedAt).getTime() > Date.now() - 1000 * 60 * 4 ? '#12B886' : '#FA5252',
-                                  marginTop: '2.5px',
-                                }}
-                              />
-                              {item.name}
-                            </Flex>
-                          </Accordion.Control>
-                          <MultiSelect
-                            classNames={{
-                              value: classes.value,
-                              values: classes.values,
-                            }}
-                            value={getSelectedPerms(item._id)}
-                            onChange={(values) => updatePermsState(item._id, '', values)}
-                            // @ts-ignore
-                            data={permissionData}
-                            itemComponent={SelectItem}
-                            placeholder="Select Permissions"
-                            variant="filled"
-                            radius={'md'}
-                            size="sm"
-                            w="24rem"
-                          />
-                        </Flex>
-                        <Accordion.Panel p={'0px'}>
-                          {item.processes?.map((process) => (
-                            <div key={process._id}>
-                              <Box py={'xs'}>
-                                <Flex align={'center'} direction={'row'} justify={'space-between'}>
-                                  <Flex align={'center'} direction={'row'} gap={rem(4)}>
-                                    <IconCircleFilled
-                                      size={10}
-                                      style={{
-                                        color: process.status === 'online' ? '#12B886' : process.status === 'stopped' ? '#FCC419' : '#FA5252',
-                                        marginTop: '3px',
+        <Grid h={'102%'}>
+          <Grid.Col lg={5} md={12}>
+            {/* 3/5 2/5 */}
+            <Paper shadow="sm" radius="md" p={'sm'} style={{ height: '100%' }}>
+              <ScrollArea>
+                <Table miw={600} verticalSpacing="sm">
+                  <thead>
+                    <tr>
+                      <th style={{ width: rem(40) }}>
+                        <Checkbox onChange={toggleAll} checked={selection.length === users.length} indeterminate={selection.length > 0 && selection.length !== users.length} transitionDuration={0} />
+                      </th>
+                      <th style={{ fontSize: rem(17) }}>User</th>
+                      <th style={{ fontSize: rem(17) }}>Email</th>
+                      <th style={{ fontSize: rem(17) }}>Permission</th>
+                      <th style={{ width: rem(50) }}></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {users.map((item) => {
+                      const selected = selection.includes(item._id);
+                      return (
+                        <tr key={item._id} className={cx({ [classes.rowSelected]: selected })}>
+                          <td>
+                            <Checkbox checked={selection.includes(item._id)} onChange={() => toggleRow(item._id)} transitionDuration={0} disabled={item.acl.admin || item.acl.owner} />
+                          </td>
+                          <td>
+                            <Group spacing="sm">
+                              <>
+                                {!item.oauth2 && <IconMail />}
+                                {item?.oauth2?.provider == 'github' && <GithubIcon />}
+                                {item.oauth2?.provider == 'google' && <GoogleIcon />}
+                              </>
+                              <Text size="sm" weight={500}>
+                                {item.name}
+                              </Text>
+                            </Group>
+                          </td>
+                          <td>{item.email}</td>
+                          <td>
+                            <NativeSelect
+                              data={['Owner', 'Admin', 'Custom', 'None'].map((x) => {
+                                return { label: x, value: x.toLowerCase(), disabled: x == 'Custom' };
+                              })}
+                              placeholder="Select"
+                              variant="filled"
+                              value={item.acl?.owner ? 'owner' : item.acl?.admin ? 'admin' : item.acl?.servers?.length ? 'custom' : 'none'}
+                              onChange={(e) => updateRole(item._id, e.currentTarget.value)}
+                            />
+                          </td>
+                          <td>
+                            <ActionIcon variant="light" color="red.4" radius="sm" size={'lg'} onClick={() => deleteUser(item._id)}>
+                              <IconTrash size="1.4rem" />
+                            </ActionIcon>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </Table>
+              </ScrollArea>
+            </Paper>{' '}
+          </Grid.Col>
+          <Grid.Col lg={7} md={12}>
+            <Paper shadow="sm" radius="md" style={{ height: '100%' }} p={'lg'} px={'md'} pb={'sm'}>
+              <Flex direction={'column'} h="100%">
+                <Title order={4} style={{ marginBottom: '1rem' }}>
+                  Custom Permissions
+                </Title>
+                <Flex direction={'column'} justify={'space-between'} h="100%">
+                  <ScrollArea h={490}>
+                    <Accordion
+                      chevronPosition="left"
+                      classNames={{
+                        content: classes.content,
+                      }}
+                    >
+                      {servers.map((item) => (
+                        <Accordion.Item value={item._id} key={item._id}>
+                          <Flex align={'center'} direction={'row'} justify={'space-between'}>
+                            <Accordion.Control>
+                              <Flex align={'center'} direction={'row'} gap={rem(4)}>
+                                <IconCircleFilled
+                                  size={12}
+                                  style={{
+                                    color: new Date(item.updatedAt).getTime() > Date.now() - 1000 * 60 * 4 ? '#12B886' : '#FA5252',
+                                    marginTop: '2.5px',
+                                  }}
+                                />
+                                {item.name}
+                              </Flex>
+                            </Accordion.Control>
+                            <MultiSelect
+                              classNames={{
+                                value: classes.value,
+                                values: classes.values,
+                              }}
+                              value={getSelectedPerms(item._id)}
+                              onChange={(values) => updatePermsState(item._id, '', values)}
+                              // @ts-ignore
+                              data={permissionData}
+                              itemComponent={SelectItem}
+                              placeholder="Select Permissions"
+                              variant="filled"
+                              radius={'md'}
+                              size="sm"
+                              w="24rem"
+                            />
+                          </Flex>
+                          <Accordion.Panel p={'0px'}>
+                            {item.processes?.map((process) => (
+                              <div key={process._id}>
+                                <Box py={'xs'}>
+                                  <Flex align={'center'} direction={'row'} justify={'space-between'}>
+                                    <Flex align={'center'} direction={'row'} gap={rem(4)}>
+                                      <IconCircleFilled
+                                        size={10}
+                                        style={{
+                                          color: process.status === 'online' ? '#12B886' : process.status === 'stopped' ? '#FCC419' : '#FA5252',
+                                          marginTop: '3px',
+                                        }}
+                                      />
+                                      {process.name}
+                                    </Flex>
+                                    <MultiSelect
+                                      classNames={{
+                                        value: classes.value,
+                                        values: classes.values,
                                       }}
+                                      value={getSelectedPerms(item._id, process._id)}
+                                      // @ts-ignore
+                                      data={permissionData}
+                                      itemComponent={SelectItem}
+                                      placeholder="Select Permissions"
+                                      onChange={(values) => updatePermsState(item._id, process._id, values)}
+                                      variant="filled"
+                                      radius={'sm'}
+                                      size="xs"
+                                      w="14rem"
                                     />
-                                    {process.name}
                                   </Flex>
-                                  <MultiSelect
-                                    classNames={{
-                                      value: classes.value,
-                                      values: classes.values,
-                                    }}
-                                    value={getSelectedPerms(item._id, process._id)}
-                                    // @ts-ignore
-                                    data={permissionData}
-                                    itemComponent={SelectItem}
-                                    placeholder="Select Permissions"
-                                    onChange={(values) => updatePermsState(item._id, process._id, values)}
-                                    variant="filled"
-                                    radius={'sm'}
-                                    size="xs"
-                                    w="14rem"
-                                  />
-                                </Flex>
-                              </Box>
-                              <Divider />
-                            </div>
-                          ))}
-                        </Accordion.Panel>
-                      </Accordion.Item>
-                    ))}
-                  </Accordion>
-                  <Transition mounted={!selection?.length} transition="fade" duration={500}>
-                    {(styles) => (
-                      <Overlay color="#000" opacity={0.1} radius={'md'} blur={7} center style={{ ...styles }}>
-                        <Badge size="xl" variant="outline">
-                          Select a User First
-                        </Badge>
-                      </Overlay>
-                    )}
-                  </Transition>
-                </ScrollArea>
-                <Flex justify={'flex-end'} direction={'row'}>
-                  <Button variant="light" color="teal" radius="sm" size={'sm'} leftIcon={<IconDeviceFloppy />} disabled={!selection.length} onClick={updatePerms}>
-                    Save
-                  </Button>
+                                </Box>
+                                <Divider />
+                              </div>
+                            ))}
+                          </Accordion.Panel>
+                        </Accordion.Item>
+                      ))}
+                    </Accordion>
+                    <Transition mounted={!selection?.length} transition="fade" duration={500}>
+                      {(styles) => (
+                        <Overlay color="#000" opacity={0.1} radius={'md'} blur={7} center style={{ ...styles }}>
+                          <Badge size="xl" variant="outline">
+                            Select a User First
+                          </Badge>
+                        </Overlay>
+                      )}
+                    </Transition>
+                  </ScrollArea>
+                  <Flex justify={'flex-end'} direction={'row'}>
+                    <Button variant="light" color="teal" radius="sm" size={'sm'} leftIcon={<IconDeviceFloppy />} disabled={!selection.length} onClick={updatePerms}>
+                      Save
+                    </Button>
+                  </Flex>
                 </Flex>
               </Flex>
-            </Flex>
-          </Paper>
-        </Flex>
+            </Paper>
+          </Grid.Col>
+        </Grid>
       </Dashboard>
     </>
   );
