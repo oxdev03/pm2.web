@@ -102,7 +102,7 @@ It doesn't require any open ports, since it only saves data to the database and 
    npm install
    ```
 
-2. Create a `.env` file in the dashboard directory and add the following variables
+2. Create a `.env` file in the dashboard directory and add the following env variables
 
    ```bash
     MONGO_URI=<MongoDB URI>
