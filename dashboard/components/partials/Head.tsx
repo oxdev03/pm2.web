@@ -117,13 +117,21 @@ export function Head() {
         opened={opened}
         onClose={close}
         title="Server/Process Filter"
-        styles={{
-          body: {
-            overflowY: 'unset',
+        sx={{
+          overflowY: 'visible',
+          ['section']: {
+            overflowY: 'visible',
           },
         }}
+        zIndex={200}
       >
-        <Stack>{MultiSelectItems}</Stack>
+        <Stack
+          style={{
+            zIndex: 203,
+          }}
+        >
+          {MultiSelectItems}
+        </Stack>
       </Modal>
       <Flex h={'100%'} justify={'space-between'}>
         <Group h={'100%'}>
