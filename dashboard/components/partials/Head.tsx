@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import { forwardRef, useEffect } from 'react';
 
-import { Box, Center, createStyles, Divider, Flex, Group, Header, MultiSelect, rem, SelectItemProps } from '@mantine/core';
+import { ActionIcon, Box, Center, createStyles, Divider, Flex, Group, Header, Modal, MultiSelect, rem, SelectItemProps, Stack } from '@mantine/core';
 import { IconCircle, IconCircleFilled, IconDatabaseCog, IconFilterCog, IconLock, IconServerCog, IconTestPipe } from '@tabler/icons-react';
 
 import { useSelected } from '../context/SelectedProvider';
@@ -9,6 +9,7 @@ import { useSession } from 'next-auth/react';
 import Access from '@/utils/acess';
 import { DefaultSession } from 'next-auth';
 import { Acl } from '@/types/user';
+import { useDisclosure } from '@mantine/hooks';
 
 const useStyles = createStyles((theme) => ({
   values: {
@@ -32,6 +33,7 @@ export function Head() {
   const { classes, cx } = useStyles();
   const { servers, selectItem, selectedItem } = useSelected();
   const { data: session } = useSession();
+  const [opened, { open, close }] = useDisclosure(false);
 
   const hasAccess = (server_id: string, process_id: string) => {
     type DefaultSessionUser = DefaultSession & {
@@ -45,8 +47,84 @@ export function Head() {
     return true;
   };
 
+  const MultiSelectItems = (
+    <>
+      {servers?.length && (
+        <>
+          <MultiSelect
+            icon={<IconServerCog />}
+            data={
+              servers?.map((server) => ({
+                value: server._id,
+                label: server.name,
+                status: new Date(server.updatedAt).getTime() > Date.now() - 1000 * 60 ? 'online' : 'offline',
+                disabled: !server.processes.some((process) => hasAccess(server._id, process._id)), // check whether user has access to any process
+              })) || []
+            }
+            onChange={(values) => {
+              selectItem?.(values, 'servers');
+            }}
+            placeholder="Select Server"
+            searchable
+            w={{
+              md: '25rem',
+            }}
+            radius={'md'}
+            itemComponent={Item}
+            classNames={{
+              values: classes.values,
+            }}
+            zIndex={204}
+          />
+          <MultiSelect
+            icon={<IconDatabaseCog />}
+            data={
+              servers
+                ?.map(
+                  (server) =>
+                    server.processes
+                      ?.filter((process) => selectedItem?.servers.includes(server._id) || selectedItem?.servers.length === 0)
+                      ?.map((process) => ({ value: process._id, label: process.name, status: process.status, disabled: !hasAccess(server._id, process._id) })) || []
+                )
+                .flat() || []
+            }
+            value={selectedItem?.processes || []}
+            onChange={(values) => {
+              selectItem(values, 'processes');
+            }}
+            placeholder="Select Process"
+            searchable
+            w={{
+              md: '25rem',
+            }}
+            maxSelectedValues={4}
+            radius={'md'}
+            itemComponent={Item}
+            classNames={{
+              values: classes.values,
+            }}
+            zIndex={204}
+            dropdownPosition="bottom"
+          />
+        </>
+      )}
+    </>
+  );
+
   return (
     <Header height={{ base: 40, xs: 60 }}>
+      <Modal
+        opened={opened}
+        onClose={close}
+        title="Server/Process Filter"
+        styles={{
+          body: {
+            overflowY: 'unset',
+          },
+        }}
+      >
+        <Stack>{MultiSelectItems}</Stack>
+      </Modal>
       <Flex h={'100%'} justify={'space-between'}>
         <Group h={'100%'}>
           <Center
@@ -58,59 +136,31 @@ export function Head() {
             <Image alt="logo" src="/logo.png" width={25} height={25} />
           </Center>
         </Group>
-        <Group h={'100%'} position="right" px={'lg'}>
-          {servers?.length && (
-            <>
-              <MultiSelect
-                icon={<IconServerCog />}
-                data={
-                  servers?.map((server) => ({
-                    value: server._id,
-                    label: server.name,
-                    status: new Date(server.updatedAt).getTime() > Date.now() - 1000 * 60 ? 'online' : 'offline',
-                    disabled: !server.processes.some((process) => hasAccess(server._id, process._id)), // check whether user has access to any process
-                  })) || []
-                }
-                onChange={(values) => {
-                  selectItem?.(values, 'servers');
-                }}
-                placeholder="Select Server"
-                searchable
-                w="25rem"
-                radius={'md'}
-                itemComponent={Item}
-                classNames={{
-                  values: classes.values,
-                }}
-              />
-              <MultiSelect
-                icon={<IconDatabaseCog />}
-                data={
-                  servers
-                    ?.map(
-                      (server) =>
-                        server.processes
-                          ?.filter((process) => selectedItem?.servers.includes(server._id) || selectedItem?.servers.length === 0)
-                          ?.map((process) => ({ value: process._id, label: process.name, status: process.status, disabled: !hasAccess(server._id, process._id) })) || []
-                    )
-                    .flat() || []
-                }
-                value={selectedItem?.processes || []}
-                onChange={(values) => {
-                  selectItem(values, 'processes');
-                }}
-                placeholder="Select Process"
-                searchable
-                w="25rem"
-                maxSelectedValues={4}
-                radius={'md'}
-                itemComponent={Item}
-                classNames={{
-                  values: classes.values,
-                }}
-              />
-            </>
-          )}
+        <Group
+          h={'100%'}
+          position="right"
+          px={'lg'}
+          sx={(theme) => ({
+            [theme.fn.smallerThan('md')]: {
+              display: 'none',
+            },
+          })}
+        >
+          {MultiSelectItems}
+        </Group>
+        <Group
+          h={'100%'}
+          position="right"
+          px={'xs'}
+          sx={(theme) => ({
+            [theme.fn.largerThan('md')]: {
+              display: 'none',
+            },
+          })}
+        >
+          <ActionIcon variant="light" color="blue" onClick={open}>
+            <IconFilterCog size={'1.2rem'} />
+          </ActionIcon>
         </Group>
       </Flex>
     </Header>
