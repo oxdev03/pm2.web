@@ -100,8 +100,9 @@ function Home({ settings }: { settings: ISetting }) {
     const total = prLen || filteredProcess.length;
     const uptime = ms((prLen ? status?.uptime : arbitraryCalc('uptime', 0, filteredServer.length)) || 0);
 
+    const filteredLogs = uniqBy([...(logsQueue.state || []), ...(status?.logs || [])], '_id').sort((a, b) => (new Date(a.createdAt) > new Date(b.createdAt) ? 1 : -1));
     // filter logs and add to queue
-    logsQueue.add(...uniqBy([...(logsQueue.state || []), ...(status?.logs || [])], '_id').sort((a, b) => (new Date(a.createdAt) > new Date(b.createdAt) ? 1 : -1)));
+    logsQueue.update(() => filteredLogs);
 
     //scrollViewport?.current?.scrollTo({ top: scrollViewport?.current?.scrollHeight, behavior: 'smooth' });
 
