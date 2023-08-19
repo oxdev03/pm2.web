@@ -4,8 +4,6 @@ pm2.web is a web-based application designed to monitor and manage processes runn
 
 ## Pages - Features
 
-Warning: Monitoring , Process Management are not rwd yet. (WIP)
-
 1. **Monitoring**
    ![Index](assets/index.jpeg)
 2. **Process Management**
