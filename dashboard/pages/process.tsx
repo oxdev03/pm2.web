@@ -186,14 +186,20 @@ function Process({ settings }: { settings: ISetting }) {
           p="xs"
           shadow="sm"
           bg={dark ? 'dark.7' : 'white'}
-          style={{
+          sx={(theme) => ({
             transition: '0.5s ease-out max-height',
             maxHeight: selection.includes(process._id) ? '200px' : '55px',
-          }}
+            [theme.fn.smallerThan('sm')]: {
+              maxHeight: selection.includes(process._id) ? '200px' : '90px',
+            },
+            [theme.fn.smallerThan('xs')]: {
+              maxHeight: selection.includes(process._id) ? '240px' : '120px',
+            },
+          })}
         >
           <Flex direction={'column'}>
-            <Flex align={'center'} justify={'space-between'}>
-              <Flex align={'center'} gap={'5px'}>
+            <Flex align={'center'} justify={'space-between'} wrap={'wrap'}>
+              <Flex align={'center'} rowGap={'10px'} columnGap={'5px'}>
                 <Indicator color={getProcessData(process._id, 'status_color') || 'gray'} position="bottom-end" size={10} offset={5} zIndex={1}>
                   <IconBrandJavascript size="1.6rem" stroke={1.5} color="#F0DB4F" />
                 </Indicator>
@@ -201,7 +207,7 @@ function Process({ settings }: { settings: ISetting }) {
                   {process.name}
                 </Text>
               </Flex>
-              <Flex align={'center'} gap={'40px'}>
+              <Flex align={'center'} rowGap={'10px'} columnGap={'40px'} wrap={'wrap'} justify={'end'}>
                 <Flex align={'center'} gap={'xs'}>
                   <Paper bg={dark ? 'dark.8' : 'gray.1'} radius="md" p={'4px'} px={'10px'}>
                     <Flex align={'center'} justify={'space-between'} gap={'5px'} w="75px">
