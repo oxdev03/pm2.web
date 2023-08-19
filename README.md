@@ -32,7 +32,7 @@ To get started with pm2.web, follow these steps:
   4. Add your IP address to the IP Access List or through a CIDR block.
 
   #### Vercel
-  [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/oxdev03/pm2.web&env=MONGO_URI&description=Process+Monitoring+and+Management&rootDirectory=dashboard)
+  [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Foxdev03%2Fpm2.web%2Ftree%2Fmaster%2Fdashboard&env=DB_URI,NEXTAUTH_SECRET&demo-title=pm2.web&demo-description=pm2.web%20-%20Easily%20monitor%20your%20processes%2C%20control%20them%20with%20various%20actions%2C%20view%20logs%20and%20set%20up%20access%20controls%20for%20users%20using%20the%20dashboard&demo-url=https%3A%2F%2Fgithub.com%2Foxdev03%2Fpm2.web&demo-image=https%3A%2F%2Fraw.githubusercontent.com%2Foxdev03%2Fpm2.web%2Fmaster%2Fassets%2Findex.jpeg)
 
   1. Click the deploy button above and follow the instructions.
 
