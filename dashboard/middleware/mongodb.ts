@@ -5,7 +5,7 @@ const MONGODB_URI = process.env.DB_URI as string;
 mongoose.set('strictQuery', false);
 
 if (!MONGODB_URI) {
-  throw new Error('Please define the MONGODB_URI environment variable inside .env.local');
+  throw new Error('Please define the DB_URI environment variable inside .env');
 }
 
 /**
