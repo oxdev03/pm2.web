@@ -59,7 +59,14 @@ export default authHandler(async (req: NextApiRequest, res: NextApiResponse<Stat
 
   if (!filteredProcesses.length) return res.status(403).end();
 
-  //TODO: add log permission check
+  const logProcesses = processes
+    .filter((process) => {
+      if (user.acl.owner) return true;
+      if (user.acl.admin) return true;
+      if (new Access(user.acl.servers).getPerms(process.server.toString(), process._id.toString()).has(PERMISSIONS.LOGS)) return true;
+      return false;
+    })
+    .map((process) => process._id);
 
   const pipeline = [
     {
@@ -70,6 +77,27 @@ export default authHandler(async (req: NextApiRequest, res: NextApiResponse<Stat
               _id: { $exists: true },
             }),
         updatedAt: { $gt: new Date((req.body.timestamp || Date.now()) - 1000 * 60 * 4) },
+      },
+    },
+    {
+      $project: {
+        _id: 1,
+        stats: 1,
+        status: 1,
+        logs: {
+          $filter: {
+            input: '$logs',
+            as: 'log',
+            cond: {
+              $and: [
+                { $gt: ['$$log.createdAt', new Date(req.body.timestamp || Date.now())] },
+                {
+                  $in: ['$_id', logProcesses],
+                },
+              ],
+            },
+          },
+        },
       },
     },
     {
@@ -84,28 +112,13 @@ export default authHandler(async (req: NextApiRequest, res: NextApiResponse<Stat
     },
     {
       $project: {
-        cpu: 1,
-        memory: 1,
-        onlineCount: 1,
-        uptime: 1,
-        logs: {
-          $reduce: { input: '$logs', initialValue: [], in: { $concatArrays: ['$$value', '$$this'] } },
-        },
-      },
-    },
-    {
-      $project: {
         _id: 0,
         cpu: 1,
         memory: 1,
         onlineCount: 1,
         uptime: 1,
         logs: {
-          $filter: {
-            input: '$logs',
-            as: 'log',
-            cond: { $gt: ['$$log.createdAt', new Date(req.body.timestamp || Date.now())] },
-          },
+          $reduce: { input: '$logs', initialValue: [], in: { $concatArrays: ['$$value', '$$this'] } },
         },
       },
     },
