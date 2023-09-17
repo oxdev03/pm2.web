@@ -21,6 +21,9 @@ import { IconBrandJavascript, IconCpu, IconDeviceSdCard, IconHistory, IconPower,
 import uniqBy from 'lodash/uniqBy';
 import { ISetting } from '@/types/setting';
 import { useRouter } from 'next/router';
+import ProcessItemMetric from '@/components/stats/ProcessItemMetric';
+import ProcessItemHeader from '@/components/misc/ProcessItemHeader';
+
 function Process({ settings }: { settings: ISetting }) {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const dark = colorScheme === 'dark';
@@ -199,41 +202,15 @@ function Process({ settings }: { settings: ISetting }) {
         >
           <Flex direction={'column'}>
             <Flex align={'center'} justify={'space-between'} wrap={'wrap'}>
-              <Flex align={'center'} rowGap={'10px'} columnGap={'5px'}>
-                <Indicator color={getProcessData(process._id, 'status_color') || 'gray'} position="bottom-end" size={10} offset={5} zIndex={1}>
-                  <IconBrandJavascript size="1.6rem" stroke={1.5} color="#F0DB4F" />
-                </Indicator>
-                <Text size="xl" weight={600}>
-                  {process.name}
-                </Text>
-              </Flex>
+              <ProcessItemHeader statusColor={getProcessData(process._id, 'status_color')} interpreter={process.type} name={process.name} />
               <Flex align={'center'} rowGap={'10px'} columnGap={'40px'} wrap={'wrap'} justify={'end'}>
                 <Flex align={'center'} gap={'xs'}>
-                  <Paper bg={dark ? 'dark.8' : 'gray.1'} radius="md" p={'4px'} px={'10px'}>
-                    <Flex align={'center'} justify={'space-between'} gap={'5px'} w="75px">
-                      <IconDeviceSdCard size="1.2rem" />
-                      <Text size="md">{getProcessData(process._id, 'ram')}</Text>
-                    </Flex>
-                  </Paper>
-                  <Paper bg={dark ? 'dark.8' : 'gray.1'} radius="md" p={'4px'} px={'10px'}>
-                    <Flex align={'center'} justify={'space-between'} gap={'5px'} w="55px">
-                      <IconCpu size="1.2rem" />
-                      <Text size="md">{getProcessData(process._id, 'cpu')}</Text>
-                    </Flex>
-                  </Paper>
-                  <Paper bg={dark ? 'dark.8' : 'gray.1'} radius="md" p={'4px'} px={'10px'}>
-                    <Flex align={'center'} justify={'space-between'} gap={'5px'} w="57px">
-                      <IconHistory size="1.2rem" />
-                      <Text size="md">{getProcessData(process._id, 'uptime')}</Text>
-                    </Flex>
-                  </Paper>
+                  <ProcessItemMetric w="75px" Icon={IconDeviceSdCard} value={getProcessData(process._id, 'ram')} />
+                  <ProcessItemMetric w="55px" Icon={IconCpu} value={getProcessData(process._id, 'cpu')} />
+                  <ProcessItemMetric w="57px" Icon={IconHistory} value={getProcessData(process._id, 'uptime')} />
                   {/* TODO: Add once pull feature is added 
-                  <Paper bg={dark ? 'dark.8' : 'gray.1'} radius="md" p={'4px'} px={'10px'}>
-                    <Flex align={'center'} gap={'5px'}>
-                      <IconGitBranch size="1.2rem" />
-                      <Text size="md">{'5ac..ed2'}</Text>
-                    </Flex>
-                  </Paper> */}
+                  <ProcessItemMetric w="80" Icon={IconGitBranch} value={'5ac..ed2'} />
+                  */}
                 </Flex>
                 <Flex gap={'5px'}>
                   <ActionIcon
