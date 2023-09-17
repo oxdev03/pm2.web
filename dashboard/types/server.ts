@@ -5,7 +5,7 @@ interface IProcess {
   pm_id: number;
   server: string;
   name: string;
-  type: string;
+  type: 'node' | 'python' | 'ruby' | 'php' | 'bash' | 'go' | 'dotnet' | 'shell' | 'java' | 'other';
   stats?: Omit<Stats, 'memoryMax'>;
   logs?: Log[];
   status: 'online' | 'stopping' | 'stopped' | 'launching' | 'errored' | 'offline';
