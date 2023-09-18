@@ -1,7 +1,7 @@
 import NextAuth from 'next-auth';
 import { JWT } from 'next-auth/jwt';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import GithubProvider from 'next-auth/providers/github';
+import GithubProvider, { GithubEmail } from 'next-auth/providers/github';
 import GoogleProvider from 'next-auth/providers/google';
 
 import connectDB from '../../../middleware/mongodb';
@@ -10,18 +10,78 @@ import { fetchSettings } from '@/utils/fetchSSRProps';
 
 const providers = () => {
   const p = [];
-  if (process.env.GITHUB_ID && process.env.GITHUB_SECRET) {
+
+  if (process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID && process.env.GITHUB_SECRET) {
     p.push(
       GithubProvider({
-        clientId: process.env.GITHUB_ID,
+        clientId: process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID,
         clientSecret: process.env.GITHUB_SECRET,
+        userinfo: {
+          url: 'https://api.github.com/user',
+          async request({ client, tokens }) {
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            const profile = await client.userinfo(tokens.access_token!);
+
+            if (!profile.email) {
+              // If the user does not have a public email, get another via the GitHub API
+              // See https://docs.github.com/en/rest/users/emails#list-public-email-addresses-for-the-authenticated-user
+              const res = await fetch('https://api.github.com/user/emails', {
+                headers: { Authorization: `token ${tokens.access_token}` },
+              });
+
+              if (res.ok) {
+                const emails: GithubEmail[] = await res.json();
+                profile.email = (emails.find((e) => e.primary) ?? emails[0]).email;
+              }
+            }
+            
+            if (!profile.email) throw new Error('NoEmail');
+
+            const user = await User.findOne({ email: { $regex: new RegExp(profile.email, 'i') } });
+
+            if (!user) throw new Error('NotRegistered');
+            //check if auth provider is already linked
+            if (!user.oauth2?.provider) {
+              user.oauth2 = {
+                provider: 'github',
+                providerUserId: profile?.id?.toString() as string,
+              };
+              await user.save();
+            }
+
+            const u = user.toJSON();
+
+            if (!u.acl.owner && !u.acl.admin && !u.acl?.servers?.length) throw new Error('Unauthorized');
+
+            // spread userObj to use in profile function
+            return {
+              ...profile,
+              ...{
+                id: user._id,
+                name: user.name,
+                email: user.email,
+              },
+              userObj: u,
+            };
+          },
+        },
+        profile(profile) {
+          return {
+            id: profile.id.toString(),
+            name: profile.name ?? profile.login,
+            email: profile.email,
+            image: profile.avatar_url,
+            ...profile.userObj,
+          };
+        },
       })
     );
   }
-  if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
+
+  if (process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
     p.push(
       GoogleProvider({
-        clientId: process.env.GOOGLE_CLIENT_ID,
+        clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       })
     );

@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import { GithubIcon } from '@/components/icons/github';
 import { GoogleIcon } from '@/components/icons/google';
 import { fetchSettings } from '@/utils/fetchSSRProps';
-import { Alert, Anchor, Button, Center, Checkbox, Divider, Group, Input, Paper, PasswordInput, PinInput, Stack, Text, TextInput, Transition } from '@mantine/core';
+import { Alert, Anchor, Button, Center, Checkbox, Divider, Group, Input, Paper, PasswordInput, PinInput, Stack, Text, TextInput, Tooltip, Transition } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { upperFirst, useToggle } from '@mantine/hooks';
 import { useState } from 'react';
@@ -47,20 +47,36 @@ export default function AuthenticationForm({ csrfToken, registrationCodeRequired
               Welcome to pm2.web, {type} with
             </Text>
 
-            <Group grow mb="md" mt="md">
-              {process.env.GOOGLE_CLIENT_ID && (
-                <Button leftIcon={<GoogleIcon />} variant="default" color="gray" radius="xl">
-                  Google
-                </Button>
-              )}
-              {process.env.GITHUB_ID && (
-                <Button leftIcon={<GithubIcon />} variant="default" color="gray" radius="xl">
-                  Github
-                </Button>
-              )}
-            </Group>
+            {type !== 'register' && (
+              <>
+                <Group grow mb="md" mt="md">
+                  {process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID && (
+                    <Button leftIcon={<GoogleIcon />} variant="default" color="gray" radius="xl">
+                      Google
+                    </Button>
+                  )}
+                  {process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID && (
+                    <Tooltip label="Registered user account is required to login with Github" position="top">
+                      <Button
+                        leftIcon={<GithubIcon />}
+                        variant="default"
+                        color="gray"
+                        radius="xl"
+                        onClick={() =>
+                          signIn('github', {
+                            callbackUrl: (callbackUrl as string) || '/',
+                          })
+                        }
+                      >
+                        Github
+                      </Button>
+                    </Tooltip>
+                  )}
+                </Group>
 
-            <Divider label="Or continue with email" labelPosition="center" my="lg" hidden={!process.env.GOOGLE_CLIENT_ID && !process.env.GITHUB_ID} />
+                <Divider label="Or continue with email" labelPosition="center" my="lg" hidden={!process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID && !process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID} />
+              </>
+            )}
 
             <form
               onSubmit={form.onSubmit(async (values) => {
