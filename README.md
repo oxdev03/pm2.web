@@ -158,6 +158,23 @@ Once pm2.web is installed and running, you can perform the following actions:
   - Configure alerts to receive notifications for specific actions.
   - Define alert rules based on events like shutdown, restart, or kill actions.
 
+- **User Registration**:
+  - User can register at the `/login` page
+  - If a registration code is configured, the user needs to enter the code
+  - The 1st user which registers is automatically assigned the owner permission
+  - The owner can assign permissions to registered users through the access control page
+  - registered user without any permissions can't access the dashboard nor login
+  - accounts linked with oauth2 can't login with credentials (can be unlinked in the settings page)
+      - **Setup Github OAuth**
+         - https://github.com/settings/developers -> New OAuth App
+         - Configure the callback url to `http://<domain|ip:port>/api/auth/callback/github`
+         - Add `NEXT_PUBLIC_GITHUB_CLIENT_ID` and `NEXT_GITHUB_SECRET` to the `.env` file with the values from the OAuth App
+         - **Usage**: Only registered users (per credentials) can login with auth2, which links the oauth2 with the existing user account in the database
+      - **Setup Registration Code**
+         - Go to the settings page and add/generate the registration code
+      - **Setup Google OAuth**
+         - TBD
+
 ## Milestones (based on stars)
 
 I have a lot of ideas for this project, but I don't have the time to implement them all due to my busy schedule. Nor the less the project will be maintained even if it doesn't reach the milestones.
