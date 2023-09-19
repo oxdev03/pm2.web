@@ -133,6 +133,9 @@ const providers = () => {
         } else {
           const user = await User.findOne({ email: { $regex: new RegExp(credentials?.email || '', 'i') } });
           if (user) {
+            //check if auth provider is already linked
+            if (user.oauth2?.providerUserId) throw new Error('OAuth2Linked');
+
             //verify password
             const match = await user.checkPassword(credentials?.password || '');
             if (match) {

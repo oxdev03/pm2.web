@@ -138,6 +138,7 @@ const errors = {
   Signin: 'Unable to sign in with this account. Please try signing in with a different account.',
   OAuthSignin: 'Unable to sign in with this account. Please try signing in with a different account.',
   OAuthCallback: 'Unable to sign in with this account. Please try signing in with a different account.',
+  OAuthLinked: 'Account is linked to an Authentication Provider. Please sign in with the same Authentication Provider.',
   OAuthCreateAccount: 'Unable to create an account with this provider. Please try signing in with a different account.',
   EmailCreateAccount: 'Unable to create an account with this email address. Please try using a different email address.',
   Callback: 'Unable to sign in with this account. Please try signing in with a different account.',
