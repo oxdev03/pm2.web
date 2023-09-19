@@ -31,7 +31,7 @@ import {
 import { useForm } from '@mantine/form';
 import { randomId } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
-import { IconCheck, IconCopy, IconDeviceFloppy, IconRefresh, IconTrash, IconX } from '@tabler/icons-react';
+import { IconCheck, IconCopy, IconDeviceFloppy, IconRefresh, IconTrash, IconUnlink, IconX } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { DefaultSession } from 'next-auth';
 import { Acl } from '@/types/user';
@@ -39,6 +39,7 @@ import { Acl } from '@/types/user';
 export default function Settings({ settings }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { data: session } = useSession();
   const [acl, setAcl] = useState(false);
+  const [isOAuth2, setIsOAuth2] = useState(false);
 
   const passwordForm = useForm({
     initialValues: {
@@ -188,6 +189,24 @@ export default function Settings({ settings }: InferGetServerSidePropsType<typeo
     }
   };
 
+  const handleUnlinkOAuth2 = async () => {
+    notification('unlink', 'Unlinking OAuth2', 'Please wait...', 'pending');
+    const res = await fetch(`/api/settings/oauth2`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    const statusCode = res.status;
+    const data = await res.json();
+    if (statusCode == 200) {
+      notification('unlink', 'Success', data.message, 'success');
+      signOut();
+    } else {
+      notification('unlink', 'Error', data.message, 'error');
+    }
+  };
+
   useEffect(() => {
     type DefaultSessionUser = DefaultSession & {
       acl: Acl;
@@ -197,6 +216,13 @@ export default function Settings({ settings }: InferGetServerSidePropsType<typeo
       setAcl(true);
     } else {
       setAcl(false);
+    }
+
+    const accessToken = session && 'accessToken' in session && (session as { accessToken: string })?.accessToken;
+    if (accessToken && (accessToken.startsWith('gho') || accessToken.startsWith('ya29'))) {
+      setIsOAuth2(true);
+    } else {
+      setIsOAuth2(false);
     }
   }, [session]);
 
@@ -263,15 +289,17 @@ export default function Settings({ settings }: InferGetServerSidePropsType<typeo
                               />
                               <Input.Wrapper label="Registration Code" description="requires code for registering new user accounts">
                                 <Flex align={'end'} gap={'xs'} wrap={'wrap'}>
-                                  <PinInput length={6} {...globalConfiguration.getInputProps('registrationCode')} 
-                                  sx={(theme) => ({
-                                    '& input': {
-                                      [theme.fn.smallerThan('xs')] : {
-                                        width: '1.5rem',
-                                        height: '1.5rem',
-                                      }
-                                    },
-                                  })}
+                                  <PinInput
+                                    length={6}
+                                    {...globalConfiguration.getInputProps('registrationCode')}
+                                    sx={(theme) => ({
+                                      '& input': {
+                                        [theme.fn.smallerThan('xs')]: {
+                                          width: '1.5rem',
+                                          height: '1.5rem',
+                                        },
+                                      },
+                                    })}
                                   />
                                   <ActionIcon
                                     type="button"
@@ -404,6 +432,31 @@ export default function Settings({ settings }: InferGetServerSidePropsType<typeo
                     </form>
                   </Accordion.Panel>
                 </Accordion.Item>
+                {isOAuth2 && (
+                  <>
+                    <Accordion.Item value="unlink">
+                      <Accordion.Control
+                        icon={
+                          <IconUnlink
+                            size={rem(20)}
+                            style={{
+                              marginTop: '0.1rem',
+                            }}
+                          />
+                        }
+                      >
+                        <Title order={5}>Unlink OAuth2</Title>
+                      </Accordion.Control>
+                      <Accordion.Panel px="xs">
+                        <Stack spacing={'xs'}>
+                          <Button type="submit" variant="light" color="orange" onClick={handleUnlinkOAuth2}>
+                            Unlink OAuth2
+                          </Button>
+                        </Stack>
+                      </Accordion.Panel>
+                    </Accordion.Item>
+                  </>
+                )}
               </Accordion>
             </Paper>
           </Grid.Col>
