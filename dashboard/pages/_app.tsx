@@ -36,8 +36,10 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
 
 App.getInitialProps = async (appContext: AppContext) => {
   const appProps = await NextApp.getInitialProps(appContext);
+
+  // cookie -> preferred color scheme -> light
   return {
     ...appProps,
-    colorScheme: getCookie('mantine-color-scheme', appContext.ctx) || 'light',
+    colorScheme: getCookie('mantine-color-scheme', appContext.ctx) || [appContext.ctx.req?.headers['sec-ch-prefers-color-scheme'], 'light'].find((x) => !!x),
   };
 };
