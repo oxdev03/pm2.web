@@ -43,7 +43,7 @@ export default function AuthenticationForm({ csrfToken, registrationCodeRequired
       <main>
         <Center h="100vh">
           <Paper radius="md" p="xl" withBorder>
-            <Text size="xl" weight={500}>
+            <Text size="xl" fw={500}>
               Welcome to pm2.web, {type} with
             </Text>
 
@@ -51,14 +51,14 @@ export default function AuthenticationForm({ csrfToken, registrationCodeRequired
               <>
                 <Group grow mb="md" mt="md">
                   {process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID && (
-                    <Button leftIcon={<GoogleIcon />} variant="default" color="gray" radius="xl">
+                    <Button leftSection={<GoogleIcon />} variant="default" color="gray" radius="xl">
                       Google
                     </Button>
                   )}
                   {process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID && (
                     <Tooltip label="Registered user account is required to login with Github" position="top">
                       <Button
-                        leftIcon={<GithubIcon />}
+                        leftSection={<GithubIcon />}
                         variant="default"
                         color="gray"
                         radius="xl"
@@ -104,7 +104,7 @@ export default function AuthenticationForm({ csrfToken, registrationCodeRequired
                   <>
                     {registrationCodeRequired && (
                       <Input.Wrapper label="Registration code" required>
-                        <PinInput required name="registrationCode" {...form.getInputProps('registrationCode')} radius="md" length={6} mt="0.2rem" />
+                        <PinInput name="registrationCode" {...form.getInputProps('registrationCode')} radius="md" length={6} mt="0.2rem" />
                       </Input.Wrapper>
                     )}
                     <Checkbox
@@ -118,8 +118,8 @@ export default function AuthenticationForm({ csrfToken, registrationCodeRequired
                 )}
               </Stack>
 
-              <Group position="apart" mt="xl">
-                <Anchor component="button" type="button" color="dimmed" onClick={() => toggle()} size="xs">
+              <Group justify="space-between" mt="xl">
+                <Anchor component="button" type="button" c="dimmed" onClick={() => toggle()} size="xs">
                   {type === 'register' ? 'Already have an account? Login' : "Don't have an account? Register"}
                 </Anchor>
                 <Button type="submit" radius="xl" loading={authLoading}>

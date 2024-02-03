@@ -32,7 +32,7 @@ export default function ProcessItemHeader({ statusColor, interpreter, name }: { 
       <Indicator color={statusColor || 'gray'} position="bottom-end" size={10} offset={5} zIndex={1}>
         <InterpreterIcon />
       </Indicator>
-      <Text size="xl" weight={600}>
+      <Text size="xl" fw={600}>
         {name}
       </Text>
     </Flex>

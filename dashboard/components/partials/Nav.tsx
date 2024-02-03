@@ -2,46 +2,9 @@ import { signIn, signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
-import { Center, createStyles, getStylesRef, Navbar, rem, Stack, Tooltip, UnstyledButton, useMantineColorScheme } from '@mantine/core';
+import { AppShell, Stack, Tooltip, UnstyledButton, useMantineColorScheme } from '@mantine/core';
 import { IconBellCog, IconGauge, IconLayoutDashboard, IconLogout, IconMoonStars, IconServerBolt, IconSettings, IconSun, IconUser } from '@tabler/icons-react';
-
-const useStyles = createStyles((theme) => ({
-  link: {
-    width: rem(50),
-    height: rem(50),
-    borderRadius: theme.radius.md,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.colors.gray[7],
-
-    '&:hover': {
-      backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[0],
-    },
-
-    [theme.fn.smallerThan('xs')]: {
-      width: rem(20),
-      height: rem(20),
-    },
-  },
-
-  icon: {
-    width: rem(24),
-    height: rem(24),
-
-    [theme.fn.smallerThan('xs')]: {
-      width: rem(20),
-      height: rem(20),
-    },
-  },
-
-  active: {
-    '&, &:hover': {
-      backgroundColor: theme.fn.variant({ variant: 'light', color: theme.primaryColor }).background,
-      color: theme.fn.variant({ variant: 'light', color: theme.primaryColor }).color,
-    },
-  },
-}));
+import classes from './Nav.module.css';
 
 interface NavbarBtnProps {
   icon: React.FC<any>;
@@ -51,10 +14,9 @@ interface NavbarBtnProps {
 }
 
 function NavbarBtn({ icon: Icon, label, active, onClick }: NavbarBtnProps) {
-  const { classes, cx } = useStyles();
   return (
     <Tooltip label={label} position="right" transitionProps={{ duration: 0 }}>
-      <UnstyledButton onClick={onClick} className={cx(classes.link, { [classes.active]: active })}>
+      <UnstyledButton onClick={onClick} className={`${classes.link} ${active && classes.active}`}>
         <Icon className={classes.icon} stroke={1.5} />
       </UnstyledButton>
     </Tooltip>
@@ -69,10 +31,9 @@ interface NavbarLinkProps {
 }
 
 function NavbarLink({ icon: Icon, label, active, href }: NavbarLinkProps) {
-  const { classes, cx } = useStyles();
   return (
     <Tooltip label={label} position="right" transitionProps={{ duration: 0 }}>
-      <Link href={href || ''} className={cx(classes.link, { [classes.active]: active })}>
+      <Link href={href || ''} className={`${classes.link} ${active && classes.active}`}>
         <Icon stroke={1.5} className={classes.icon} />
       </Link>
     </Tooltip>
@@ -98,34 +59,26 @@ export function Nav() {
   const links = navLinks.map((link, index) => <NavbarLink {...link} key={link.label} active={index === active} />);
 
   return (
-    <Navbar width={{ base: 40, xs: 75 }} p="sm">
-      <Navbar.Section grow mt={20}>
+    <AppShell.Navbar p="sm">
+      <AppShell.Section grow mt={20}>
         <Stack
           justify="center"
-          spacing={0}
-          sx={(theme) => ({
-            [theme.fn.smallerThan('xs')]: {
-              gap: rem(10),
-            },
-          })}
+          //spacing={0}
+          className={classes.stackLink}
         >
           {links}
         </Stack>
-      </Navbar.Section>
-      <Navbar.Section>
+      </AppShell.Section>
+      <AppShell.Section>
         <Stack
           justify="center"
-          spacing={0}
-          sx={(theme) => ({
-            [theme.fn.smallerThan('xs')]: {
-              gap: rem(15),
-            },
-          })}
+          //spacing={0}
+          className={classes.stackAction}
         >
           <NavbarBtn icon={dark ? IconSun : IconMoonStars} label="Toggle Theme" onClick={() => toggleColorScheme()} />
           <NavbarBtn icon={IconLogout} label="Logout" onClick={() => signOut()} />
         </Stack>
-      </Navbar.Section>
-    </Navbar>
+      </AppShell.Section>
+    </AppShell.Navbar>
   );
 }

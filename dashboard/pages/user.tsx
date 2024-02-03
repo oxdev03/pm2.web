@@ -20,7 +20,6 @@ import {
   Box,
   Button,
   Checkbox,
-  createStyles,
   Divider,
   Flex,
   Grid,
@@ -39,40 +38,7 @@ import {
 } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconChartBar, IconCheck, IconCircleFilled, IconDeviceFloppy, IconHistory, IconMail, IconPower, IconReload, IconTrash, IconX } from '@tabler/icons-react';
-
-const useStyles = createStyles((theme) => ({
-  rowSelected: {
-    backgroundColor: theme.colorScheme === 'dark' ? theme.fn.rgba(theme.colors[theme.primaryColor][7], 0.2) : theme.colors[theme.primaryColor][0],
-  },
-  value: {
-    marginLeft: rem(1),
-    marginRight: rem(1),
-  },
-  values: {
-    maxWidth: rem(200),
-    flexWrap: 'nowrap',
-    overflowX: 'auto',
-    '::-webkit-scrollbar': {
-      height: '0.4rem',
-    },
-    '::-webkit-scrollbar-track': {
-      boxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
-      webkitBoxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
-    },
-    '::-webkit-scrollbar-thumb': {
-      backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[3] : theme.colors.gray[5],
-      borderRadius: '0.3rem',
-    },
-  },
-  content: {
-    padding: 0,
-    paddingLeft: rem(60),
-
-    [theme.fn.smallerThan('xs')]: {
-      paddingLeft: rem(10),
-    },
-  },
-}));
+import classes from './user.module.css';
 
 const permissionData = [
   {
@@ -110,7 +76,7 @@ interface ItemProps extends React.ComponentPropsWithoutRef<'div'> {
 
 const SelectItem = forwardRef<HTMLDivElement, ItemProps>(({ icon, label, description, ...others }: ItemProps, ref) => (
   <div ref={ref} {...others}>
-    <Group noWrap>
+    <Group wrap="nowrap">
       <Avatar size={'xs'}>{icon}</Avatar>
       <div>
         <Text size="sm">{description}</Text>
@@ -120,7 +86,6 @@ const SelectItem = forwardRef<HTMLDivElement, ItemProps>(({ icon, label, descrip
 ));
 
 export default function User({ users, servers }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const { classes, cx } = useStyles();
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const dark = colorScheme === 'dark';
   const aclPerms = {
@@ -297,7 +262,7 @@ export default function User({ users, servers }: InferGetServerSidePropsType<typ
       </Head>
       <Dashboard>
         <Grid h={'102%'}>
-          <Grid.Col lg={6} md={12}>
+          <Grid.Col span={{ lg: 6, md: 12 }}>
             {/* 3/5 2/5 */}
             <Paper shadow="sm" radius="md" p={'sm'} style={{ height: '100%' }}>
               <ScrollArea>
@@ -305,7 +270,7 @@ export default function User({ users, servers }: InferGetServerSidePropsType<typ
                   <thead>
                     <tr>
                       <th style={{ width: rem(40) }}>
-                        <Checkbox onChange={toggleAll} checked={selection.length === users.length} indeterminate={selection.length > 0 && selection.length !== users.length} transitionDuration={0} />
+                        <Checkbox onChange={toggleAll} checked={selection.length === users.length} indeterminate={selection.length > 0 && selection.length !== users.length} />
                       </th>
                       <th style={{ fontSize: rem(17) }}>User</th>
                       <th style={{ fontSize: rem(17) }}>Email</th>
@@ -317,18 +282,18 @@ export default function User({ users, servers }: InferGetServerSidePropsType<typ
                     {users.map((item) => {
                       const selected = selection.includes(item._id);
                       return (
-                        <tr key={item._id} className={cx({ [classes.rowSelected]: selected })}>
+                        <tr key={item._id} className={`${selected ? classes.rowSelected : ''}`}>
                           <td>
-                            <Checkbox checked={selection.includes(item._id)} onChange={() => toggleRow(item._id)} transitionDuration={0} disabled={item.acl.admin || item.acl.owner} />
+                            <Checkbox checked={selection.includes(item._id)} onChange={() => toggleRow(item._id)} disabled={item.acl.admin || item.acl.owner} />
                           </td>
                           <td>
-                            <Group spacing="sm">
+                            <Group gap="sm">
                               <>
                                 {!item.oauth2 && <IconMail />}
                                 {item?.oauth2?.provider == 'github' && <GithubIcon />}
                                 {item.oauth2?.provider == 'google' && <GoogleIcon />}
                               </>
-                              <Text size="sm" weight={500}>
+                              <Text size="sm" fw={500}>
                                 {item.name}
                               </Text>
                             </Group>
@@ -358,7 +323,7 @@ export default function User({ users, servers }: InferGetServerSidePropsType<typ
               </ScrollArea>
             </Paper>{' '}
           </Grid.Col>
-          <Grid.Col lg={6} md={12}>
+          <Grid.Col span={{ lg: 6, md: 12 }}>
             <Paper shadow="sm" radius="md" style={{ height: '100%' }} p={'lg'} px={'md'} pb={'sm'}>
               <Flex direction={'column'} h="100%">
                 <Title order={4} style={{ marginBottom: '1rem' }}>
@@ -399,15 +364,15 @@ export default function User({ users, servers }: InferGetServerSidePropsType<typ
                               </Flex>
                             </Accordion.Control>
                             <MultiSelect
-                              classNames={{
-                                value: classes.value,
+                              /*  classNames={{
+                                pill: classes.value,
                                 values: classes.values,
-                              }}
-                              value={getSelectedPerms(item._id)}
-                              onChange={(values) => updatePermsState(item._id, '', values)}
+                              }} */
+                              //value={getSelectedPerms(item._id)}
+                              //onChange={(values) => updatePermsState(item._id, '', values)}
                               // @ts-ignore
-                              data={permissionData}
-                              itemComponent={SelectItem}
+                              //data={permissionData}
+                              //itemComponent={SelectItem}
                               placeholder="Select Permissions"
                               variant="filled"
                               radius={'md'}
@@ -445,14 +410,14 @@ export default function User({ users, servers }: InferGetServerSidePropsType<typ
                                       {process.name}
                                     </Flex>
                                     <MultiSelect
-                                      classNames={{
+                                      /*   classNames={{
                                         value: classes.value,
                                         values: classes.values,
-                                      }}
-                                      value={getSelectedPerms(item._id, process._id)}
+                                      }} */
+                                      //value={getSelectedPerms(item._id, process._id)}
                                       // @ts-ignore
-                                      data={permissionData}
-                                      itemComponent={SelectItem}
+                                      //data={permissionData}
+                                      //itemComponent={SelectItem}
                                       placeholder="Select Permissions"
                                       onChange={(values) => updatePermsState(item._id, process._id, values)}
                                       variant="filled"
@@ -480,7 +445,7 @@ export default function User({ users, servers }: InferGetServerSidePropsType<typ
                     </Transition>
                   </ScrollArea>
                   <Flex justify={'flex-end'} direction={'row'}>
-                    <Button variant="light" color="teal" radius="sm" size={'sm'} leftIcon={<IconDeviceFloppy />} disabled={!selection.length} onClick={updatePerms}>
+                    <Button variant="light" color="teal" radius="sm" size={'sm'} leftSection={<IconDeviceFloppy />} disabled={!selection.length} onClick={updatePerms}>
                       Save
                     </Button>
                   </Flex>

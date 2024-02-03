@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import { forwardRef, useEffect } from 'react';
 
-import { ActionIcon, Box, Center, createStyles, Divider, Flex, Group, Header, Modal, MultiSelect, rem, SelectItemProps, Stack } from '@mantine/core';
+import { ActionIcon, AppShell, Box, Center, Divider, Flex, Group, Modal, MultiSelect, rem, Stack } from '@mantine/core';
 import { IconCircle, IconCircleFilled, IconDatabaseCog, IconFilterCog, IconLock, IconServerCog, IconTestPipe } from '@tabler/icons-react';
 
 import { useSelected } from '../context/SelectedProvider';
@@ -10,27 +10,10 @@ import Access from '@/utils/acess';
 import { DefaultSession } from 'next-auth';
 import { Acl } from '@/types/user';
 import { useDisclosure } from '@mantine/hooks';
-
-const useStyles = createStyles((theme) => ({
-  values: {
-    flexWrap: 'nowrap',
-    overflowX: 'auto',
-    '::-webkit-scrollbar': {
-      height: '0.4rem',
-    },
-    '::-webkit-scrollbar-track': {
-      boxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
-      webkitBoxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
-    },
-    '::-webkit-scrollbar-thumb': {
-      backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[3] : theme.colors.gray[5],
-      borderRadius: '0.3rem',
-    },
-  },
-}));
+import classes from './Head.module.css';
+import { ResourceMultiSelect } from '../misc/ResourceMultiSelect';
 
 export function Head() {
-  const { classes, cx } = useStyles();
   const { servers, selectItem, selectedItem } = useSelected();
   const { data: session } = useSession();
   const [opened, { open, close }] = useDisclosure(false);
@@ -51,8 +34,8 @@ export function Head() {
     <>
       {servers?.length && (
         <>
-          <MultiSelect
-            icon={<IconServerCog />}
+          <ResourceMultiSelect
+            leftSection={<IconServerCog />}
             data={
               servers?.map((server) => ({
                 value: server._id,
@@ -70,20 +53,19 @@ export function Head() {
               md: '25rem',
             }}
             radius={'md'}
-            itemComponent={Item}
             classNames={{
-              values: classes.values,
+              pillsList: classes.value,
             }}
-            zIndex={204}
+            // zIndex={204}
           />
-          <MultiSelect
-            icon={<IconDatabaseCog />}
+          <ResourceMultiSelect
+            leftSection={<IconDatabaseCog />}
             data={
               servers
                 ?.map(
                   (server) =>
                     server.processes
-                      ?.filter((process) => selectedItem?.servers.includes(server._id) || selectedItem?.servers.length === 0)
+                      ?.filter(() => selectedItem?.servers.includes(server._id) || selectedItem?.servers.length === 0)
                       ?.map((process) => ({ value: process._id, label: process.name, status: process.status, disabled: !hasAccess(server._id, process._id) })) || []
                 )
                 .flat() || []
@@ -97,14 +79,13 @@ export function Head() {
             w={{
               md: '25rem',
             }}
-            maxSelectedValues={4}
+            maxValues={4}
             radius={'md'}
-            itemComponent={Item}
+            //zIndex={204}
             classNames={{
-              values: classes.values,
+              pillsList: classes.value,
             }}
-            zIndex={204}
-            dropdownPosition="bottom"
+            comboboxProps={{ position: 'bottom', middlewares: { flip: false, shift: false } }}
           />
         </>
       )}
@@ -112,19 +93,8 @@ export function Head() {
   );
 
   return (
-    <Header height={{ base: 40, xs: 60 }}>
-      <Modal
-        opened={opened}
-        onClose={close}
-        title="Server/Process Filter"
-        sx={{
-          overflowY: 'visible',
-          ['section']: {
-            overflowY: 'visible',
-          },
-        }}
-        zIndex={200}
-      >
+    <AppShell.Header>
+      <Modal opened={opened} onClose={close} title="Server/Process Filter" className={classes.modal} zIndex={200}>
         <Stack
           style={{
             zIndex: 203,
@@ -144,55 +114,15 @@ export function Head() {
             <Image alt="logo" src="/logo.png" width={25} height={25} />
           </Center>
         </Group>
-        <Group
-          h={'100%'}
-          position="right"
-          px={'lg'}
-          sx={(theme) => ({
-            [theme.fn.smallerThan('md')]: {
-              display: 'none',
-            },
-          })}
-        >
+        <Group h={'100%'} justify="right" px={'lg'} className={classes.defaultSelectGroup}>
           {MultiSelectItems}
         </Group>
-        <Group
-          h={'100%'}
-          position="right"
-          px={'xs'}
-          sx={(theme) => ({
-            [theme.fn.largerThan('md')]: {
-              display: 'none',
-            },
-          })}
-        >
+        <Group h={'100%'} justify="right" px={'xs'} className={classes.filterIcon}>
           <ActionIcon variant="light" color="blue" onClick={open}>
             <IconFilterCog size={'1.2rem'} />
           </ActionIcon>
         </Group>
       </Flex>
-    </Header>
+    </AppShell.Header>
   );
 }
-
-const Item = forwardRef<HTMLDivElement, SelectItemProps & { status: string } & { disabled: boolean }>(({ label, value, disabled, status, ...others }, ref) => {
-  return (
-    <div ref={ref} {...others}>
-      <Flex align="center">
-        <Box mr={10}>
-          {disabled ? (
-            <IconLock size={14} />
-          ) : (
-            <IconCircleFilled
-              size={10}
-              style={{
-                color: status === 'online' ? '#12B886' : status === 'stopped' ? '#FCC419' : '#FA5252',
-              }}
-            />
-          )}
-        </Box>
-        <div>{label}</div>
-      </Flex>
-    </div>
-  );
-});

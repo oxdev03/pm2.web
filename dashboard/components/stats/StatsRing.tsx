@@ -28,17 +28,17 @@ export function StatsRing({ stat }: { stat: StatsRingProps }) {
           thickness={8}
           sections={[{ value: stat.progress, color: stat.color }]}
           label={
-            <Text color={stat.color} weight={700} align="center" size="sm">
+            <Text c={stat.color} fw={700} ta="center" size="sm">
               {stat.value != undefined ? `${stat.value}` : `${stat.progress}%`}
             </Text>
           }
         />
 
         <div>
-          <Text size="xl" transform="uppercase" weight={700}>
+          <Text size="xl" tt="uppercase" fw={700}>
             {stat.label}
           </Text>
-          <Text color="dimmed" weight={700} size="md" c={dark ? 'gray.6' : 'gray.7'}>
+          <Text fw={700} size="md" c={dark ? 'gray.6' : 'gray.7'}>
             {stat.stats}
           </Text>
         </div>

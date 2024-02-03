@@ -118,9 +118,9 @@ function Home({ settings }: { settings: ISetting }) {
   }, [status]);
 
   return (
-    <Flex direction={'column'} rowGap={'md'} h={'85vh'}>
+    <Flex direction={'column'} rowGap={'md'} >
       <div>
-        <SimpleGrid cols={4} breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
+        <SimpleGrid cols={{ base: 1, sm: 4 }}>
           <StatsRing
             stat={{
               label: 'CPU',
@@ -164,7 +164,7 @@ function Home({ settings }: { settings: ISetting }) {
         <Center h="100%" mt={'0.5px'}>
           <IconList size="1.4rem" stroke={1.5} />
         </Center>
-        <Text size="xl" weight={600}>
+        <Text size="xl" fw={600}>
           Logs
         </Text>
       </Flex>
@@ -184,7 +184,7 @@ function Home({ settings }: { settings: ISetting }) {
           <Paper h={'100%'} mih={'100%'} radius={'md'} p="md">
             {logsQueue.state?.length
               ? logsQueue.state?.map((log) => (
-                  <Text key={log._id} size="md" weight={600} color={log.type == 'success' ? 'teal.6' : log.type == 'error' ? 'red.6' : 'blue.4'} component="pre" my="0px">
+                  <Text key={log._id} size="md" fw={600} color={log.type == 'success' ? 'teal.6' : log.type == 'error' ? 'red.6' : 'blue.4'} component="pre" my="0px">
                     {log.createdAt.split('T')[1].split('.')[0]} {log.message}
                   </Text>
                 ))

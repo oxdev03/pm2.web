@@ -236,7 +236,7 @@ export default function Settings({ settings }: InferGetServerSidePropsType<typeo
       </Head>
       <Dashboard>
         <Grid h={'102%'}>
-          <Grid.Col lg={8} md={7} sm={6} xs={12}>
+          <Grid.Col span={{ lg: 8, md: 7, sm: 6, xs: 12 }}>
             <Paper shadow="sm" radius="md" p={'md'} style={{ height: '100%' }}>
               <Title order={3} style={{ marginBottom: '1rem' }}>
                 Configuration
@@ -251,7 +251,7 @@ export default function Settings({ settings }: InferGetServerSidePropsType<typeo
                       <form onSubmit={globalConfiguration.onSubmit(async (values) => await handleConfigurationUpdate(values))}>
                         <Grid grow gutter={'xl'}>
                           <Grid.Col span={2}>
-                            <Stack spacing={'xs'}>
+                            <Stack my={'xs'}>
                               <NumberInput
                                 label="Backend Update Interval"
                                 description="In ms"
@@ -273,7 +273,7 @@ export default function Settings({ settings }: InferGetServerSidePropsType<typeo
                             </Stack>
                           </Grid.Col>
                           <Grid.Col span={2}>
-                            <Stack spacing={'xs'}>
+                            <Stack my={'xs'}>
                               <NumberInput
                                 label="Log Rotation"
                                 description="automatically rotate logs,to meet max logs length"
@@ -292,14 +292,14 @@ export default function Settings({ settings }: InferGetServerSidePropsType<typeo
                                   <PinInput
                                     length={6}
                                     {...globalConfiguration.getInputProps('registrationCode')}
-                                    sx={(theme) => ({
+                                    /* sx={(theme) => ({
                                       '& input': {
                                         [theme.fn.smallerThan('xs')]: {
                                           width: '1.5rem',
                                           height: '1.5rem',
                                         },
                                       },
-                                    })}
+                                    })} */
                                   />
                                   <ActionIcon
                                     type="button"
@@ -325,7 +325,7 @@ export default function Settings({ settings }: InferGetServerSidePropsType<typeo
                               </Input.Wrapper>
                             </Stack>
                             <Flex justify={'flex-end'}>
-                              <Button type="submit" variant="light" color="teal" leftIcon={<IconDeviceFloppy />} mt={'sm'}>
+                              <Button type="submit" variant="light" color="teal" leftSection={<IconDeviceFloppy />} mt={'sm'}>
                                 Save
                               </Button>
                             </Flex>
@@ -376,7 +376,7 @@ export default function Settings({ settings }: InferGetServerSidePropsType<typeo
               </ScrollArea>
             </Paper>
           </Grid.Col>
-          <Grid.Col lg={4} md={5} sm={6} xs={12}>
+          <Grid.Col span={{ lg: 4, md: 5, sm: 6, xs: 12 }}>
             <Paper shadow="sm" radius="md" p={'md'} style={{ height: '100%' }}>
               <Title order={3} style={{ marginBottom: '1rem' }}>
                 User Settings
@@ -386,7 +386,6 @@ export default function Settings({ settings }: InferGetServerSidePropsType<typeo
                   <Accordion.Control
                     icon={
                       <IconRefresh
-                        size={rem(20)}
                         style={{
                           marginTop: '0.1rem',
                         }}
@@ -397,7 +396,7 @@ export default function Settings({ settings }: InferGetServerSidePropsType<typeo
                   </Accordion.Control>
                   <Accordion.Panel px="xs">
                     <form onSubmit={passwordForm.onSubmit(async (values) => await handlePasswordUpdate(values))}>
-                      <Stack spacing={'xs'}>
+                      <Stack my={'xs'}>
                         <TextInput label="Old Password" placeholder="Old Password" required type="password" {...passwordForm.getInputProps('oldPassword')} />
                         <TextInput label="New Password" placeholder="New Password" required type="password" {...passwordForm.getInputProps('newPassword')} />
                         <TextInput label="Confirm Password" placeholder="Confirm Password" required type="password" {...passwordForm.getInputProps('confirmPassword')} />
@@ -412,7 +411,6 @@ export default function Settings({ settings }: InferGetServerSidePropsType<typeo
                   <Accordion.Control
                     icon={
                       <IconTrash
-                        size={rem(20)}
                         style={{
                           marginTop: '0.1rem',
                         }}
@@ -423,7 +421,7 @@ export default function Settings({ settings }: InferGetServerSidePropsType<typeo
                   </Accordion.Control>
                   <Accordion.Panel px="xs">
                     <form onSubmit={deleteForm.onSubmit(async (values) => await handleDeleteAccount(values))}>
-                      <Stack spacing={'xs'}>
+                      <Stack my={'xs'}>
                         <TextInput label="Password" placeholder="Password" required type="password" {...deleteForm.getInputProps('password')} />
                         <Button type="submit" variant="light" color="red">
                           Delete Account
@@ -438,7 +436,6 @@ export default function Settings({ settings }: InferGetServerSidePropsType<typeo
                       <Accordion.Control
                         icon={
                           <IconUnlink
-                            size={rem(20)}
                             style={{
                               marginTop: '0.1rem',
                             }}
@@ -448,7 +445,7 @@ export default function Settings({ settings }: InferGetServerSidePropsType<typeo
                         <Title order={5}>Unlink OAuth2</Title>
                       </Accordion.Control>
                       <Accordion.Panel px="xs">
-                        <Stack spacing={'xs'}>
+                        <Stack my={'xs'}>
                           <Button type="submit" variant="light" color="orange" onClick={handleUnlinkOAuth2}>
                             Unlink OAuth2
                           </Button>

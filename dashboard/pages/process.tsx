@@ -189,7 +189,7 @@ function Process({ settings }: { settings: ISetting }) {
           p="xs"
           shadow="sm"
           bg={dark ? 'dark.7' : 'white'}
-          sx={(theme) => ({
+          /* sx={(theme) => ({
             transition: '0.5s ease-out max-height',
             maxHeight: selection.includes(process._id) ? '200px' : '55px',
             [theme.fn.smallerThan('sm')]: {
@@ -198,7 +198,7 @@ function Process({ settings }: { settings: ISetting }) {
             [theme.fn.smallerThan('xs')]: {
               maxHeight: selection.includes(process._id) ? '240px' : '120px',
             },
-          })}
+          })} */
         >
           <Flex direction={'column'}>
             <Flex align={'center'} justify={'space-between'} wrap={'wrap'}>
@@ -275,7 +275,7 @@ function Process({ settings }: { settings: ISetting }) {
                         {logs
                           ?.filter((log) => log.process == process._id)
                           ?.map((log) => (
-                            <Text key={log._id} size="md" weight={600} color={log.type == 'success' ? 'teal.6' : log.type == 'error' ? 'red.6' : 'blue.4'} component="pre" my="0px">
+                            <Text key={log._id} size="md" fw={600} color={log.type == 'success' ? 'teal.6' : log.type == 'error' ? 'red.6' : 'blue.4'} component="pre" my="0px">
                               {log.createdAt.split('T')[1].split('.')[0]} {log.message}
                             </Text>
                           ))}
