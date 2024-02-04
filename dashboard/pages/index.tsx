@@ -118,7 +118,7 @@ function Home({ settings }: { settings: ISetting }) {
   }, [status]);
 
   return (
-    <Flex direction={'column'} rowGap={'md'} >
+    <Flex direction={'column'} rowGap={'md'}>
       <div>
         <SimpleGrid cols={{ base: 1, sm: 4 }}>
           <StatsRing
@@ -169,18 +169,7 @@ function Home({ settings }: { settings: ISetting }) {
         </Text>
       </Flex>
       <Flex mih={'64vh'} h={'64vh'} w={'100%'} direction={'column'} gap={'md'}>
-        <ScrollArea
-          viewportRef={scrollViewport}
-          mih={'100%'}
-          h={'100%'}
-          styles={{
-            viewport: {
-              div: {
-                height: '100%',
-              },
-            },
-          }}
-        >
+        <ScrollArea.Autosize viewportRef={scrollViewport}>
           <Paper h={'100%'} mih={'100%'} radius={'md'} p="md">
             {logsQueue.state?.length
               ? logsQueue.state?.map((log) => (
@@ -190,7 +179,7 @@ function Home({ settings }: { settings: ISetting }) {
                 ))
               : 'No logs'}
           </Paper>
-        </ScrollArea>
+        </ScrollArea.Autosize>
       </Flex>
     </Flex>
   );

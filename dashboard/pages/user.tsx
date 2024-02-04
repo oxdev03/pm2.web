@@ -267,26 +267,26 @@ export default function User({ users, servers }: InferGetServerSidePropsType<typ
             <Paper shadow="sm" radius="md" p={'sm'} style={{ height: '100%' }}>
               <ScrollArea>
                 <Table miw={600} verticalSpacing="sm">
-                  <thead>
-                    <tr>
-                      <th style={{ width: rem(40) }}>
+                  <Table.Thead>
+                    <Table.Tr>
+                      <Table.Th style={{ width: rem(40) }}>
                         <Checkbox onChange={toggleAll} checked={selection.length === users.length} indeterminate={selection.length > 0 && selection.length !== users.length} />
-                      </th>
-                      <th style={{ fontSize: rem(17) }}>User</th>
-                      <th style={{ fontSize: rem(17) }}>Email</th>
-                      <th style={{ fontSize: rem(17) }}>Permission</th>
-                      <th style={{ width: rem(50) }}></th>
-                    </tr>
-                  </thead>
-                  <tbody>
+                      </Table.Th>
+                      <Table.Th style={{ fontSize: rem(17) }}>User</Table.Th>
+                      <Table.Th style={{ fontSize: rem(17) }}>Email</Table.Th>
+                      <Table.Th style={{ fontSize: rem(17) }}>Permission</Table.Th>
+                      <Table.Th style={{ width: rem(50) }}></Table.Th>
+                    </Table.Tr>
+                  </Table.Thead>
+                  <Table.Tbody>
                     {users.map((item) => {
                       const selected = selection.includes(item._id);
                       return (
-                        <tr key={item._id} className={`${selected ? classes.rowSelected : ''}`}>
-                          <td>
+                        <Table.Tr key={item._id} className={`${selected ? classes.rowSelected : ''}`}>
+                          <Table.Td>
                             <Checkbox checked={selection.includes(item._id)} onChange={() => toggleRow(item._id)} disabled={item.acl.admin || item.acl.owner} />
-                          </td>
-                          <td>
+                          </Table.Td>
+                          <Table.Td>
                             <Group gap="sm">
                               <>
                                 {!item.oauth2 && <IconMail />}
@@ -297,9 +297,9 @@ export default function User({ users, servers }: InferGetServerSidePropsType<typ
                                 {item.name}
                               </Text>
                             </Group>
-                          </td>
-                          <td>{item.email}</td>
-                          <td>
+                          </Table.Td>
+                          <Table.Td>{item.email}</Table.Td>
+                          <Table.Td>
                             <NativeSelect
                               data={['Owner', 'Admin', 'Custom', 'None'].map((x) => {
                                 return { label: x, value: x.toLowerCase(), disabled: x == 'Custom' };
@@ -308,16 +308,16 @@ export default function User({ users, servers }: InferGetServerSidePropsType<typ
                               value={item.acl?.owner ? 'owner' : item.acl?.admin ? 'admin' : item.acl?.servers?.length ? 'custom' : 'none'}
                               onChange={(e) => updateRole(item._id, e.currentTarget.value)}
                             />
-                          </td>
-                          <td>
+                          </Table.Td>
+                          <Table.Td>
                             <ActionIcon variant="light" color="red.4" radius="sm" size={'lg'} onClick={() => deleteUser(item._id)}>
                               <IconTrash size="1.4rem" />
                             </ActionIcon>
-                          </td>
-                        </tr>
+                          </Table.Td>
+                        </Table.Tr>
                       );
                     })}
-                  </tbody>
+                  </Table.Tbody>
                 </Table>
               </ScrollArea>
             </Paper>{' '}

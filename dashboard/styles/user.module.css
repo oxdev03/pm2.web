@@ -35,7 +35,7 @@ const useStyles = createStyles((theme) => ({
 */
 
 .rowSelected {
-  background-color: light-dark(var(--mantine-color-dark-2), var(--mantine-primary-color-0));
+  background-color: var(--mantine-color-blue-light);
 }
 
 .value {
