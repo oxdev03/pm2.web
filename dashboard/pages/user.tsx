@@ -435,7 +435,7 @@ export default function User({ users, servers }: InferGetServerSidePropsType<typ
                     </Accordion>
                     <Transition mounted={!selection?.length} transition="fade" duration={500}>
                       {(styles) => (
-                        <Overlay color="#000" opacity={0.1} radius={'md'} blur={7} center style={{ ...styles }}>
+                        <Overlay color="#000" backgroundOpacity={0.1} radius={'md'} blur={7} center style={styles}>
                           <Badge size="xl" variant="outline">
                             Select a User First
                           </Badge>
