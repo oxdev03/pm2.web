@@ -304,7 +304,6 @@ export default function User({ users, servers }: InferGetServerSidePropsType<typ
                               data={['Owner', 'Admin', 'Custom', 'None'].map((x) => {
                                 return { label: x, value: x.toLowerCase(), disabled: x == 'Custom' };
                               })}
-                              placeholder="Select"
                               variant="filled"
                               value={item.acl?.owner ? 'owner' : item.acl?.admin ? 'admin' : item.acl?.servers?.length ? 'custom' : 'none'}
                               onChange={(e) => updateRole(item._id, e.currentTarget.value)}
