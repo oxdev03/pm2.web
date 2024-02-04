@@ -38,7 +38,7 @@ import {
 } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconChartBar, IconCheck, IconCircleFilled, IconDeviceFloppy, IconHistory, IconMail, IconPower, IconReload, IconTrash, IconX } from '@tabler/icons-react';
-import classes from './user.module.css';
+import classes from '../styles/user.module.css';
 
 const permissionData = [
   {

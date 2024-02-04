@@ -11,7 +11,7 @@ export function Dashboard({ children }: { children: ReactNode }) {
 
   return (
     <>
-      <AppShell bg={dark ? 'dark.9' : 'gray.1'} header={{ height: { base: 40, xs: 60 } }} navbar={{ width: { base: 40, xs: 75 }, breakpoint: '' }} p='md'>
+      <AppShell bg={dark ? 'dark.9' : 'gray.1'} header={{ height: { base: 40, xs: 60 } }} navbar={{ width: { base: 40, xs: 75 }, breakpoint: '' }} padding="md">
         <Head />
         <Nav />
         <AppShell.Main>{children}</AppShell.Main>
