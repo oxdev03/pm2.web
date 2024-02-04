@@ -11,7 +11,8 @@ import { DefaultSession } from 'next-auth';
 import { Acl } from '@/types/user';
 import { useDisclosure } from '@mantine/hooks';
 import classes from './Head.module.css';
-import { ResourceMultiSelect } from '../misc/ResourceMultiSelect';
+import { CustomMultiSelect, IItem } from '../misc/MultiSelect/CustomMultiSelect';
+import { IProcess } from '@/types/server';
 
 export function Head() {
   const { servers, selectItem, selectedItem } = useSelected();
@@ -34,7 +35,7 @@ export function Head() {
     <>
       {servers?.length && (
         <>
-          <ResourceMultiSelect
+          <CustomMultiSelect
             leftSection={<IconServerCog />}
             data={
               servers?.map((server) => ({
@@ -47,6 +48,7 @@ export function Head() {
             onChange={(values) => {
               selectItem?.(values, 'servers');
             }}
+            itemComponent={itemComponent}
             placeholder="Select Server"
             searchable
             w={{
@@ -56,9 +58,10 @@ export function Head() {
             classNames={{
               pillsList: classes.value,
             }}
+            hidePickedOptions
             // zIndex={204}
           />
-          <ResourceMultiSelect
+          <CustomMultiSelect
             leftSection={<IconDatabaseCog />}
             data={
               servers
@@ -70,6 +73,7 @@ export function Head() {
                 )
                 .flat() || []
             }
+            itemComponent={itemComponent}
             value={selectedItem?.processes || []}
             onChange={(values) => {
               selectItem(values, 'processes');
@@ -86,6 +90,7 @@ export function Head() {
               pillsList: classes.value,
             }}
             comboboxProps={{ position: 'bottom', middlewares: { flip: false, shift: false } }}
+            hidePickedOptions
           />
         </>
       )}
@@ -124,5 +129,25 @@ export function Head() {
         </Group>
       </Flex>
     </AppShell.Header>
+  );
+}
+
+function itemComponent(opt: IItem & { status: IProcess['status'] }) {
+  return (
+    <Flex align="center">
+      <Box mr={10}>
+        {opt.disabled ? (
+          <IconLock size={14} />
+        ) : (
+          <IconCircleFilled
+            size={10}
+            style={{
+              color: opt.status === 'online' ? '#12B886' : opt.status === 'stopped' ? '#FCC419' : '#FA5252',
+            }}
+          />
+        )}
+      </Box>
+      <div>{opt.label}</div>
+    </Flex>
   );
 }
