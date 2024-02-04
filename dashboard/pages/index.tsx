@@ -168,7 +168,7 @@ function Home({ settings }: { settings: ISetting }) {
           Logs
         </Text>
       </Flex>
-      <Flex mih={'77%'} h={'77%'} w={'100%'} direction={'column'} gap={'md'}>
+      <Flex mih={'64vh'} h={'64vh'} w={'100%'} direction={'column'} gap={'md'}>
         <ScrollArea
           viewportRef={scrollViewport}
           mih={'100%'}

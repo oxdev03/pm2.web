@@ -33,7 +33,7 @@ export function Head() {
 
   const MultiSelectItems = (
     <>
-      {servers?.length && (
+      {!!servers?.length && (
         <>
           <CustomMultiSelect
             leftSection={<IconServerCog />}
@@ -56,7 +56,7 @@ export function Head() {
             }}
             radius={'md'}
             classNames={{
-              pillsList: classes.value,
+              pillsList: classes.values,
             }}
             hidePickedOptions
             // zIndex={204}
@@ -87,7 +87,7 @@ export function Head() {
             radius={'md'}
             //zIndex={204}
             classNames={{
-              pillsList: classes.value,
+              pillsList: classes.values,
             }}
             comboboxProps={{ position: 'bottom', middlewares: { flip: false, shift: false } }}
             hidePickedOptions
