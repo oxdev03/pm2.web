@@ -30,6 +30,7 @@ export interface IItem {
 
 interface CustomMultiSelectProps extends MultiSelectProps {
   data: IItem[];
+  pillComponent?: (item: IItem & any) => JSX.Element;
   itemComponent?: (item: IItem & any) => JSX.Element;
 }
 
@@ -117,6 +118,7 @@ export const CustomMultiSelect = factory<CustomMultiSelectFactory>((_props, ref)
     hiddenInputValuesDivider,
     required,
     itemComponent,
+    pillComponent,
     //mod,
     ...others
   } = props;
@@ -183,7 +185,7 @@ export const CustomMultiSelect = factory<CustomMultiSelectFactory>((_props, ref)
     .filter((opt) => _value.includes(opt.value))
     .map((item, index) => (
       <Pill key={`${item}-${index}`} withRemoveButton={!readOnly && !item?.disabled} onRemove={() => setValue(_value.filter((i) => item.value !== i))} unstyled={unstyled} {...getStyles('pill')}>
-        {item.label}
+        {pillComponent ? pillComponent(item) : item.label}
       </Pill>
     ));
 

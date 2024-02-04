@@ -39,51 +39,51 @@ import {
 import { notifications } from '@mantine/notifications';
 import { IconChartBar, IconCheck, IconCircleFilled, IconDeviceFloppy, IconHistory, IconMail, IconPower, IconReload, IconTrash, IconX } from '@tabler/icons-react';
 import classes from '../styles/user.module.css';
+import { CustomMultiSelect, IItem } from '@/components/misc/MultiSelect/CustomMultiSelect';
 
 const permissionData = [
   {
     icon: <IconHistory />,
     value: 'LOGS',
+    label: 'Logs',
     description: 'View logs',
   },
   {
     icon: <IconChartBar />,
     value: 'MONITORING',
+    label: 'Monitoring',
     description: 'View monitoring/stats',
   },
   {
     icon: <IconReload />,
     value: 'RESTART',
+    label: 'Restart',
     description: 'Restart process',
   },
   {
     icon: <IconPower />,
     value: 'STOP',
+    label: 'Stop',
     description: 'Stop process',
   },
   {
     icon: <IconTrash />,
     value: 'DELETE',
+    label: 'Delete',
     description: 'Delete process',
   },
-].map((item) => ({ ...item, label: <Avatar size={'xs'}>{item.icon}</Avatar> }));
+];
 
-interface ItemProps extends React.ComponentPropsWithoutRef<'div'> {
-  icon: React.ReactNode;
-  label: React.ReactNode;
-  description: string;
-}
+const SelectItemComponent = (item: (typeof permissionData)[0]) => (
+  <Group wrap="nowrap">
+    <Avatar size={'xs'}>{item.icon}</Avatar>
+    <div>
+      <Text size="sm">{item.description}</Text>
+    </div>
+  </Group>
+);
 
-const SelectItem = forwardRef<HTMLDivElement, ItemProps>(({ icon, label, description, ...others }: ItemProps, ref) => (
-  <div ref={ref} {...others}>
-    <Group wrap="nowrap">
-      <Avatar size={'xs'}>{icon}</Avatar>
-      <div>
-        <Text size="sm">{description}</Text>
-      </div>
-    </Group>
-  </div>
-));
+const PillComponent = (item: (typeof permissionData)[0]) => <Avatar size={'xs'}>{item.icon}</Avatar>;
 
 export default function User({ users, servers }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
@@ -363,16 +363,16 @@ export default function User({ users, servers }: InferGetServerSidePropsType<typ
                                 {item.name}
                               </Flex>
                             </Accordion.Control>
-                            <MultiSelect
-                              /*  classNames={{
+                            <CustomMultiSelect
+                              classNames={{
                                 pill: classes.value,
-                                values: classes.values,
-                              }} */
-                              //value={getSelectedPerms(item._id)}
-                              //onChange={(values) => updatePermsState(item._id, '', values)}
-                              // @ts-ignore
-                              //data={permissionData}
-                              //itemComponent={SelectItem}
+                                pillsList: classes.values,
+                              }}
+                              value={getSelectedPerms(item._id)}
+                              onChange={(values) => updatePermsState(item._id, '', values)}
+                              data={permissionData}
+                              itemComponent={SelectItemComponent}
+                              pillComponent={PillComponent}
                               placeholder="Select Permissions"
                               variant="filled"
                               radius={'md'}
@@ -409,15 +409,15 @@ export default function User({ users, servers }: InferGetServerSidePropsType<typ
                                       />
                                       {process.name}
                                     </Flex>
-                                    <MultiSelect
-                                      /*   classNames={{
-                                        value: classes.value,
-                                        values: classes.values,
-                                      }} */
-                                      //value={getSelectedPerms(item._id, process._id)}
-                                      // @ts-ignore
-                                      //data={permissionData}
-                                      //itemComponent={SelectItem}
+                                    <CustomMultiSelect
+                                      classNames={{
+                                        pill: classes.value,
+                                        pillsList: classes.values,
+                                      }}
+                                      value={getSelectedPerms(item._id, process._id)}
+                                      data={permissionData}
+                                      itemComponent={SelectItemComponent}
+                                      pillComponent={PillComponent}
                                       placeholder="Select Permissions"
                                       onChange={(values) => updatePermsState(item._id, process._id, values)}
                                       variant="filled"
