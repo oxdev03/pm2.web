@@ -1,0 +1,7 @@
+.statsRing {
+  background: light-dark(white, var(--mantine-color-dark-7));
+}
+
+.statsRingText {
+  color: light-dark(var(--mantine-color-gray-7), var(--mantine-color-gray-6));
+}

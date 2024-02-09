@@ -1,5 +1,5 @@
-import { Center, Group, Paper, RingProgress, SimpleGrid, Text, useMantineColorScheme } from '@mantine/core';
-import { IconArrowDownRight, IconArrowUpRight } from '@tabler/icons-react';
+import { Center, Group, Paper, RingProgress, Text } from '@mantine/core';
+import classes from './StatsRing.module.css';
 
 interface StatsRingProps {
   label: string;
@@ -10,17 +10,9 @@ interface StatsRingProps {
   value?: number;
 }
 
-const icons = {
-  up: IconArrowUpRight,
-  down: IconArrowDownRight,
-};
-
 export function StatsRing({ stat }: { stat: StatsRingProps }) {
-  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
-  const dark = colorScheme === 'dark';
-  const Icon = icons[stat.icon];
   return (
-    <Paper radius="md" p="xs" key={stat.label} shadow="sm" bg={dark ? 'dark.7' : 'white'}>
+    <Paper radius="md" p="xs" key={stat.label} shadow="sm" className={classes.statsRing}>
       <Group>
         <RingProgress
           size={80}
@@ -38,7 +30,7 @@ export function StatsRing({ stat }: { stat: StatsRingProps }) {
           <Text size="xl" tt="uppercase" fw={700}>
             {stat.label}
           </Text>
-          <Text fw={700} size="md" c={dark ? 'gray.6' : 'gray.7'}>
+          <Text fw={700} size="md" className={classes.statsRingText}>
             {stat.stats}
           </Text>
         </div>
