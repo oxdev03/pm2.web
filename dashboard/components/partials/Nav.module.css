@@ -43,7 +43,6 @@
   &,
   &:hover {
     background-color: var(--mantine-primary-color-light);
-    color: var(--mantine-primary-color-filled); /*  BUG: fix this */
   }
 }
 
