@@ -1,4 +1,5 @@
-import { GetServerSideProps, GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
+import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
+
 import { signOut, useSession } from 'next-auth/react';
 import Head from 'next/head';
 

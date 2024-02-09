@@ -1,5 +1,6 @@
+import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
+
 import ms from 'ms';
-import { GetServerSideProps, GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import Head from 'next/head';
 import { useEffect, useRef, useState } from 'react';
 
