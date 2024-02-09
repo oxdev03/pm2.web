@@ -68,15 +68,14 @@ userSchema.pre('save', async function (next) {
 
 // Check if the provided password matches the user's password
 userSchema.methods.checkPassword = async function (password: string) {
-  return await bcrypt.compare(password, this.password);
+  return await bcrypt.compare(password, this.password!);
 };
 
 // Remove sensitive fields from the user object before sending it to the client
 userSchema.methods.toJSON = function () {
   const user = this.toObject();
   delete user.password;
-  delete user.__v;
-  return user;
+  return { ...user, updatedAt: user.updatedAt.toISOString(), createdAt: user.createdAt.toISOString() };
 };
 
 export default (mongoose.models.User as UserModel & mongoose.Document) || mongoose.model<MUser, UserModel>('User', userSchema);

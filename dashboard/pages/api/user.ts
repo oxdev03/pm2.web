@@ -17,7 +17,7 @@ export default authHandler(async (req: NextApiRequest, res: NextApiResponse<{ me
         if (user.acl?.owner) return res.status(403).json({ message: 'Owner cannot be deleted' });
         if (user.acl?.admin && !reqUser?.acl?.owner) return res.status(403).json({ message: 'Unauthorized' });
 
-        await User.findByIdAndRemove(req.query.id);
+        await User.findByIdAndDelete(req.query.id);
         return res.status(200).json({ message: 'User deleted successfully' });
       } catch (error) {
         console.error(error);
