@@ -1,0 +1,27 @@
+.processItem {
+  background: light-dark(white, var(--mantine-color-dark-7));
+}
+
+.processLog {
+  background: light-dark(var(--mantine-color-gray-1), var(--mantine-color-dark-8));
+}
+
+.colorSchemeDark {
+  @mixin dark {
+    display: none;
+  }
+
+  @mixin light {
+    display: block;
+  }
+}
+
+.colorSchemeLight {
+  @mixin light {
+    display: none;
+  }
+
+  @mixin dark {
+    display: block;
+  }
+}

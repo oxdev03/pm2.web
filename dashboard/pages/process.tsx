@@ -1,7 +1,6 @@
 import ms from 'ms';
 import { GetServerSideProps, GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import { type DefaultSession } from 'next-auth';
-//import { JWTDecodeParams, getToken } from 'next-auth/jwt';
 import { useSession } from 'next-auth/react';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
@@ -15,7 +14,7 @@ import Access from '@/utils/acess';
 import { fetchServer, fetchSettings } from '@/utils/fetchSSRProps';
 import { formatBytes } from '@/utils/format';
 import { IPermissionConstants, PERMISSIONS } from '@/utils/permission';
-import { ActionIcon, Flex, Indicator, Paper, ScrollArea, Text, Transition, useMantineColorScheme } from '@mantine/core';
+import { ActionIcon, Flex, Indicator, Paper, ScrollArea, Text, Transition } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconBrandJavascript, IconCpu, IconDeviceSdCard, IconHistory, IconPower, IconReload, IconSquareRoundedMinus, IconTrash } from '@tabler/icons-react';
 import uniqBy from 'lodash/uniqBy';
@@ -23,10 +22,9 @@ import { ISetting } from '@/types/setting';
 import { useRouter } from 'next/router';
 import ProcessItemMetric from '@/components/stats/ProcessItemMetric';
 import ProcessItemHeader from '@/components/misc/ProcessItemHeader';
+import classes from '../styles/process.module.css';
 
 function Process({ settings }: { settings: ISetting }) {
-  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
-  const dark = colorScheme === 'dark';
   const [selection, setSelection] = useState<string[]>([]);
   const [processData, setProcessData] = useState<IProcess[]>([]);
   const [processState, setProcessState] = useState<
@@ -188,7 +186,7 @@ function Process({ settings }: { settings: ISetting }) {
           radius="md"
           p="xs"
           shadow="sm"
-          bg={dark ? 'dark.7' : 'white'}
+          className={classes.processItem}
           /* sx={(theme) => ({
             transition: '0.5s ease-out max-height',
             maxHeight: selection.includes(process._id) ? '200px' : '55px',
@@ -250,7 +248,10 @@ function Process({ settings }: { settings: ISetting }) {
                   >
                     <IconTrash size="1.4rem" />
                   </ActionIcon>
-                  <ActionIcon variant={dark ? 'light' : 'subtle'} color={dark ? 'dark.2' : 'dark.8'} radius="sm" size={'sm'} mr={'-3px'} onClick={() => toggleRow(process._id)}>
+                  <ActionIcon className={classes.colorSchemeLight} variant={'light'} color={'dark.2'} radius="sm" size={'sm'} mr={'-3px'} onClick={() => toggleRow(process._id)}>
+                    <IconSquareRoundedMinus size="1.1rem" />
+                  </ActionIcon>
+                  <ActionIcon className={classes.colorSchemeDark} variant={'subtle'} color={'dark.8'} radius="sm" size={'sm'} mr={'-3px'} onClick={() => toggleRow(process._id)}>
                     <IconSquareRoundedMinus size="1.1rem" />
                   </ActionIcon>
                 </Flex>
@@ -268,7 +269,7 @@ function Process({ settings }: { settings: ISetting }) {
                       Ram Chart
                     </Paper>
                   </Flex> */}
-                  <Paper radius="md" p="xs" bg={dark ? 'dark.8' : 'gray.1'} h={'100px'} m="xs">
+                  <Paper radius="md" p="xs" className={classes.processLog} h={'100px'} m="xs">
                     <ScrollArea h={'100%'} style={{ overflowX: 'hidden' }}>
                       <Text fw="bold">Logs</Text>
                       <div>
