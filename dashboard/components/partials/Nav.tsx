@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 
 import { AppShell, Stack, Tooltip, UnstyledButton, useMantineColorScheme } from '@mantine/core';
 import { IconBellCog, IconGauge, IconLayoutDashboard, IconLogout, IconMoonStars, IconServerBolt, IconSettings, IconSun, IconUser } from '@tabler/icons-react';
+import cx from 'clsx';
 import classes from './Nav.module.css';
 
 interface NavbarBtnProps {
@@ -50,8 +51,7 @@ const navLinks = [
 ];
 
 export function Nav() {
-  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
-  const dark = colorScheme === 'dark';
+  const { toggleColorScheme } = useMantineColorScheme();
   //active page
   const router = useRouter();
   let active = navLinks.findIndex((link) => router.pathname === link.href);
@@ -75,7 +75,12 @@ export function Nav() {
           //spacing={0}
           className={classes.stackAction}
         >
-          <NavbarBtn icon={dark ? IconSun : IconMoonStars} label="Toggle Theme" onClick={() => toggleColorScheme()} />
+          <Tooltip label="Toggle Theme" position="right" transitionProps={{ duration: 0 }}>
+            <Link href={''} className={classes.link} onClick={() => toggleColorScheme()}>
+              <IconSun stroke={1.5} className={cx(classes.icon, classes.colorSchemeLight)} />
+              <IconMoonStars stroke={1.5} className={cx(classes.icon, classes.colorSchemeDark)} />
+            </Link>
+          </Tooltip>
           <NavbarBtn icon={IconLogout} label="Logout" onClick={() => signOut()} />
         </Stack>
       </AppShell.Section>

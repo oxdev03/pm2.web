@@ -46,3 +46,23 @@
     color: var(--mantine-primary-color-filled); /*  BUG: fix this */
   }
 }
+
+.colorSchemeDark {
+  @mixin dark {
+    display: none;
+  }
+
+  @mixin light {
+    display: block;
+  }
+}
+
+.colorSchemeLight {
+  @mixin light {
+    display: none;
+  }
+
+  @mixin dark {
+    display: block;
+  }
+}
