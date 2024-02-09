@@ -34,7 +34,6 @@ import {
   Text,
   Title,
   Transition,
-  useMantineColorScheme,
 } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconChartBar, IconCheck, IconCircleFilled, IconDeviceFloppy, IconHistory, IconMail, IconPower, IconReload, IconTrash, IconX } from '@tabler/icons-react';
@@ -86,8 +85,6 @@ const SelectItemComponent = (item: (typeof permissionData)[0]) => (
 const PillComponent = (item: (typeof permissionData)[0]) => <Avatar size={'xs'}>{item.icon}</Avatar>;
 
 export default function User({ users, servers }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
-  const dark = colorScheme === 'dark';
   const aclPerms = {
     logs: false,
     monitoring: false,
