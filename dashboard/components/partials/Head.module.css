@@ -2,19 +2,23 @@
   flex-wrap: nowrap;
   overflow-x: auto;
 
-  ::-webkit-scrollbar {
+  &::-webkit-scrollbar {
     height: 0.4rem;
   }
 
-  ::-webkit-scrollbar-track {
+  &::-webkit-scrollbar-track {
     box-shadow: inset 0 0 6px rgba(0, 0, 0, 0);
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0);
   }
 
-  ::-webkit-scrollbar-thumb {
-    background-color: var(--scrollbar-thumb-background, var(--theme-colors-dark-3, var(--theme-colors-gray-5)));
+  &::-webkit-scrollbar-thumb {
+    background-color: light-dark(var(--mantine-color-gray-7), var(--mantine-color-dark-2));
     border-radius: 0.3rem;
   }
+}
+
+.inputField {
+  --input-padding-y: 0;
 }
 
 .modal {
