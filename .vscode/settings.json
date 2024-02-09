@@ -1,3 +1,4 @@
 {
-  "cssVariables.lookupFiles": ["**/*.css", "**/*.scss", "**/*.sass", "**/*.less", "dashboard/node_modules/@mantine/core/styles.css"]
+  "cssvar.files": ["dashboard/node_modules/@mantine/core/styles.css"],
+  "cssvar.extensions": ["css", "scss", "tsx", "jsx"]
 }
