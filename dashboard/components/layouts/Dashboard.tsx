@@ -1,17 +1,23 @@
 import { ReactNode, useEffect } from 'react';
 
-import { AppShell, useMantineColorScheme } from '@mantine/core';
+import { AppShell } from '@mantine/core';
 
 import { Head } from '../partials/Head';
 import { Nav } from '../partials/Nav';
 
-export function Dashboard({ children }: { children: ReactNode }) {
-  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
-  const dark = colorScheme === 'dark';
+import classes from './Dashboard.module.css';
 
+export function Dashboard({ children }: { children: ReactNode }) {
   return (
     <>
-      <AppShell bg={dark ? 'dark.9' : 'gray.1'} header={{ height: { base: 40, xs: 60 } }} navbar={{ width: { base: 40, xs: 75 }, breakpoint: '' }} padding="md">
+      <AppShell
+        classNames={{
+          root: classes.appShellRoot,
+        }}
+        header={{ height: { base: 40, xs: 60 } }}
+        navbar={{ width: { base: 40, xs: 75 }, breakpoint: '' }}
+        padding="md"
+      >
         <Head />
         <Nav />
         <AppShell.Main>{children}</AppShell.Main>
