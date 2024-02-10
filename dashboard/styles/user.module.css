@@ -19,7 +19,7 @@
   padding: 0;
   padding-left: rem(60);
 
-  @media (max-width: --mantine-breakpoint-xs) {
+  @media (max-width: $mantine-breakpoint-xs) {
     padding-left: rem(10);
   }
 }

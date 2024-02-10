@@ -36,6 +36,7 @@ import { IconCheck, IconCopy, IconDeviceFloppy, IconRefresh, IconTrash, IconUnli
 import { useEffect, useState } from 'react';
 import { DefaultSession } from 'next-auth';
 import { Acl } from '@/types/user';
+import classes from '../styles/settings.module.css';
 
 export default function Settings({ settings }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { data: session } = useSession();
@@ -301,14 +302,9 @@ export default function Settings({ settings }: InferGetServerSidePropsType<typeo
                                   <PinInput
                                     length={6}
                                     {...globalConfiguration.getInputProps('registrationCode')}
-                                    /* sx={(theme) => ({
-                                      '& input': {
-                                        [theme.fn.smallerThan('xs')]: {
-                                          width: '1.5rem',
-                                          height: '1.5rem',
-                                        },
-                                      },
-                                    })} */
+                                    classNames={{
+                                      input: classes.pinInput,
+                                    }}
                                   />
                                   <ActionIcon
                                     type="button"
@@ -319,13 +315,13 @@ export default function Settings({ settings }: InferGetServerSidePropsType<typeo
                                     size={'2rem'}
                                     onClick={() => globalConfiguration.setFieldValue('registrationCode', randomId().slice(8, 14))}
                                   >
-                                    <IconRefresh size={rem(20)} />
+                                    <IconRefresh />
                                   </ActionIcon>
                                   <CopyButton value={globalConfiguration.values.registrationCode} timeout={2000}>
                                     {({ copied, copy }) => (
                                       <Tooltip label={copied ? 'Copied' : 'Copy'} withArrow position="right">
                                         <ActionIcon color={copied ? 'teal' : 'gray'} onClick={copy} variant="light" size={'2rem'}>
-                                          {copied ? <IconCheck size="1rem" /> : <IconCopy size="1rem" />}
+                                          {copied ? <IconCheck /> : <IconCopy size="1rem" />}
                                         </ActionIcon>
                                       </Tooltip>
                                     )}
