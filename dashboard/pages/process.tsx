@@ -22,6 +22,7 @@ import { ISetting } from '@/types/setting';
 import { useRouter } from 'next/router';
 import ProcessItemMetric from '@/components/stats/ProcessItemMetric';
 import ProcessItemHeader from '@/components/misc/ProcessItemHeader';
+import cx from 'clsx';
 import classes from '../styles/process.module.css';
 
 function Process({ settings }: { settings: ISetting }) {
@@ -186,7 +187,10 @@ function Process({ settings }: { settings: ISetting }) {
           radius="md"
           p="xs"
           shadow="sm"
-          className={classes.processItem}
+          className={cx(classes.processItem, {
+            [classes.opened]: selection.includes(process._id),
+            [classes.closed]: !selection.includes(process._id),
+          })}
           /* sx={(theme) => ({
             transition: '0.5s ease-out max-height',
             maxHeight: selection.includes(process._id) ? '200px' : '55px',
