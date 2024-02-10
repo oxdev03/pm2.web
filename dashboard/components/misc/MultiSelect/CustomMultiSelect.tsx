@@ -291,6 +291,7 @@ export const CustomMultiSelect = factory<CustomMultiSelectFactory>((_props, ref)
               <Combobox.EventsTarget>
                 <PillsInput.Field
                   {...rest}
+                  hidden={!!_value.length}
                   ref={ref}
                   id={_id}
                   placeholder={placeholder}
