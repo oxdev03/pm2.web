@@ -123,7 +123,7 @@ export function Head() {
           {MultiSelectItems}
         </Group>
         <Group h={'100%'} justify="right" px={'xs'} className={classes.filterIcon}>
-          <ActionIcon variant="light" color="blue" onClick={open}>
+          <ActionIcon variant="light" color="blue" onClick={open}> 
             <IconFilterCog size={'1.2rem'} />
           </ActionIcon>
         </Group>

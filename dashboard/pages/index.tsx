@@ -119,7 +119,7 @@ function Home({ settings }: { settings: ISetting }) {
   }, [status]);
 
   return (
-    <Flex direction={'column'} rowGap={'md'}>
+    <Flex direction={'column'} rowGap={'md'} flex={1}>
       <div>
         <SimpleGrid cols={{ base: 1, sm: 4 }}>
           <StatsRing
@@ -161,27 +161,23 @@ function Home({ settings }: { settings: ISetting }) {
           />
         </SimpleGrid>
       </div>
-      <Flex gap={'4px'}>
-        <Center h="100%" mt={'0.5px'}>
-          <IconList size="1.4rem" stroke={1.5} />
-        </Center>
+      <Flex gap={'4px'} align={'center'}>
+        <IconList size="1.4rem" stroke={1.5} />
         <Text size="xl" fw={600}>
           Logs
         </Text>
       </Flex>
-      <Flex mih={'64vh'} h={'64vh'} w={'100%'} direction={'column'} gap={'md'}>
-        <ScrollArea.Autosize viewportRef={scrollViewport}>
-          <Paper h={'100%'} mih={'100%'} radius={'md'} p="md">
-            {logsQueue.state?.length
-              ? logsQueue.state?.map((log) => (
-                  <Text key={log._id} size="md" fw={600} color={log.type == 'success' ? 'teal.6' : log.type == 'error' ? 'red.6' : 'blue.4'} component="pre" my="0px">
-                    {log.createdAt.split('T')[1].split('.')[0]} {log.message}
-                  </Text>
-                ))
-              : 'No logs'}
-          </Paper>
-        </ScrollArea.Autosize>
-      </Flex>
+      <ScrollArea viewportRef={scrollViewport} flex={1}>
+        <Paper mah={'64dvh'} mih={'64dvh'} radius={'md'} p="md">
+          {logsQueue.state?.length
+            ? logsQueue.state?.map((log) => (
+                <Text key={log._id} size="md" fw={600} c={log.type == 'success' ? 'teal.6' : log.type == 'error' ? 'red.6' : 'blue.4'} component="pre" my="0px">
+                  {log.createdAt.split('T')[1].split('.')[0]} {log.message}
+                </Text>
+              ))
+            : 'No logs'}
+        </Paper>
+      </ScrollArea>
     </Flex>
   );
 }
