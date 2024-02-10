@@ -258,7 +258,14 @@ export default function User({ users, servers }: InferGetServerSidePropsType<typ
         <link rel="icon" type="image/png" href="/logo.png" />
       </Head>
       <Dashboard>
-        <Grid h={'102%'}>
+        <Grid
+          flex={1}
+          styles={{
+            root: {
+              display: 'flex',
+            },
+          }}
+        >
           <Grid.Col span={{ lg: 6, md: 12 }}>
             {/* 3/5 2/5 */}
             <Paper shadow="sm" radius="md" p={'sm'} style={{ height: '100%' }}>
