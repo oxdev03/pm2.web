@@ -12,7 +12,7 @@
   flex-wrap: nowrap;
   overflow-x: auto;
   scrollbar-width: thin;
-
+  overflow-y: hidden;
 }
 
 .content {

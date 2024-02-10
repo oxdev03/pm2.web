@@ -1,6 +1,7 @@
 .values {
   flex-wrap: nowrap;
   overflow-x: auto;
+  overflow-y: hidden;
 
   &::-webkit-scrollbar {
     height: 0.4rem;
