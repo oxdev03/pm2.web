@@ -235,66 +235,73 @@ export default function Settings({ settings }: InferGetServerSidePropsType<typeo
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" type="image/png" href="/logo.png" />
       </Head>
+
       <Dashboard>
-        <Flex h={'100%'} direction={'column'}>
-          <Grid h={'100%'} mih={'100%'}>
-            <Grid.Col span={{ lg: 8, md: 7, sm: 6, xs: 12 }} mih={'100%'}>
-              <Paper shadow="sm" radius="md" p={'md'} mih={'100%'} h={'100%'}>
-                <Title order={3} style={{ marginBottom: '1rem' }}>
-                  Configuration
-                </Title>
-                <ScrollArea>
-                  <Accordion variant="filled">
-                    <Accordion.Item value="configuration">
-                      <Accordion.Control>
-                        <Title order={5}>Configuration</Title>
-                      </Accordion.Control>
-                      <Accordion.Panel px="xs">
-                        <form onSubmit={globalConfiguration.onSubmit(async (values) => await handleConfigurationUpdate(values))}>
-                          <Grid grow gutter={'xl'}>
-                            <Grid.Col span={2}>
-                              <Stack my={'xs'}>
-                                <NumberInput
-                                  label="Backend Update Interval"
-                                  description="In ms"
-                                  placeholder="Backend Update Interval"
-                                  required
-                                  {...globalConfiguration.getInputProps('polling.backend')}
-                                  min={1000}
-                                  step={500}
-                                />
-                                <NumberInput
-                                  label="Frontend Update Interval"
-                                  description="In ms"
-                                  placeholder="Frontend Update Interval"
-                                  required
-                                  {...globalConfiguration.getInputProps('polling.frontend')}
-                                  min={1000}
-                                  step={500}
-                                />
-                              </Stack>
-                            </Grid.Col>
-                            <Grid.Col span={2}>
-                              <Stack my={'xs'}>
-                                <NumberInput
-                                  label="Log Rotation"
-                                  description="automatically rotate logs,to meet max logs length"
-                                  placeholder="Log Rotation"
-                                  required
-                                  step={50}
-                                  {...globalConfiguration.getInputProps('logRotation')}
-                                />
-                                <Checkbox
-                                  label="Exclude Daemon Process"
-                                  {...globalConfiguration.getInputProps('excludeDaemon', { type: 'checkbox' })}
-                                  description="excludes process with name pm2.web-daemon"
-                                />
-                                <Input.Wrapper label="Registration Code" description="requires code for registering new user accounts">
-                                  <Flex align={'end'} gap={'xs'} wrap={'wrap'}>
-                                    <PinInput
-                                      length={6}
-                                      {...globalConfiguration.getInputProps('registrationCode')}
-                                      /* sx={(theme) => ({
+        <Grid
+          flex={1}
+          styles={{
+            root: {
+              display: 'flex',
+            },
+          }}
+        >
+          <Grid.Col span={{ lg: 8, md: 7, sm: 6, xs: 12 }}>
+            <Paper shadow="sm" radius="md" p={'md'} mih={'100%'} h={'100%'}>
+              <Title order={3} style={{ marginBottom: '1rem' }}>
+                Configuration
+              </Title>
+              <ScrollArea>
+                <Accordion variant="filled">
+                  <Accordion.Item value="configuration">
+                    <Accordion.Control>
+                      <Title order={5}>Configuration</Title>
+                    </Accordion.Control>
+                    <Accordion.Panel px="xs">
+                      <form onSubmit={globalConfiguration.onSubmit(async (values) => await handleConfigurationUpdate(values))}>
+                        <Grid grow gutter={'xl'}>
+                          <Grid.Col span={2}>
+                            <Stack my={'xs'}>
+                              <NumberInput
+                                label="Backend Update Interval"
+                                description="In ms"
+                                placeholder="Backend Update Interval"
+                                required
+                                {...globalConfiguration.getInputProps('polling.backend')}
+                                min={1000}
+                                step={500}
+                              />
+                              <NumberInput
+                                label="Frontend Update Interval"
+                                description="In ms"
+                                placeholder="Frontend Update Interval"
+                                required
+                                {...globalConfiguration.getInputProps('polling.frontend')}
+                                min={1000}
+                                step={500}
+                              />
+                            </Stack>
+                          </Grid.Col>
+                          <Grid.Col span={2}>
+                            <Stack my={'xs'}>
+                              <NumberInput
+                                label="Log Rotation"
+                                description="automatically rotate logs,to meet max logs length"
+                                placeholder="Log Rotation"
+                                required
+                                step={50}
+                                {...globalConfiguration.getInputProps('logRotation')}
+                              />
+                              <Checkbox
+                                label="Exclude Daemon Process"
+                                {...globalConfiguration.getInputProps('excludeDaemon', { type: 'checkbox' })}
+                                description="excludes process with name pm2.web-daemon"
+                              />
+                              <Input.Wrapper label="Registration Code" description="requires code for registering new user accounts">
+                                <Flex align={'end'} gap={'xs'} wrap={'wrap'}>
+                                  <PinInput
+                                    length={6}
+                                    {...globalConfiguration.getInputProps('registrationCode')}
+                                    /* sx={(theme) => ({
                                       '& input': {
                                         [theme.fn.smallerThan('xs')]: {
                                           width: '1.5rem',
@@ -302,165 +309,164 @@ export default function Settings({ settings }: InferGetServerSidePropsType<typeo
                                         },
                                       },
                                     })} */
-                                    />
-                                    <ActionIcon
-                                      type="button"
-                                      title="reload_code"
-                                      variant="light"
-                                      color="blue"
-                                      radius="sm"
-                                      size={'2rem'}
-                                      onClick={() => globalConfiguration.setFieldValue('registrationCode', randomId().slice(8, 14))}
-                                    >
-                                      <IconRefresh size={rem(20)} />
-                                    </ActionIcon>
-                                    <CopyButton value={globalConfiguration.values.registrationCode} timeout={2000}>
-                                      {({ copied, copy }) => (
-                                        <Tooltip label={copied ? 'Copied' : 'Copy'} withArrow position="right">
-                                          <ActionIcon color={copied ? 'teal' : 'gray'} onClick={copy} variant="light" size={'2rem'}>
-                                            {copied ? <IconCheck size="1rem" /> : <IconCopy size="1rem" />}
-                                          </ActionIcon>
-                                        </Tooltip>
-                                      )}
-                                    </CopyButton>
-                                  </Flex>
-                                </Input.Wrapper>
-                              </Stack>
-                              <Flex justify={'flex-end'}>
-                                <Button type="submit" variant="light" color="teal" leftSection={<IconDeviceFloppy />} mt={'sm'}>
-                                  Save
-                                </Button>
-                              </Flex>
-                            </Grid.Col>
-                          </Grid>
-                        </form>
-                      </Accordion.Panel>
-                    </Accordion.Item>
-                    <Accordion.Item value="database_management">
-                      <Accordion.Control>
-                        <Title order={5}>Database Management</Title>
+                                  />
+                                  <ActionIcon
+                                    type="button"
+                                    title="reload_code"
+                                    variant="light"
+                                    color="blue"
+                                    radius="sm"
+                                    size={'2rem'}
+                                    onClick={() => globalConfiguration.setFieldValue('registrationCode', randomId().slice(8, 14))}
+                                  >
+                                    <IconRefresh size={rem(20)} />
+                                  </ActionIcon>
+                                  <CopyButton value={globalConfiguration.values.registrationCode} timeout={2000}>
+                                    {({ copied, copy }) => (
+                                      <Tooltip label={copied ? 'Copied' : 'Copy'} withArrow position="right">
+                                        <ActionIcon color={copied ? 'teal' : 'gray'} onClick={copy} variant="light" size={'2rem'}>
+                                          {copied ? <IconCheck size="1rem" /> : <IconCopy size="1rem" />}
+                                        </ActionIcon>
+                                      </Tooltip>
+                                    )}
+                                  </CopyButton>
+                                </Flex>
+                              </Input.Wrapper>
+                            </Stack>
+                            <Flex justify={'flex-end'}>
+                              <Button type="submit" variant="light" color="teal" leftSection={<IconDeviceFloppy />} mt={'sm'}>
+                                Save
+                              </Button>
+                            </Flex>
+                          </Grid.Col>
+                        </Grid>
+                      </form>
+                    </Accordion.Panel>
+                  </Accordion.Item>
+                  <Accordion.Item value="database_management">
+                    <Accordion.Control>
+                      <Title order={5}>Database Management</Title>
+                    </Accordion.Control>
+                    <Accordion.Panel px="xs">
+                      <form
+                        onSubmit={databaseAction.onSubmit(async () => {
+                          await handleDatabaseAction(databaseAction.values.action as 'delete' | 'delete_logs');
+                        })}
+                      >
+                        <Flex align={'end'} gap={'lg'}>
+                          <Select
+                            label="Database Action"
+                            placeholder="Select Action"
+                            data={[
+                              { label: 'Delete Database Server/Process', value: 'delete' },
+                              { label: 'Delete Logs of Process', value: 'delete_logs' },
+                            ]}
+                            style={{
+                              flex: '1',
+                            }}
+                            required
+                            {...databaseAction.getInputProps('action')}
+                          />
+                          <Button type="submit" variant="light" color="orange">
+                            Run
+                          </Button>
+                        </Flex>
+                      </form>
+                    </Accordion.Panel>
+                  </Accordion.Item>
+                </Accordion>
+                {!acl && (
+                  <Overlay color="#000" backgroundOpacity={0.1} radius={'md'} blur={7} center zIndex={2}>
+                    <Badge size="xl" variant="outline" color="red">
+                      Owner/Admin Permission required
+                    </Badge>
+                  </Overlay>
+                )}
+              </ScrollArea>
+            </Paper>
+          </Grid.Col>
+          <Grid.Col span={{ lg: 4, md: 5, sm: 6, xs: 12 }}>
+            <Paper shadow="sm" radius="md" p={'md'} style={{ height: '100%' }}>
+              <Title order={3} style={{ marginBottom: '1rem' }}>
+                User Settings
+              </Title>
+              <Accordion variant="filled">
+                <Accordion.Item value="password">
+                  <Accordion.Control
+                    icon={
+                      <IconRefresh
+                        style={{
+                          marginTop: '0.1rem',
+                        }}
+                      />
+                    }
+                  >
+                    <Title order={5}>Update Password</Title>
+                  </Accordion.Control>
+                  <Accordion.Panel px="xs">
+                    <form onSubmit={passwordForm.onSubmit(async (values) => await handlePasswordUpdate(values))}>
+                      <Stack my={'xs'}>
+                        <TextInput label="Old Password" placeholder="Old Password" required type="password" {...passwordForm.getInputProps('oldPassword')} />
+                        <TextInput label="New Password" placeholder="New Password" required type="password" {...passwordForm.getInputProps('newPassword')} />
+                        <TextInput label="Confirm Password" placeholder="Confirm Password" required type="password" {...passwordForm.getInputProps('confirmPassword')} />
+                        <Button type="submit" variant="light" color="blue">
+                          Update Password
+                        </Button>
+                      </Stack>
+                    </form>
+                  </Accordion.Panel>
+                </Accordion.Item>
+                <Accordion.Item value="delete">
+                  <Accordion.Control
+                    icon={
+                      <IconTrash
+                        style={{
+                          marginTop: '0.1rem',
+                        }}
+                      />
+                    }
+                  >
+                    <Title order={5}>Delete Account</Title>
+                  </Accordion.Control>
+                  <Accordion.Panel px="xs">
+                    <form onSubmit={deleteForm.onSubmit(async (values) => await handleDeleteAccount(values))}>
+                      <Stack my={'xs'}>
+                        <TextInput label="Password" placeholder="Password" required type="password" {...deleteForm.getInputProps('password')} />
+                        <Button type="submit" variant="light" color="red">
+                          Delete Account
+                        </Button>
+                      </Stack>
+                    </form>
+                  </Accordion.Panel>
+                </Accordion.Item>
+                {isOAuth2 && (
+                  <>
+                    <Accordion.Item value="unlink">
+                      <Accordion.Control
+                        icon={
+                          <IconUnlink
+                            style={{
+                              marginTop: '0.1rem',
+                            }}
+                          />
+                        }
+                      >
+                        <Title order={5}>Unlink OAuth2</Title>
                       </Accordion.Control>
                       <Accordion.Panel px="xs">
-                        <form
-                          onSubmit={databaseAction.onSubmit(async () => {
-                            await handleDatabaseAction(databaseAction.values.action as 'delete' | 'delete_logs');
-                          })}
-                        >
-                          <Flex align={'end'} gap={'lg'}>
-                            <Select
-                              label="Database Action"
-                              placeholder="Select Action"
-                              data={[
-                                { label: 'Delete Database Server/Process', value: 'delete' },
-                                { label: 'Delete Logs of Process', value: 'delete_logs' },
-                              ]}
-                              style={{
-                                flex: '1',
-                              }}
-                              required
-                              {...databaseAction.getInputProps('action')}
-                            />
-                            <Button type="submit" variant="light" color="orange">
-                              Run
-                            </Button>
-                          </Flex>
-                        </form>
+                        <Stack my={'xs'}>
+                          <Button type="submit" variant="light" color="orange" onClick={handleUnlinkOAuth2}>
+                            Unlink OAuth2
+                          </Button>
+                        </Stack>
                       </Accordion.Panel>
                     </Accordion.Item>
-                  </Accordion>
-                  {!acl && (
-                    <Overlay color="#000" backgroundOpacity={0.1} radius={'md'} blur={7} center zIndex={2}>
-                      <Badge size="xl" variant="outline" color="red">
-                        Owner/Admin Permission required
-                      </Badge>
-                    </Overlay>
-                  )}
-                </ScrollArea>
-              </Paper>
-            </Grid.Col>
-            <Grid.Col span={{ lg: 4, md: 5, sm: 6, xs: 12 }}>
-              <Paper shadow="sm" radius="md" p={'md'} style={{ height: '100%' }}>
-                <Title order={3} style={{ marginBottom: '1rem' }}>
-                  User Settings
-                </Title>
-                <Accordion variant="filled">
-                  <Accordion.Item value="password">
-                    <Accordion.Control
-                      icon={
-                        <IconRefresh
-                          style={{
-                            marginTop: '0.1rem',
-                          }}
-                        />
-                      }
-                    >
-                      <Title order={5}>Update Password</Title>
-                    </Accordion.Control>
-                    <Accordion.Panel px="xs">
-                      <form onSubmit={passwordForm.onSubmit(async (values) => await handlePasswordUpdate(values))}>
-                        <Stack my={'xs'}>
-                          <TextInput label="Old Password" placeholder="Old Password" required type="password" {...passwordForm.getInputProps('oldPassword')} />
-                          <TextInput label="New Password" placeholder="New Password" required type="password" {...passwordForm.getInputProps('newPassword')} />
-                          <TextInput label="Confirm Password" placeholder="Confirm Password" required type="password" {...passwordForm.getInputProps('confirmPassword')} />
-                          <Button type="submit" variant="light" color="blue">
-                            Update Password
-                          </Button>
-                        </Stack>
-                      </form>
-                    </Accordion.Panel>
-                  </Accordion.Item>
-                  <Accordion.Item value="delete">
-                    <Accordion.Control
-                      icon={
-                        <IconTrash
-                          style={{
-                            marginTop: '0.1rem',
-                          }}
-                        />
-                      }
-                    >
-                      <Title order={5}>Delete Account</Title>
-                    </Accordion.Control>
-                    <Accordion.Panel px="xs">
-                      <form onSubmit={deleteForm.onSubmit(async (values) => await handleDeleteAccount(values))}>
-                        <Stack my={'xs'}>
-                          <TextInput label="Password" placeholder="Password" required type="password" {...deleteForm.getInputProps('password')} />
-                          <Button type="submit" variant="light" color="red">
-                            Delete Account
-                          </Button>
-                        </Stack>
-                      </form>
-                    </Accordion.Panel>
-                  </Accordion.Item>
-                  {isOAuth2 && (
-                    <>
-                      <Accordion.Item value="unlink">
-                        <Accordion.Control
-                          icon={
-                            <IconUnlink
-                              style={{
-                                marginTop: '0.1rem',
-                              }}
-                            />
-                          }
-                        >
-                          <Title order={5}>Unlink OAuth2</Title>
-                        </Accordion.Control>
-                        <Accordion.Panel px="xs">
-                          <Stack my={'xs'}>
-                            <Button type="submit" variant="light" color="orange" onClick={handleUnlinkOAuth2}>
-                              Unlink OAuth2
-                            </Button>
-                          </Stack>
-                        </Accordion.Panel>
-                      </Accordion.Item>
-                    </>
-                  )}
-                </Accordion>
-              </Paper>
-            </Grid.Col>
-          </Grid>
-        </Flex>
+                  </>
+                )}
+              </Accordion>
+            </Paper>
+          </Grid.Col>
+        </Grid>
       </Dashboard>
     </>
   );

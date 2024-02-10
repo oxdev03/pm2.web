@@ -13,6 +13,7 @@ export function Dashboard({ children }: { children: ReactNode }) {
       <AppShell
         classNames={{
           root: classes.appShellRoot,
+          main: classes.appShellMain,
         }}
         header={{ height: { base: 40, xs: 60 } }}
         navbar={{ width: { base: 40, xs: 75 }, breakpoint: '' }}

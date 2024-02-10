@@ -1,3 +1,8 @@
 .appShellRoot {
   background: light-dark(var(--mantine-color-gray-1), var(--mantine-color-dark-9));
 }
+
+.appShellMain {
+  display: flex;
+  flex-direction: column;
+}

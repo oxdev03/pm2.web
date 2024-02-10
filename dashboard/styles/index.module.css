@@ -1,0 +1,9 @@
+.scrollAreaRoot {
+  flex: 1;
+}
+
+.scrollAreaRoot,
+.scrollAreaViewPort,
+.scrollAreaViewPort div {
+  height: '100%';
+}
