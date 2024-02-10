@@ -82,7 +82,11 @@ const SelectItemComponent = (item: (typeof permissionData)[0]) => (
   </Group>
 );
 
-const PillComponent = (item: (typeof permissionData)[0]) => <Avatar size={'xs'}>{item.icon}</Avatar>;
+const PillComponent = (item: (typeof permissionData)[0]) => (
+  <Flex align={'center'} justify={'center'} h={'100%'}>
+    <Avatar size={'xs'}>{item.icon}</Avatar>
+  </Flex>
+);
 
 export default function User({ users, servers }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const aclPerms = {
