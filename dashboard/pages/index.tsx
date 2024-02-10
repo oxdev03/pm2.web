@@ -168,7 +168,14 @@ function Home({ settings }: { settings: ISetting }) {
         </Text>
       </Flex>
       <ScrollArea.Autosize viewportRef={scrollViewport} flex={1} mah={'64dvh'}>
-        <Paper radius={'md'} p="md"  mih={'64dvh'}>
+        <Paper
+          radius={'md'}
+          p="md"
+          mih={'64dvh'}
+          style={{
+            overflowX: 'visible',
+          }}
+        >
           {logsQueue.state?.length
             ? logsQueue.state?.map((log) => (
                 <Text key={log._id} size="md" fw={600} c={log.type == 'success' ? 'teal.6' : log.type == 'error' ? 'red.6' : 'blue.4'} component="pre" my="0px">
