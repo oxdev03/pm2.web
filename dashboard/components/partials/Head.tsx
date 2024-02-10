@@ -85,9 +85,13 @@ export function Head() {
             }}
             maxValues={4}
             radius={'md'}
-            //zIndex={204}
+            withScrollArea
+            maxDropdownHeight={200}
             classNames={{
               pillsList: classes.values,
+            }}
+            style={{
+              zIndex: 204,
             }}
             comboboxProps={{ position: 'bottom', middlewares: { flip: false, shift: false } }}
             hidePickedOptions
@@ -123,7 +127,7 @@ export function Head() {
           {MultiSelectItems}
         </Group>
         <Group h={'100%'} justify="right" px={'xs'} className={classes.filterIcon}>
-          <ActionIcon variant="light" color="blue" onClick={open}> 
+          <ActionIcon variant="light" color="blue" onClick={open}>
             <IconFilterCog size={'1.2rem'} />
           </ActionIcon>
         </Group>
