@@ -9,13 +9,7 @@ import { MUser, MUserMethods } from "@pm2.web/typings";
 import connectDB from "./mongodb";
 
 const authHandler =
-  (
-    handler: (
-      req: NextApiRequest,
-      res: NextApiResponse,
-      user: IUserModel,
-    ) => any,
-  ) =>
+  (handler: (req: NextApiRequest, res: NextApiResponse, user: IUserModel) => any) =>
   async (req: NextApiRequest, res: NextApiResponse) => {
     await connectDB();
     const token = await getToken({ req });

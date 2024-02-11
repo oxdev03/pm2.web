@@ -1,8 +1,4 @@
-import {
-  GetServerSideProps,
-  GetServerSidePropsContext,
-  InferGetServerSidePropsType,
-} from "next";
+import { GetServerSideProps, GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { forwardRef, useEffect, useState } from "react";
@@ -10,17 +6,10 @@ import React, { forwardRef, useEffect, useState } from "react";
 import { GithubIcon } from "@/components/icons/github";
 import { GoogleIcon } from "@/components/icons/google";
 import { Dashboard } from "@/components/layouts/Dashboard";
-import {
-  CustomMultiSelect,
-  IItem,
-} from "@/components/misc/MultiSelect/CustomMultiSelect";
+import { CustomMultiSelect, IItem } from "@/components/misc/MultiSelect/CustomMultiSelect";
 import connectDB from "@/middleware/mongodb";
 import { fetchServer, fetchSettings } from "@/utils/fetchSSRProps";
-import {
-  IPermissionConstants,
-  Permission,
-  PERMISSIONS,
-} from "@/utils/permission";
+import { IPermissionConstants, Permission, PERMISSIONS } from "@/utils/permission";
 import {
   Accordion,
   ActionIcon,
@@ -110,10 +99,7 @@ const PillComponent = (item: (typeof permissionData)[0]) => (
   </Flex>
 );
 
-export default function User({
-  users,
-  servers,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function User({ users, servers }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const aclPerms = {
     logs: false,
     monitoring: false,
@@ -135,29 +121,17 @@ export default function User({
   );
 
   const toggleRow = (id: string) =>
-    setSelection((current) =>
-      current.includes(id)
-        ? current.filter((item) => item !== id)
-        : [...current, id],
-    );
+    setSelection((current) => (current.includes(id) ? current.filter((item) => item !== id) : [...current, id]));
   const toggleAll = () =>
     setSelection((current) =>
-      current.length ===
-      users.filter((x) => !x.acl.owner && !x.acl.admin).length
+      current.length === users.filter((x) => !x.acl.owner && !x.acl.admin).length
         ? []
-        : users
-            .filter((x) => !x.acl.owner && !x.acl.admin)
-            .map((item) => item._id),
+        : users.filter((x) => !x.acl.owner && !x.acl.admin).map((item) => item._id),
     );
 
   const router = useRouter();
 
-  const notification = (
-    id: string,
-    title: string,
-    message: string,
-    status: "pending" | "success" | "error",
-  ) => {
+  const notification = (id: string, title: string, message: string, status: "pending" | "success" | "error") => {
     if (status == "pending") {
       notifications.show({
         id,
@@ -182,12 +156,7 @@ export default function User({
 
   const deleteUser = async (id: string) => {
     const rnd = Math.random().toString(36).substring(7);
-    notification(
-      `delete-user-${id}-${rnd}`,
-      "Deleting user",
-      "Please wait...",
-      "pending",
-    );
+    notification(`delete-user-${id}-${rnd}`, "Deleting user", "Please wait...", "pending");
     const res = await fetch(`/api/user?id=${id}`, {
       method: "DELETE",
     });
@@ -196,30 +165,13 @@ export default function User({
 
     router.replace(router.asPath); // hacky way to refresh page
 
-    if (statusCode !== 200)
-      notification(
-        `delete-user-${id}-${rnd}`,
-        "Failed to delete user",
-        data.message,
-        "error",
-      );
-    else if (statusCode === 200)
-      notification(
-        `delete-user-${id}-${rnd}`,
-        "User deleted",
-        data.message,
-        "success",
-      );
+    if (statusCode !== 200) notification(`delete-user-${id}-${rnd}`, "Failed to delete user", data.message, "error");
+    else if (statusCode === 200) notification(`delete-user-${id}-${rnd}`, "User deleted", data.message, "success");
   };
 
   const updateRole = async (id: string, permission: string) => {
     const rnd = Math.random().toString(36).substring(7);
-    notification(
-      `update-user-${id}-${rnd}`,
-      "Updating user",
-      "Please wait...",
-      "pending",
-    );
+    notification(`update-user-${id}-${rnd}`, "Updating user", "Please wait...", "pending");
     const res = await fetch(`/api/user`, {
       method: "PATCH",
       body: JSON.stringify({
@@ -236,57 +188,30 @@ export default function User({
     await new Promise((resolve) => setTimeout(resolve, 1000));
     router.replace(router.asPath); // hacky way to refresh page
 
-    if (statusCode !== 200)
-      notification(
-        `update-user-${id}-${rnd}`,
-        "Failed to update user",
-        data.message,
-        "error",
-      );
-    else if (statusCode === 200)
-      notification(
-        `update-user-${id}-${rnd}`,
-        "User updated",
-        data.message,
-        "success",
-      );
+    if (statusCode !== 200) notification(`update-user-${id}-${rnd}`, "Failed to update user", data.message, "error");
+    else if (statusCode === 200) notification(`update-user-${id}-${rnd}`, "User updated", data.message, "success");
   };
 
-  const updatePermsState = (
-    server_id: string,
-    process_id: string,
-    new_perms: string[],
-  ) => {
+  const updatePermsState = (server_id: string, process_id: string, new_perms: string[]) => {
     const newPerms = [...perms];
     const serverIndex = newPerms.findIndex((x) => x.server == server_id);
     if (serverIndex !== -1) {
       if (process_id) {
-        const processIndex = newPerms[serverIndex].processes.findIndex(
-          (x) => x.process == process_id,
-        );
+        const processIndex = newPerms[serverIndex].processes.findIndex((x) => x.process == process_id);
         if (processIndex !== -1) {
-          newPerms[serverIndex].processes[processIndex].perms =
-            new Permission().add(
-              ...new_perms.map(
-                (x) => PERMISSIONS[x as keyof IPermissionConstants],
-              ),
-            ).value;
+          newPerms[serverIndex].processes[processIndex].perms = new Permission().add(
+            ...new_perms.map((x) => PERMISSIONS[x as keyof IPermissionConstants]),
+          ).value;
         }
       } else {
         newPerms[serverIndex].perms = new Permission().add(
           ...new_perms.map((x) => PERMISSIONS[x as keyof IPermissionConstants]),
         ).value;
         // process should inherit server perms , if server perms is changed
-        newPerms[serverIndex].processes = newPerms[serverIndex].processes.map(
-          (process) => ({
-            ...process,
-            perms: new Permission().add(
-              ...new_perms.map(
-                (x) => PERMISSIONS[x as keyof IPermissionConstants],
-              ),
-            ).value,
-          }),
-        );
+        newPerms[serverIndex].processes = newPerms[serverIndex].processes.map((process) => ({
+          ...process,
+          perms: new Permission().add(...new_perms.map((x) => PERMISSIONS[x as keyof IPermissionConstants])).value,
+        }));
       }
     }
     setPerms(newPerms);
@@ -309,12 +234,7 @@ export default function User({
 
   const updatePerms = async () => {
     const rnd = Math.random().toString(36).substring(7);
-    notification(
-      `update-perms-${rnd}`,
-      "Updating permissions",
-      "Please wait...",
-      "pending",
-    );
+    notification(`update-perms-${rnd}`, "Updating permissions", "Please wait...", "pending");
     const res = await fetch(`/api/user`, {
       method: "POST",
       body: JSON.stringify({
@@ -331,20 +251,8 @@ export default function User({
     await new Promise((resolve) => setTimeout(resolve, 1000));
     router.replace(router.asPath); // hacky way to refresh page
 
-    if (statusCode !== 200)
-      notification(
-        `update-perms-${rnd}`,
-        "Failed to update permissions",
-        data.message,
-        "error",
-      );
-    else if (statusCode === 200)
-      notification(
-        `update-perms-${rnd}`,
-        "Permissions updated",
-        data.message,
-        "success",
-      );
+    if (statusCode !== 200) notification(`update-perms-${rnd}`, "Failed to update permissions", data.message, "error");
+    else if (statusCode === 200) notification(`update-perms-${rnd}`, "Permissions updated", data.message, "success");
   };
 
   useEffect(() => {
@@ -355,10 +263,7 @@ export default function User({
     for (const perm of newPerms) {
       perm.perms = new Permission().add(
         ...Permission.common(
-          ...selectedUsers.map(
-            (x) =>
-              x.acl.servers.find((y) => y.server == perm.server)?.perms ?? 0,
-          ),
+          ...selectedUsers.map((x) => x.acl.servers.find((y) => y.server == perm.server)?.perms ?? 0),
         ),
       ).value;
       perm.processes = perm.processes.map((process) => ({
@@ -367,9 +272,7 @@ export default function User({
           ...Permission.common(
             ...selectedUsers.map(
               (x) =>
-                x.acl.servers
-                  .find((y) => y.server == perm.server)
-                  ?.processes.find((z) => z.process == process.process)
+                x.acl.servers.find((y) => y.server == perm.server)?.processes.find((z) => z.process == process.process)
                   ?.perms ?? perm.perms,
             ),
           ),
@@ -408,17 +311,12 @@ export default function User({
                         <Checkbox
                           onChange={toggleAll}
                           checked={selection.length === users.length}
-                          indeterminate={
-                            selection.length > 0 &&
-                            selection.length !== users.length
-                          }
+                          indeterminate={selection.length > 0 && selection.length !== users.length}
                         />
                       </Table.Th>
                       <Table.Th style={{ fontSize: rem(17) }}>User</Table.Th>
                       <Table.Th style={{ fontSize: rem(17) }}>Email</Table.Th>
-                      <Table.Th style={{ fontSize: rem(17) }}>
-                        Permission
-                      </Table.Th>
+                      <Table.Th style={{ fontSize: rem(17) }}>Permission</Table.Th>
                       <Table.Th style={{ width: rem(50) }}></Table.Th>
                     </Table.Tr>
                   </Table.Thead>
@@ -426,10 +324,7 @@ export default function User({
                     {users.map((item) => {
                       const selected = selection.includes(item._id);
                       return (
-                        <Table.Tr
-                          key={item._id}
-                          className={`${selected ? classes.rowSelected : ""}`}
-                        >
+                        <Table.Tr key={item._id} className={`${selected ? classes.rowSelected : ""}`}>
                           <Table.Td>
                             <Checkbox
                               checked={selection.includes(item._id)}
@@ -441,12 +336,8 @@ export default function User({
                             <Group gap="sm">
                               <>
                                 {!item.oauth2 && <IconMail />}
-                                {item?.oauth2?.provider == "github" && (
-                                  <GithubIcon />
-                                )}
-                                {item.oauth2?.provider == "google" && (
-                                  <GoogleIcon />
-                                )}
+                                {item?.oauth2?.provider == "github" && <GithubIcon />}
+                                {item.oauth2?.provider == "google" && <GoogleIcon />}
                               </>
                               <Text size="sm" fw={500}>
                                 {item.name}
@@ -456,15 +347,13 @@ export default function User({
                           <Table.Td>{item.email}</Table.Td>
                           <Table.Td>
                             <NativeSelect
-                              data={["Owner", "Admin", "Custom", "None"].map(
-                                (x) => {
-                                  return {
-                                    label: x,
-                                    value: x.toLowerCase(),
-                                    disabled: x == "Custom",
-                                  };
-                                },
-                              )}
+                              data={["Owner", "Admin", "Custom", "None"].map((x) => {
+                                return {
+                                  label: x,
+                                  value: x.toLowerCase(),
+                                  disabled: x == "Custom",
+                                };
+                              })}
                               variant="filled"
                               value={
                                 item.acl?.owner
@@ -475,9 +364,7 @@ export default function User({
                                       ? "custom"
                                       : "none"
                               }
-                              onChange={(e) =>
-                                updateRole(item._id, e.currentTarget.value)
-                              }
+                              onChange={(e) => updateRole(item._id, e.currentTarget.value)}
                             />
                           </Table.Td>
                           <Table.Td>
@@ -500,14 +387,7 @@ export default function User({
             </Paper>{" "}
           </Grid.Col>
           <Grid.Col span={{ lg: 6, md: 12 }}>
-            <Paper
-              shadow="sm"
-              radius="md"
-              style={{ height: "100%" }}
-              p={"lg"}
-              px={"md"}
-              pb={"sm"}
-            >
+            <Paper shadow="sm" radius="md" style={{ height: "100%" }} p={"lg"} px={"md"} pb={"sm"}>
               <Flex direction={"column"} h="100%">
                 <Title order={4} style={{ marginBottom: "1rem" }}>
                   Custom Permissions
@@ -535,17 +415,12 @@ export default function User({
                             }}
                           >
                             <Accordion.Control>
-                              <Flex
-                                align={"center"}
-                                direction={"row"}
-                                gap={rem(4)}
-                              >
+                              <Flex align={"center"} direction={"row"} gap={rem(4)}>
                                 <IconCircleFilled
                                   size={12}
                                   style={{
                                     color:
-                                      new Date(item.updatedAt).getTime() >
-                                      Date.now() - 1000 * 60 * 4
+                                      new Date(item.updatedAt).getTime() > Date.now() - 1000 * 60 * 4
                                         ? "#12B886"
                                         : "#FA5252",
                                     marginTop: "2.5px",
@@ -560,9 +435,7 @@ export default function User({
                                 pillsList: classes.values,
                               }}
                               value={getSelectedPerms(item._id)}
-                              onChange={(values) =>
-                                updatePermsState(item._id, "", values)
-                              }
+                              onChange={(values) => updatePermsState(item._id, "", values)}
                               data={permissionData}
                               itemComponent={SelectItemComponent}
                               pillComponent={PillComponent}
@@ -592,11 +465,7 @@ export default function User({
                                       sm: "nowrap",
                                     }}
                                   >
-                                    <Flex
-                                      align={"center"}
-                                      direction={"row"}
-                                      gap={rem(4)}
-                                    >
+                                    <Flex align={"center"} direction={"row"} gap={rem(4)}>
                                       <IconCircleFilled
                                         size={10}
                                         style={{
@@ -616,21 +485,12 @@ export default function User({
                                         pill: classes.value,
                                         pillsList: classes.values,
                                       }}
-                                      value={getSelectedPerms(
-                                        item._id,
-                                        process._id,
-                                      )}
+                                      value={getSelectedPerms(item._id, process._id)}
                                       data={permissionData}
                                       itemComponent={SelectItemComponent}
                                       pillComponent={PillComponent}
                                       placeholder="Select Permissions"
-                                      onChange={(values) =>
-                                        updatePermsState(
-                                          item._id,
-                                          process._id,
-                                          values,
-                                        )
-                                      }
+                                      onChange={(values) => updatePermsState(item._id, process._id, values)}
                                       variant="filled"
                                       radius={"sm"}
                                       size="xs"
@@ -645,20 +505,9 @@ export default function User({
                         </Accordion.Item>
                       ))}
                     </Accordion>
-                    <Transition
-                      mounted={!selection?.length}
-                      transition="fade"
-                      duration={500}
-                    >
+                    <Transition mounted={!selection?.length} transition="fade" duration={500}>
                       {(styles) => (
-                        <Overlay
-                          color="#000"
-                          backgroundOpacity={0.1}
-                          radius={"md"}
-                          blur={7}
-                          center
-                          style={styles}
-                        >
+                        <Overlay color="#000" backgroundOpacity={0.1} radius={"md"} blur={7} center style={styles}>
                           <Badge size="xl" variant="outline">
                             Select a User First
                           </Badge>
@@ -689,10 +538,7 @@ export default function User({
   );
 }
 
-export async function getServerSideProps({
-  req,
-  res,
-}: GetServerSidePropsContext) {
+export async function getServerSideProps({ req, res }: GetServerSidePropsContext) {
   await connectDB();
   const users = await userModel
     .find(
@@ -706,10 +552,7 @@ export async function getServerSideProps({
   const settings = await fetchSettings();
   return {
     props: {
-      users: JSON.parse(JSON.stringify(users)) as Omit<
-        IUser,
-        "password" | "updatedAt"
-      >[],
+      users: JSON.parse(JSON.stringify(users)) as Omit<IUser, "password" | "updatedAt">[],
       servers: await fetchServer(settings.excludeDaemon),
     },
   };

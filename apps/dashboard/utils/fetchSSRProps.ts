@@ -1,10 +1,5 @@
 import connectDB from "@/middleware/mongodb";
-import {
-  processModel,
-  serverModel,
-  settingModel,
-  userModel,
-} from "@pm2.web/mongoose-models";
+import { processModel, serverModel, settingModel, userModel } from "@pm2.web/mongoose-models";
 import { IServer, ISetting } from "@pm2.web/typings";
 
 import { defaultSettings } from "./constants";
@@ -37,15 +32,10 @@ export async function fetchServer(excludeDaemon?: boolean): Promise<IServer[]> {
     )
     .lean();
 
-  console.log(
-    `[DATABASE] ${servers.length} servers, ${processes.length} processes`,
-  );
+  console.log(`[DATABASE] ${servers.length} servers, ${processes.length} processes`);
   // override online status ,m, if last updatedAt > 4 minutes ago
   for (let i = 0; i < processes.length; i++) {
-    if (
-      processes[i].status == "online" &&
-      new Date(processes[i].updatedAt).getTime() < Date.now() - 1000 * 60 * 3
-    ) {
+    if (processes[i].status == "online" && new Date(processes[i].updatedAt).getTime() < Date.now() - 1000 * 60 * 3) {
       // 3 minutes
       processes[i].status = "offline";
     }

@@ -32,9 +32,7 @@ const providers = () => {
 
               if (res.ok) {
                 const emails: GithubEmail[] = await res.json();
-                profile.email = (
-                  emails.find((e) => e.primary) ?? emails[0]
-                ).email;
+                profile.email = (emails.find((e) => e.primary) ?? emails[0]).email;
               }
             }
 
@@ -56,8 +54,7 @@ const providers = () => {
 
             const u = user.toJSON();
 
-            if (!u.acl.owner && !u.acl.admin && !u.acl?.servers?.length)
-              throw new Error("Unauthorized");
+            if (!u.acl.owner && !u.acl.admin && !u.acl?.servers?.length) throw new Error("Unauthorized");
 
             // spread userObj to use in profile function
             return {
@@ -84,10 +81,7 @@ const providers = () => {
     );
   }
 
-  if (
-    process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID &&
-    process.env.GOOGLE_CLIENT_SECRET
-  ) {
+  if (process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
     p.push(
       GoogleProvider({
         clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
@@ -132,10 +126,7 @@ const providers = () => {
           });
           const is1stAccount = (await userModel.countDocuments()) === 0;
           const settings = await fetchSettings();
-          if (
-            settings.registrationCode?.length &&
-            settings.registrationCode !== credentials.registrationCode
-          )
+          if (settings.registrationCode?.length && settings.registrationCode !== credentials.registrationCode)
             throw new Error("InvalidRegistrationCode");
 
           if (accountExists) {
@@ -171,8 +162,7 @@ const providers = () => {
             const match = await user.checkPassword(credentials?.password || "");
             if (match) {
               const u = user.toJSON();
-              if (!u.acl.owner && !u.acl.admin && !u.acl?.servers?.length)
-                throw new Error("Unauthorized");
+              if (!u.acl.owner && !u.acl.admin && !u.acl?.servers?.length) throw new Error("Unauthorized");
               return {
                 id: u._id,
                 ...u,
@@ -198,15 +188,7 @@ export const authOptions = {
     error: "/login",
   },
   callbacks: {
-    async jwt({
-      token,
-      account,
-      user,
-    }: {
-      token: JWT;
-      account: any;
-      user: any;
-    }) {
+    async jwt({ token, account, user }: { token: JWT; account: any; user: any }) {
       // Persist the OAuth access_token and or the user id to the token right after signin
       if (account) {
         token.accessToken = account.access_token;
@@ -215,15 +197,7 @@ export const authOptions = {
       if (user) token.acl = user.acl;
       return token;
     },
-    async session({
-      session,
-      token,
-      user,
-    }: {
-      session: any;
-      token: JWT;
-      user: any;
-    }) {
+    async session({ session, token, user }: { session: any; token: JWT; user: any }) {
       // Send properties to the client, like an access_token and user id from a provider.
       session.accessToken = token.accessToken;
       session.user.id = token.id;

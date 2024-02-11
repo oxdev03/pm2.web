@@ -14,12 +14,7 @@ export default function ProcessItemMetric({
 }) {
   return (
     <Paper className={classes.processMetric} radius="md" p={"4px"} px={"10px"}>
-      <Flex
-        align={"center"}
-        justify={"space-between"}
-        gap={"5px"}
-        w={w || "50px"}
-      >
+      <Flex align={"center"} justify={"space-between"} gap={"5px"} w={w || "50px"}>
         <Icon size="1.2rem" />
         <Text size="md">{value || ""}</Text>
       </Flex>

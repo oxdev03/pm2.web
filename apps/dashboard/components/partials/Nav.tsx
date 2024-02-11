@@ -3,13 +3,7 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-import {
-  AppShell,
-  Stack,
-  Tooltip,
-  UnstyledButton,
-  useMantineColorScheme,
-} from "@mantine/core";
+import { AppShell, Stack, Tooltip, UnstyledButton, useMantineColorScheme } from "@mantine/core";
 import {
   IconBellCog,
   IconGauge,
@@ -34,10 +28,7 @@ interface NavbarBtnProps {
 function NavbarBtn({ icon: Icon, label, active, onClick }: NavbarBtnProps) {
   return (
     <Tooltip label={label} position="right" transitionProps={{ duration: 0 }}>
-      <UnstyledButton
-        onClick={onClick}
-        className={`${classes.link} ${active && classes.active}`}
-      >
+      <UnstyledButton onClick={onClick} className={`${classes.link} ${active && classes.active}`}>
         <Icon className={classes.icon} stroke={1.5} />
       </UnstyledButton>
     </Tooltip>
@@ -54,10 +45,7 @@ interface NavbarLinkProps {
 function NavbarLink({ icon: Icon, label, active, href }: NavbarLinkProps) {
   return (
     <Tooltip label={label} position="right" transitionProps={{ duration: 0 }}>
-      <Link
-        href={href || ""}
-        className={`${classes.link} ${active && classes.active}`}
-      >
+      <Link href={href || ""} className={`${classes.link} ${active && classes.active}`}>
         <Icon stroke={1.5} className={classes.icon} />
       </Link>
     </Tooltip>
@@ -79,9 +67,7 @@ export function Nav() {
   const router = useRouter();
   let active = navLinks.findIndex((link) => router.pathname === link.href);
 
-  const links = navLinks.map((link, index) => (
-    <NavbarLink {...link} key={link.label} active={index === active} />
-  ));
+  const links = navLinks.map((link, index) => <NavbarLink {...link} key={link.label} active={index === active} />);
 
   return (
     <AppShell.Navbar p="sm">
@@ -100,31 +86,13 @@ export function Nav() {
           //spacing={0}
           className={classes.stackAction}
         >
-          <Tooltip
-            label="Toggle Theme"
-            position="right"
-            transitionProps={{ duration: 0 }}
-          >
-            <Link
-              href={""}
-              className={classes.link}
-              onClick={() => toggleColorScheme()}
-            >
-              <IconSun
-                stroke={1.5}
-                className={cx(classes.icon, classes.colorSchemeLight)}
-              />
-              <IconMoonStars
-                stroke={1.5}
-                className={cx(classes.icon, classes.colorSchemeDark)}
-              />
+          <Tooltip label="Toggle Theme" position="right" transitionProps={{ duration: 0 }}>
+            <Link href={""} className={classes.link} onClick={() => toggleColorScheme()}>
+              <IconSun stroke={1.5} className={cx(classes.icon, classes.colorSchemeLight)} />
+              <IconMoonStars stroke={1.5} className={cx(classes.icon, classes.colorSchemeDark)} />
             </Link>
           </Tooltip>
-          <NavbarBtn
-            icon={IconLogout}
-            label="Logout"
-            onClick={() => signOut()}
-          />
+          <NavbarBtn icon={IconLogout} label="Logout" onClick={() => signOut()} />
         </Stack>
       </AppShell.Section>
     </AppShell.Navbar>

@@ -1,18 +1,18 @@
-import uniqBy from 'lodash/uniqBy';
-import ms from 'ms';
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
-import Head from 'next/head';
-import { useRouter } from 'next/router';
-import { useEffect, useRef, useState } from 'react';
+import uniqBy from "lodash/uniqBy";
+import ms from "ms";
+import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
+import Head from "next/head";
+import { useRouter } from "next/router";
+import { useEffect, useRef, useState } from "react";
 
-import { SelectedProvider, useSelected } from '@/components/context/SelectedProvider';
-import { Dashboard } from '@/components/layouts/Dashboard';
-import { StatsRing } from '@/components/stats/StatsRing';
-import { fetchServer, fetchSettings } from '@/utils/fetchSSRProps';
-import { Center, Flex, Paper, ScrollArea, SimpleGrid, Text } from '@mantine/core';
-import { useQueue } from '@mantine/hooks';
-import { IProcess, ISetting, Log, Stats, Status } from '@pm2.web/typings';
-import { IconList } from '@tabler/icons-react';
+import { SelectedProvider, useSelected } from "@/components/context/SelectedProvider";
+import { Dashboard } from "@/components/layouts/Dashboard";
+import { StatsRing } from "@/components/stats/StatsRing";
+import { fetchServer, fetchSettings } from "@/utils/fetchSSRProps";
+import { Center, Flex, Paper, ScrollArea, SimpleGrid, Text } from "@mantine/core";
+import { useQueue } from "@mantine/hooks";
+import { IProcess, ISetting, Log, Stats, Status } from "@pm2.web/typings";
+import { IconList } from "@tabler/icons-react";
 
 function Home({ settings }: { settings: ISetting }) {
   const [status, setStatus] = useState<Status | null>();
@@ -40,15 +40,15 @@ function Home({ settings }: { settings: ISetting }) {
       if (selectedItem?.processes?.length) body.process = selectedItem.processes;
       body.timestamp = lastFetched;
 
-      const res = await fetch('/api/status', {
-        method: 'POST',
+      const res = await fetch("/api/status", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(body),
       });
       lastFetched = Date.now() - settings.polling.frontend;
-      if (res.status != 200) return console.error('Error fetching status', res.status, res.statusText);
+      if (res.status != 200) return console.error("Error fetching status", res.status, res.statusText);
       const data = await res.json();
       setStatus(data);
     };
@@ -63,7 +63,7 @@ function Home({ settings }: { settings: ISetting }) {
       async () => {
         router.replace(router.asPath);
       },
-      Math.min(settings.polling.frontend * 5, 1000 * 50)
+      Math.min(settings.polling.frontend * 5, 1000 * 50),
     );
     return () => clearInterval(interval);
   }, []);
@@ -78,30 +78,35 @@ function Home({ settings }: { settings: ISetting }) {
       ...(allProcesses
         .filter((process) => selectedItem?.processes?.find((item) => item == process._id))
         .map((process) => process.server)
-        .filter((item) => !selectedItem?.servers.includes(item || '')) || []),
+        .filter((item) => !selectedItem?.servers.includes(item || "")) || []),
     ];
-    const filteredServer = servers.filter((server) => (selectedServers.length ? selectedServers.includes(server._id) : true));
+    const filteredServer = servers.filter((server) =>
+      selectedServers.length ? selectedServers.includes(server._id) : true,
+    );
     const filteredProcess = filteredServer.map((server) => server.processes.map((process) => process)).flat();
 
     const arbitraryCalc = (key: keyof Stats, defaultValue: number, divideBy?: number) => {
-      let reduced = filteredServer.map((process) => process.stats[key]).reduce((a, b) => a + b, defaultValue) || defaultValue;
+      let reduced =
+        filteredServer.map((process) => process.stats[key]).reduce((a, b) => a + b, defaultValue) || defaultValue;
       if (divideBy) reduced /= divideBy;
       return reduced;
     };
 
-    const cpu = (((prLen ? status?.cpu : arbitraryCalc('cpu', 0, servers.length)) || 0) / KB_TO_GB).toFixed(0);
-    const memory = (((prLen ? status?.memory : arbitraryCalc('memory', 0)) || 0) / KB_TO_GB).toFixed(1);
-    const load = arbitraryCalc('cpu', 0, servers.length).toFixed(0);
+    const cpu = (((prLen ? status?.cpu : arbitraryCalc("cpu", 0, servers.length)) || 0) / KB_TO_GB).toFixed(0);
+    const memory = (((prLen ? status?.memory : arbitraryCalc("memory", 0)) || 0) / KB_TO_GB).toFixed(1);
+    const load = arbitraryCalc("cpu", 0, servers.length).toFixed(0);
 
-    let memoryMax = Number(arbitraryCalc('memoryMax', 0, KB_TO_GB).toFixed(0));
+    let memoryMax = Number(arbitraryCalc("memoryMax", 0, KB_TO_GB).toFixed(0));
     if (prLen) memoryMax = memoryMax - Number(memory);
     if (Number(memoryMax) < 0.01) memoryMax = Number(memory);
 
     const online = status?.onlineCount;
     const total = prLen || filteredProcess.length;
-    const uptime = ms((prLen ? status?.uptime : arbitraryCalc('uptime', 0, filteredServer.length)) || 0);
+    const uptime = ms((prLen ? status?.uptime : arbitraryCalc("uptime", 0, filteredServer.length)) || 0);
 
-    const filteredLogs = uniqBy([...(logsQueue.state || []), ...(status?.logs || [])], '_id').sort((a, b) => (new Date(a.createdAt) > new Date(b.createdAt) ? 1 : -1));
+    const filteredLogs = uniqBy([...(logsQueue.state || []), ...(status?.logs || [])], "_id").sort((a, b) =>
+      new Date(a.createdAt) > new Date(b.createdAt) ? 1 : -1,
+    );
     // filter logs and add to queue
     logsQueue.update(() => filteredLogs);
 
@@ -119,63 +124,70 @@ function Home({ settings }: { settings: ISetting }) {
   }, [status]);
 
   return (
-    <Flex direction={'column'} rowGap={'md'} flex={1}>
+    <Flex direction={"column"} rowGap={"md"} flex={1}>
       <div>
         <SimpleGrid cols={{ base: 1, sm: 4 }}>
           <StatsRing
             stat={{
-              label: 'CPU',
+              label: "CPU",
               stats: `Server ~${stats?.load || 0}%`,
               progress: stats?.cpu || 0,
-              color: 'blue',
-              icon: 'up',
+              color: "blue",
+              icon: "up",
             }}
           />
           <StatsRing
             stat={{
-              label: 'RAM',
+              label: "RAM",
               stats: `${stats?.memory || 0}/${stats?.memoryMax || 0} GB`,
               progress: Number((((stats?.memory || 0) / (stats?.memoryMax || 0)) * 100).toFixed(0)),
-              color: 'teal',
-              icon: 'up',
+              color: "teal",
+              icon: "up",
             }}
           />
           <StatsRing
             stat={{
-              label: 'Uptime',
+              label: "Uptime",
               stats: stats?.uptime || 0,
               progress: 80,
-              color: '#8377D1',
-              icon: 'up',
+              color: "#8377D1",
+              icon: "up",
             }}
           />
           <StatsRing
             stat={{
-              label: 'Status',
+              label: "Status",
               stats: `${stats?.online || 0}/${stats?.total || 0} online`,
               progress: Number((((stats?.online || 0) / (stats?.total || 0)) * 100).toFixed(0)),
               value: stats?.online || 0,
-              color: '#93BEDF',
-              icon: 'up',
+              color: "#93BEDF",
+              icon: "up",
             }}
           />
         </SimpleGrid>
       </div>
-      <Flex gap={'4px'} align={'center'}>
+      <Flex gap={"4px"} align={"center"}>
         <IconList size="1.4rem" stroke={1.5} />
         <Text size="xl" fw={600}>
           Logs
         </Text>
       </Flex>
-      <ScrollArea.Autosize viewportRef={scrollViewport} flex={1} mah={'64dvh'}>
-        <Paper radius={'md'} p="md" mih={'64dvh'} w={'100%'} maw={'100%'}>
+      <ScrollArea.Autosize viewportRef={scrollViewport} flex={1} mah={"64dvh"}>
+        <Paper radius={"md"} p="md" mih={"64dvh"} w={"100%"} maw={"100%"}>
           {logsQueue.state?.length
             ? logsQueue.state?.map((log) => (
-                <Text key={log._id} size="md" fw={600} c={log.type == 'success' ? 'teal.6' : log.type == 'error' ? 'red.6' : 'blue.4'} component="pre" my="0px">
-                  {log.createdAt.split('T')[1].split('.')[0]} {log.message}
+                <Text
+                  key={log._id}
+                  size="md"
+                  fw={600}
+                  c={log.type == "success" ? "teal.6" : log.type == "error" ? "red.6" : "blue.4"}
+                  component="pre"
+                  my="0px"
+                >
+                  {log.createdAt.split("T")[1].split(".")[0]} {log.message}
                 </Text>
               ))
-            : 'No logs'}
+            : "No logs"}
         </Paper>
       </ScrollArea.Autosize>
     </Flex>
@@ -201,7 +213,7 @@ export default function HomePage({ servers, settings }: InferGetServerSidePropsT
 }
 
 export async function getServerSideProps({ req, res }: GetServerSidePropsContext) {
-  res.setHeader('Cache-Control', 's-maxage=10, stale-while-revalidate');
+  res.setHeader("Cache-Control", "s-maxage=10, stale-while-revalidate");
 
   return {
     props: {

@@ -21,30 +21,20 @@ export function useSelected() {
   return useContext(SelectedContext);
 }
 
-export function SelectedProvider({
-  children,
-  servers,
-}: {
-  children: React.ReactNode;
-  servers: IServer[];
-}) {
+export function SelectedProvider({ children, servers }: { children: React.ReactNode; servers: IServer[] }) {
   const [selectedItem, setSelectedItem] = useState<StateSelectedItem>({
     servers: [],
     processes: [],
   });
 
   const selectItem: SelectItem = (items, type) => {
-    const allProcesses = servers
-      .map((server) => server.processes.map((process) => process))
-      .flat();
+    const allProcesses = servers.map((server) => server.processes.map((process) => process)).flat();
     if (type == "servers") {
       setSelectedItem({
         servers: items,
         processes: items.length
           ? selectedItem.processes.filter((process) =>
-              items.includes(
-                allProcesses.find((item) => item._id == process)?.server || "",
-              ),
+              items.includes(allProcesses.find((item) => item._id == process)?.server || ""),
             )
           : [],
       });
@@ -53,18 +43,12 @@ export function SelectedProvider({
         servers: selectedItem.servers || [],
         processes: selectedItem.servers.length
           ? items.filter((process) =>
-              selectedItem.servers.includes(
-                allProcesses.find((item) => item._id == process)?.server || "",
-              ),
+              selectedItem.servers.includes(allProcesses.find((item) => item._id == process)?.server || ""),
             )
           : items,
       });
     }
   };
 
-  return (
-    <SelectedContext.Provider value={{ selectedItem, selectItem, servers }}>
-      {children}
-    </SelectedContext.Provider>
-  );
+  return <SelectedContext.Provider value={{ selectedItem, selectItem, servers }}>{children}</SelectedContext.Provider>;
 }

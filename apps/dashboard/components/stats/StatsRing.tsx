@@ -13,13 +13,7 @@ interface StatsRingProps {
 
 export function StatsRing({ stat }: { stat: StatsRingProps }) {
   return (
-    <Paper
-      radius="md"
-      p="xs"
-      key={stat.label}
-      shadow="sm"
-      className={classes.statsRing}
-    >
+    <Paper radius="md" p="xs" key={stat.label} shadow="sm" className={classes.statsRing}>
       <Group>
         <RingProgress
           size={80}

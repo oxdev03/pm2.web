@@ -45,18 +45,10 @@ export default function AuthenticationForm({
 
     validate: {
       email: (val) => (/^\S+@\S+$/.test(val) ? null : "Invalid email"),
-      password: (val) =>
-        val.length <= 6
-          ? "Password should include at least 6 characters"
-          : null,
+      password: (val) => (val.length <= 6 ? "Password should include at least 6 characters" : null),
       registrationCode: (val) =>
-        registrationCodeRequired && !val && type == "register"
-          ? "Registration code is required"
-          : null,
-      terms: (val) =>
-        !val && type == "register"
-          ? "You need to accept terms and conditions"
-          : null,
+        registrationCodeRequired && !val && type == "register" ? "Registration code is required" : null,
+      terms: (val) => (!val && type == "register" ? "You need to accept terms and conditions" : null),
     },
   });
   const router = useRouter();
@@ -80,20 +72,12 @@ export default function AuthenticationForm({
               <>
                 <Group grow mb="md" mt="md">
                   {process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID && (
-                    <Button
-                      leftSection={<GoogleIcon />}
-                      variant="default"
-                      color="gray"
-                      radius="xl"
-                    >
+                    <Button leftSection={<GoogleIcon />} variant="default" color="gray" radius="xl">
                       Google
                     </Button>
                   )}
                   {process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID && (
-                    <Tooltip
-                      label="Registered user account is required to login with Github"
-                      position="top"
-                    >
+                    <Tooltip label="Registered user account is required to login with Github" position="top">
                       <Button
                         leftSection={<GithubIcon />}
                         variant="default"
@@ -115,10 +99,7 @@ export default function AuthenticationForm({
                   label="Or continue with email"
                   labelPosition="center"
                   my="lg"
-                  hidden={
-                    !process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID &&
-                    !process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID
-                  }
+                  hidden={!process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID && !process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID}
                 />
               </>
             )}
@@ -131,11 +112,7 @@ export default function AuthenticationForm({
                   type: type,
                   redirect: false,
                 });
-                router.replace(
-                  !res?.ok
-                    ? `/login?error=${res?.error}`
-                    : (callbackUrl as string) || "/",
-                );
+                router.replace(!res?.ok ? `/login?error=${res?.error}` : (callbackUrl as string) || "/");
                 setAuthLoading(false);
               })}
             >
@@ -147,11 +124,7 @@ export default function AuthenticationForm({
                     </div>
                   )}
                 </Transition>
-                <input
-                  name="csrfToken"
-                  type="hidden"
-                  defaultValue={csrfToken}
-                />
+                <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
                 {type === "register" && (
                   <TextInput
                     name="name"
@@ -204,16 +177,8 @@ export default function AuthenticationForm({
               </Stack>
 
               <Group justify="space-between" mt="xl">
-                <Anchor
-                  component="button"
-                  type="button"
-                  c="dimmed"
-                  onClick={() => toggle()}
-                  size="xs"
-                >
-                  {type === "register"
-                    ? "Already have an account? Login"
-                    : "Don't have an account? Register"}
+                <Anchor component="button" type="button" c="dimmed" onClick={() => toggle()} size="xs">
+                  {type === "register" ? "Already have an account? Login" : "Don't have an account? Register"}
                 </Anchor>
                 <Button type="submit" radius="xl" loading={authLoading}>
                   {upperFirst(type)}
@@ -228,33 +193,22 @@ export default function AuthenticationForm({
 }
 
 const errors = {
-  Signin:
-    "Unable to sign in with this account. Please try signing in with a different account.",
-  OAuthSignin:
-    "Unable to sign in with this account. Please try signing in with a different account.",
-  OAuthCallback:
-    "Unable to sign in with this account. Please try signing in with a different account.",
-  OAuthLinked:
-    "Account is linked to an Authentication Provider. Please sign in with the same Authentication Provider.",
-  OAuthCreateAccount:
-    "Unable to create an account with this provider. Please try signing in with a different account.",
+  Signin: "Unable to sign in with this account. Please try signing in with a different account.",
+  OAuthSignin: "Unable to sign in with this account. Please try signing in with a different account.",
+  OAuthCallback: "Unable to sign in with this account. Please try signing in with a different account.",
+  OAuthLinked: "Account is linked to an Authentication Provider. Please sign in with the same Authentication Provider.",
+  OAuthCreateAccount: "Unable to create an account with this provider. Please try signing in with a different account.",
   EmailCreateAccount:
     "Unable to create an account with this email address. Please try using a different email address.",
-  Callback:
-    "Unable to sign in with this account. Please try signing in with a different account.",
-  OAuthAccountNotLinked:
-    "Unable to confirm your identity. Please sign in with the same account you used originally.",
-  EmailSignin:
-    "Unable to sign in with this email address. Please check that your email address is correct.",
-  CredentialsSignin:
-    "Unable to sign in with these credentials. Please check that your details are correct.",
+  Callback: "Unable to sign in with this account. Please try signing in with a different account.",
+  OAuthAccountNotLinked: "Unable to confirm your identity. Please sign in with the same account you used originally.",
+  EmailSignin: "Unable to sign in with this email address. Please check that your email address is correct.",
+  CredentialsSignin: "Unable to sign in with these credentials. Please check that your details are correct.",
   NotRegistered: "You need to register an account to continue.",
-  AccountExists:
-    "An account with the same email address already exists. Please sign in instead.",
+  AccountExists: "An account with the same email address already exists. Please sign in instead.",
   IncorrectPassword: "The password you entered is incorrect. Please try again.",
   default: "Unable to sign in.",
-  Unauthorized:
-    "No server/process permission found. Please contact the administrator.",
+  Unauthorized: "No server/process permission found. Please contact the administrator.",
   UnauthorizedRegister:
     "Registration successful, no server/process permission found. Please contact the administrator.",
   InvalidForm: "Some fields are invalid. Please check the form.",
@@ -262,8 +216,7 @@ const errors = {
 };
 
 const SignInError = ({ error }: { error: String }) => {
-  const errorMessage =
-    error && (errors[error as keyof typeof errors] ?? errors.default);
+  const errorMessage = error && (errors[error as keyof typeof errors] ?? errors.default);
   return (
     <Alert color="red" maw={"300px"}>
       {errorMessage}
