@@ -1,11 +1,10 @@
-import { ReactNode, useEffect } from 'react';
+import { ReactNode, useEffect } from "react";
 
-import { AppShell } from '@mantine/core';
+import { AppShell } from "@mantine/core";
 
-import { Head } from '../partials/Head';
-import { Nav } from '../partials/Nav';
-
-import classes from './Dashboard.module.css';
+import { Head } from "../partials/Head";
+import { Nav } from "../partials/Nav";
+import classes from "./Dashboard.module.css";
 
 export function Dashboard({ children }: { children: ReactNode }) {
   return (
@@ -16,7 +15,7 @@ export function Dashboard({ children }: { children: ReactNode }) {
           main: classes.appShellMain,
         }}
         header={{ height: { base: 40, xs: 60 } }}
-        navbar={{ width: { base: 40, xs: 75 }, breakpoint: '' }}
+        navbar={{ width: { base: 40, xs: 75 }, breakpoint: "" }}
         padding="md"
       >
         <Head />

@@ -1,18 +1,25 @@
-import { Center, Group, Paper, RingProgress, Text } from '@mantine/core';
-import classes from './StatsRing.module.css';
+import { Center, Group, Paper, RingProgress, Text } from "@mantine/core";
+
+import classes from "./StatsRing.module.css";
 
 interface StatsRingProps {
   label: string;
   stats: string;
   progress: number;
   color: string;
-  icon: 'up' | 'down';
+  icon: "up" | "down";
   value?: number;
 }
 
 export function StatsRing({ stat }: { stat: StatsRingProps }) {
   return (
-    <Paper radius="md" p="xs" key={stat.label} shadow="sm" className={classes.statsRing}>
+    <Paper
+      radius="md"
+      p="xs"
+      key={stat.label}
+      shadow="sm"
+      className={classes.statsRing}
+    >
       <Group>
         <RingProgress
           size={80}

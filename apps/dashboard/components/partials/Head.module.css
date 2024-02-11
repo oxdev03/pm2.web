@@ -13,7 +13,10 @@
   }
 
   &::-webkit-scrollbar-thumb {
-    background-color: light-dark(var(--mantine-color-gray-7), var(--mantine-color-dark-2));
+    background-color: light-dark(
+      var(--mantine-color-gray-7),
+      var(--mantine-color-dark-2)
+    );
     border-radius: 0.3rem;
   }
 }

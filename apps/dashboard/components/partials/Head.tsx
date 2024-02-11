@@ -1,17 +1,40 @@
-import Image from 'next/image';
-import { forwardRef, useEffect } from 'react';
+import { DefaultSession } from "next-auth";
+import { useSession } from "next-auth/react";
+import Image from "next/image";
+import { forwardRef, useEffect } from "react";
 
-import { ActionIcon, AppShell, Box, Center, Divider, Flex, Group, Modal, MultiSelect, rem, Stack } from '@mantine/core';
-import { IconCircle, IconCircleFilled, IconDatabaseCog, IconFilterCog, IconLock, IconServerCog, IconTestPipe } from '@tabler/icons-react';
+import Access from "@/utils/acess";
+import {
+  ActionIcon,
+  AppShell,
+  Box,
+  Center,
+  Divider,
+  Flex,
+  Group,
+  Modal,
+  MultiSelect,
+  rem,
+  Stack,
+} from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
+import { Acl, IProcess } from "@pm2.web/typings";
+import {
+  IconCircle,
+  IconCircleFilled,
+  IconDatabaseCog,
+  IconFilterCog,
+  IconLock,
+  IconServerCog,
+  IconTestPipe,
+} from "@tabler/icons-react";
 
-import { useSelected } from '../context/SelectedProvider';
-import { useSession } from 'next-auth/react';
-import Access from '@/utils/acess';
-import { DefaultSession } from 'next-auth';
-import { useDisclosure } from '@mantine/hooks';
-import classes from './Head.module.css';
-import { CustomMultiSelect, IItem } from '../misc/MultiSelect/CustomMultiSelect';
-import { Acl, IProcess } from '@pm2.web/typings';
+import { useSelected } from "../context/SelectedProvider";
+import {
+  CustomMultiSelect,
+  IItem,
+} from "../misc/MultiSelect/CustomMultiSelect";
+import classes from "./Head.module.css";
 
 export function Head() {
   const { servers, selectItem, selectedItem } = useSelected();
@@ -25,7 +48,10 @@ export function Head() {
     const user = session?.user as DefaultSessionUser;
     if (!user || !user.acl) return false;
     if (!user?.acl?.owner && !user?.acl?.admin) {
-      return !!new Access(user.acl?.servers ?? []).getPermsValue(server_id, process_id);
+      return !!new Access(user.acl?.servers ?? []).getPermsValue(
+        server_id,
+        process_id,
+      );
     }
     return true;
   };
@@ -40,20 +66,25 @@ export function Head() {
               servers?.map((server) => ({
                 value: server._id,
                 label: server.name,
-                status: new Date(server.updatedAt).getTime() > Date.now() - 1000 * 60 ? 'online' : 'offline',
-                disabled: !server.processes.some((process) => hasAccess(server._id, process._id)), // check whether user has access to any process
+                status:
+                  new Date(server.updatedAt).getTime() > Date.now() - 1000 * 60
+                    ? "online"
+                    : "offline",
+                disabled: !server.processes.some((process) =>
+                  hasAccess(server._id, process._id),
+                ), // check whether user has access to any process
               })) || []
             }
             onChange={(values) => {
-              selectItem?.(values, 'servers');
+              selectItem?.(values, "servers");
             }}
             itemComponent={itemComponent}
             placeholder="Select Server"
             searchable
             w={{
-              md: '25rem',
+              md: "25rem",
             }}
-            radius={'md'}
+            radius={"md"}
             classNames={{
               pillsList: classes.values,
             }}
@@ -67,23 +98,32 @@ export function Head() {
                 ?.map(
                   (server) =>
                     server.processes
-                      ?.filter(() => selectedItem?.servers.includes(server._id) || selectedItem?.servers.length === 0)
-                      ?.map((process) => ({ value: process._id, label: process.name, status: process.status, disabled: !hasAccess(server._id, process._id) })) || []
+                      ?.filter(
+                        () =>
+                          selectedItem?.servers.includes(server._id) ||
+                          selectedItem?.servers.length === 0,
+                      )
+                      ?.map((process) => ({
+                        value: process._id,
+                        label: process.name,
+                        status: process.status,
+                        disabled: !hasAccess(server._id, process._id),
+                      })) || [],
                 )
                 .flat() || []
             }
             itemComponent={itemComponent}
             value={selectedItem?.processes || []}
             onChange={(values) => {
-              selectItem(values, 'processes');
+              selectItem(values, "processes");
             }}
             placeholder="Select Process"
             searchable
             w={{
-              md: '25rem',
+              md: "25rem",
             }}
             maxValues={4}
-            radius={'md'}
+            radius={"md"}
             withScrollArea
             maxDropdownHeight={200}
             classNames={{
@@ -92,7 +132,10 @@ export function Head() {
             style={{
               zIndex: 204,
             }}
-            comboboxProps={{ position: 'bottom', middlewares: { flip: false, shift: false } }}
+            comboboxProps={{
+              position: "bottom",
+              middlewares: { flip: false, shift: false },
+            }}
             hidePickedOptions
           />
         </>
@@ -102,7 +145,13 @@ export function Head() {
 
   return (
     <AppShell.Header>
-      <Modal opened={opened} onClose={close} title="Server/Process Filter" className={classes.modal} zIndex={200}>
+      <Modal
+        opened={opened}
+        onClose={close}
+        title="Server/Process Filter"
+        className={classes.modal}
+        zIndex={200}
+      >
         <Stack
           style={{
             zIndex: 203,
@@ -111,8 +160,8 @@ export function Head() {
           {MultiSelectItems}
         </Stack>
       </Modal>
-      <Flex h={'100%'} justify={'space-between'}>
-        <Group h={'100%'}>
+      <Flex h={"100%"} justify={"space-between"}>
+        <Group h={"100%"}>
           <Center
             w={{
               base: rem(42),
@@ -122,12 +171,22 @@ export function Head() {
             <Image alt="logo" src="/logo.png" width={25} height={25} />
           </Center>
         </Group>
-        <Group h={'100%'} justify="right" px={'lg'} className={classes.defaultSelectGroup}>
+        <Group
+          h={"100%"}
+          justify="right"
+          px={"lg"}
+          className={classes.defaultSelectGroup}
+        >
           {MultiSelectItems}
         </Group>
-        <Group h={'100%'} justify="right" px={'xs'} className={classes.filterIcon}>
+        <Group
+          h={"100%"}
+          justify="right"
+          px={"xs"}
+          className={classes.filterIcon}
+        >
           <ActionIcon variant="light" color="blue" onClick={open}>
-            <IconFilterCog size={'1.2rem'} />
+            <IconFilterCog size={"1.2rem"} />
           </ActionIcon>
         </Group>
       </Flex>
@@ -135,7 +194,7 @@ export function Head() {
   );
 }
 
-function itemComponent(opt: IItem & { status: IProcess['status'] }) {
+function itemComponent(opt: IItem & { status: IProcess["status"] }) {
   return (
     <Flex align="center">
       <Box mr={10}>
@@ -145,7 +204,12 @@ function itemComponent(opt: IItem & { status: IProcess['status'] }) {
           <IconCircleFilled
             size={10}
             style={{
-              color: opt.status === 'online' ? '#12B886' : opt.status === 'stopped' ? '#FCC419' : '#FA5252',
+              color:
+                opt.status === "online"
+                  ? "#12B886"
+                  : opt.status === "stopped"
+                    ? "#FCC419"
+                    : "#FA5252",
             }}
           />
         )}

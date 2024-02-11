@@ -1,11 +1,11 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const MONGODB_URI = process.env.DB_URI as string;
 
-mongoose.set('strictQuery', false);
+mongoose.set("strictQuery", false);
 
 if (!MONGODB_URI) {
-  throw new Error('Please define the DB_URI environment variable inside .env');
+  throw new Error("Please define the DB_URI environment variable inside .env");
 }
 
 /**
@@ -38,7 +38,7 @@ async function connectDB() {
 
   try {
     cached.conn = await cached.promise;
-    console.log('[DATABASE] Connected');
+    console.log("[DATABASE] Connected");
   } catch (e) {
     cached.promise = null;
     throw e;

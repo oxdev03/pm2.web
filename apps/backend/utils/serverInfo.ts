@@ -1,5 +1,6 @@
-import { ServerInfo } from '@pm2.web/typings';
 import si from 'systeminformation';
+
+import { ServerInfo } from '@pm2.web/typings';
 
 export default async function getServerInfo(): Promise<ServerInfo> {
   const mem = await si.mem();

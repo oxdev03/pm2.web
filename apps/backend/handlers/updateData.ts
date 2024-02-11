@@ -1,5 +1,6 @@
 import { processModel, serverModel } from '@pm2.web/mongoose-models';
-import { QueuedLog, UpdateDataResponse, ISetting } from '@pm2.web/typings';
+import { ISetting, QueuedLog, UpdateDataResponse } from '@pm2.web/typings';
+
 import processInfo from '../utils/processInfo.js';
 import serverInfo from '../utils/serverInfo.js';
 

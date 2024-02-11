@@ -1,21 +1,18 @@
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
-
+import uniqBy from 'lodash/uniqBy';
 import ms from 'ms';
+import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 
 import { SelectedProvider, useSelected } from '@/components/context/SelectedProvider';
 import { Dashboard } from '@/components/layouts/Dashboard';
 import { StatsRing } from '@/components/stats/StatsRing';
-import { Log, Status } from '@pm2.web/typings';
 import { fetchServer, fetchSettings } from '@/utils/fetchSSRProps';
 import { Center, Flex, Paper, ScrollArea, SimpleGrid, Text } from '@mantine/core';
 import { useQueue } from '@mantine/hooks';
+import { IProcess, ISetting, Log, Stats, Status } from '@pm2.web/typings';
 import { IconList } from '@tabler/icons-react';
-import { IProcess, Stats } from '@pm2.web/typings';
-import uniqBy from 'lodash/uniqBy';
-import { ISetting } from '@pm2.web/typings';
-import { useRouter } from 'next/router';
 
 function Home({ settings }: { settings: ISetting }) {
   const [status, setStatus] = useState<Status | null>();
@@ -62,9 +59,12 @@ function Home({ settings }: { settings: ISetting }) {
 
   useEffect(() => {
     //refresh ssr props
-    const interval = setInterval(async () => {
-      router.replace(router.asPath);
-    }, Math.min(settings.polling.frontend * 5, 1000 * 50));
+    const interval = setInterval(
+      async () => {
+        router.replace(router.asPath);
+      },
+      Math.min(settings.polling.frontend * 5, 1000 * 50)
+    );
     return () => clearInterval(interval);
   }, []);
 

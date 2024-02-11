@@ -1,5 +1,6 @@
-import { ProcessInfo } from '@pm2.web/typings';
 import pm2 from 'pm2';
+
+import { ProcessInfo } from '@pm2.web/typings';
 
 const getProcessInfo = async (): Promise<ProcessInfo[]> => {
   const pm2List = await new Promise<pm2.ProcessDescription[]>((resolve, reject) => {

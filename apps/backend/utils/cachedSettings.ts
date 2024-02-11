@@ -1,8 +1,9 @@
 
 
 import { settingModel } from '@pm2.web/mongoose-models';
-import { defaultSettings } from './constants.js';
 import { ISetting } from '@pm2.web/typings';
+
+import { defaultSettings } from './constants.js';
 
 let cachedSettings: ISetting | null = null;
 let cacheExpiration: number = 0;

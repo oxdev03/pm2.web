@@ -1,6 +1,7 @@
 import pm2 from 'pm2';
 
 import { Packet, QueuedLog } from '@pm2.web/typings';
+
 import censorMessage from '../utils/censorMessage.js';
 
 class LogCapture {
