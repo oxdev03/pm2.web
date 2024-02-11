@@ -18,7 +18,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc --build --clean && tsc",
     "start": "node dist/index.js",
-    "prestart": "tsc --build --clean && tsc"
+    "prestart": "tsc --build --clean && tsc",
+    "watch": "tsc -w",
+    "dev": "npm run watch && node dist/index.js"
   },
   "license": "LGPL-3.0-or-later",
   "dependencies": {
