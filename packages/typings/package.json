@@ -1,6 +1,6 @@
 {
   "name": "@pm2.web/typings",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "Shared Typings for pm2.web",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

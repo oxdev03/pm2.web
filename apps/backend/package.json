@@ -1,6 +1,6 @@
 {
   "name": "backend",
-  "version": "1.0.1",
+  "version": "1.2.0",
   "main": "dist/index.js",
   "description": "Dashboard for PM2",
   "author": {
