@@ -1,0 +1,56 @@
+{
+  "name": "dashboard",
+  "description": "Dashboard for PM2",
+  "author": {
+    "name": "oxdev03"
+  },
+  "version": "1.1.0",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/oxdev03/pm2.web"
+  },
+  "bugs": {
+    "url": "https://github.com/oxdev03/pm2.web/issues"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "dev:turbo": "next dev --turbo",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@mantine/code-highlight": "^7.5.2",
+    "@mantine/core": "^7.5.2",
+    "@mantine/form": "^7.5.2",
+    "@mantine/hooks": "^7.5.2",
+    "@mantine/notifications": "^7.5.2",
+    "@tabler/icons-react": "^2.47.0",
+    "bcrypt": "^5.1.0",
+    "cookies-next": "^2.1.2",
+    "lodash": "^4.17.21",
+    "mongoose": "^8.1.1",
+    "next": "^14.1.0",
+    "next-auth": "^4.22.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "@pm2.web/typings": "*",
+    "@pm2.web/mongoose-models": "*"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
+    "@types/lodash": "^4.14.197",
+    "@types/ms": "^0.7.31",
+    "@types/node": "20.2.0",
+    "@types/react": "^18.2.52",
+    "@types/react-dom": "^18.2.18",
+    "eslint": "8.40.0",
+    "eslint-config-next": "^14.1.0",
+    "eslint-config-prettier": "^8.8.0",
+    "postcss": "^8.4.35",
+    "postcss-preset-mantine": "^1.13.0",
+    "postcss-simple-vars": "^7.0.1",
+    "typescript": "5.0.4"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "@pm2.web/mongoose-models",
+  "version": "1.0.0",
+  "description": "Shared Mongoose Models for pm2.web",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w"
+  },
+  "dependencies": {
+    "@pm2.web/typings": "*",
+    "bcrypt": "^5.1.0",
+    "mongoose": "^8.1.1"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
+    "@types/mongoose": "^5.11.97",
+    "typescript": "^5.3.3"
+  },
+  "author": "",
+  "license": "ISC"
+}
