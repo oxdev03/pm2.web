@@ -17,6 +17,6 @@
     "@types/bcrypt": "^5.0.0",
     "typescript": "^5.3.3"
   },
-  "author": "",
-  "license": "ISC"
+  "author": "oxdev03",
+  "license": "GPL-3.0-only"
 }

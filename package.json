@@ -6,32 +6,31 @@
     "type": "git",
     "url": "https://github.com/oxdev03/pm2.web"
   },
+  "author": {
+    "name": "oxdev03"
+  },
+  "license": "GPL-3.0-only",
   "workspaces": [
     "apps/*",
     "packages/*"
   ],
   "description": "pm2.web is a web-based application designed to monitor and manage processes running on your server using the PM2 process manager",
   "scripts": {
-    "build": "npm run build:apps && npm run build:packages",
-    "build:apps": "npm run build -w apps",
-    "build:packages": "npm run build -w packages",
-    "build:apps:dashboard": "npm run build:apps -w apps/dashboard",
-    "build:apps:backend": "npm run build:packages -w packages/backend",
-    "dev": "npm run dev -w apps",
-    "dev:apps:dashboard": "npm run dev -w apps/dashboard",
-    "dev:turbo:apps:dashboard": "npm run dev:turbo -w apps/dashboard",
-    "dev:apps:backend": "npm run dev -w apps/backend",
-    "start": "npm run start -w apps",
-    "start:apps:dashboard": "npm run start -w apps/dashboard",
-    "start:apps:backend": "npm run start -w apps/backend",
-    "lint": "npm run lint:apps && npm run lint:packages",
-    "lint:apps": "npm run lint -w apps",
-    "lint:packages": "npm run lint -w packages",
-    "lint:apps:dashboard": "npm run lint -w apps/dashboard",
-    "lint:apps:backend": "npm run lint -w packages/backend"
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "format": "turbo run format",
+    "start": "turbo run start",
+    "graph": "turbo run build --graph",
+    "build:apps": "turbo run build --filter=./apps/*",
+    "build:packages": "turbo run build --filter=./packages/*",
+    "dev:apps:dashboard": "turbo run dev --filter=dashboard",
+    "dev:turbo:apps:dashboard": "turbo run dev:turbo --filter=dashboard",
+    "dev:apps:backend": "turbo run dev --filter=backend",
+    "start:apps:dashboard": "turbo run start --filter=dashboard",
+    "start:apps:backend": "turbo run start --filter=backend"
   },
-  "author": {
-    "name": "oxdev03"
-  },
-  "license": "GPL-3.0-only"
+  "devDependencies": {
+    "turbo": "^1.12.3"
+  }
 }

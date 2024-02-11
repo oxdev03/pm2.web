@@ -20,7 +20,7 @@
     "start": "node dist/index.js",
     "prestart": "tsc --build --clean && tsc",
     "watch": "tsc -w",
-    "dev": "npm run watch && node dist/index.js"
+    "dev": "npm run start"
   },
   "license": "LGPL-3.0-or-later",
   "dependencies": {
