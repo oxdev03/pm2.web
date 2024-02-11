@@ -26,7 +26,6 @@
   "dependencies": {
     "bcrypt": "^5.1.0",
     "dotenv": "^16.3.1",
-    "mongoose": "^7.4.3",
     "pm2": "^5.3.0",
     "systeminformation": "^5.18.15",
     "@pm2.web/typings": "*",
