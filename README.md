@@ -24,20 +24,22 @@ To get started with pm2.web, follow these steps:
 <details>
   <summary>Expand</summary>
 
-  #### MongoDB Atlas
+#### MongoDB Atlas
 
-  1. Create a MongoDB Atlas account and create a new project.
-  2. Create a new cluster and select the free tier.
-  3. Create a new database user and save the username and password.
-  4. Add your IP address to the IP Access List or through a CIDR block.
+1. Create a MongoDB Atlas account and create a new project.
+2. Create a new cluster and select the free tier.
+3. Create a new database user and save the username and password.
+4. Add your IP address to the IP Access List or through a CIDR block.
 
-  #### Vercel
-  [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Foxdev03%2Fpm2.web%2Ftree%2Fmaster%2Fdashboard&env=DB_URI,NEXTAUTH_SECRET&demo-title=pm2.web&demo-description=pm2.web%20-%20Easily%20monitor%20your%20processes%2C%20control%20them%20with%20various%20actions%2C%20view%20logs%20and%20set%20up%20access%20controls%20for%20users%20using%20the%20dashboard&demo-url=https%3A%2F%2Fgithub.com%2Foxdev03%2Fpm2.web&demo-image=https%3A%2F%2Fraw.githubusercontent.com%2Foxdev03%2Fpm2.web%2Fmaster%2Fassets%2Findex.jpeg)
+#### Vercel
 
-  1. Click the deploy button above and follow the instructions.
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Foxdev03%2Fpm2.web%2Ftree%2Fmaster%2Fdashboard&env=DB_URI,NEXTAUTH_SECRET&demo-title=pm2.web&demo-description=pm2.web%20-%20Easily%20monitor%20your%20processes%2C%20control%20them%20with%20various%20actions%2C%20view%20logs%20and%20set%20up%20access%20controls%20for%20users%20using%20the%20dashboard&demo-url=https%3A%2F%2Fgithub.com%2Foxdev03%2Fpm2.web&demo-image=https%3A%2F%2Fraw.githubusercontent.com%2Foxdev03%2Fpm2.web%2Fmaster%2Fassets%2Findex.jpeg)
 
-  #### Backend
-  [Follow the instructions here , On-Premise->Backend](#backend1)
+1. Click the deploy button above and follow the instructions.
+
+#### Backend
+
+[Follow the instructions here , On-Premise->Backend](#backend1)
 
 </details>
 
@@ -52,7 +54,8 @@ To get started with pm2.web, follow these steps:
    git clone https://github.com/oxdev03/pm2.web.git
    ```
 
-#### Backend 
+#### Backend
+
 <a name="backend1"></a>
 
 The Backend is a simple nodejs application that uses the pm2 BUS API to communicate and monitor pm2 process.
@@ -82,7 +85,7 @@ It doesn't require any open ports, since it only saves data to the database and 
 3. Start the backend
 
    ```bash
-   npm start
+   npm start:apps:backend
    ```
 
 #### Frontend
@@ -112,13 +115,13 @@ It doesn't require any open ports, since it only saves data to the database and 
 3. Build the frontend
 
    ```bash
-    npm run build
+    npm run build:apps:dashboard
    ```
 
 4. Start the frontend
 
    ```bash
-   npm start
+   npm start:apps:dashboard
    ```
 
    </details>
@@ -155,6 +158,7 @@ Once pm2.web is installed and running, you can perform the following actions:
   - Configure settings such as the update interval, log rotation, and more.
 
 - **Alert Setup (Planned)**:
+
   - Configure alerts to receive notifications for specific actions.
   - Define alert rules based on events like shutdown, restart, or kill actions.
 
@@ -165,15 +169,15 @@ Once pm2.web is installed and running, you can perform the following actions:
   - The owner can assign permissions to registered users through the access control page
   - registered user without any permissions can't access the dashboard nor login
   - accounts linked with oauth2 can't login with credentials (can be unlinked in the settings page)
-      - **Setup Github OAuth**
-         - https://github.com/settings/developers -> New OAuth App
-         - Configure the callback url to `http://<domain|ip:port>/api/auth/callback/github`
-         - Add `NEXT_PUBLIC_GITHUB_CLIENT_ID` and `NEXT_GITHUB_SECRET` to the `.env` file with the values from the OAuth App
-         - **Usage**: Only registered users (per credentials) can login with auth2, which links the oauth2 with the existing user account in the database
-      - **Setup Registration Code**
-         - Go to the settings page and add/generate the registration code
-      - **Setup Google OAuth**
-         - TBD
+    - **Setup Github OAuth**
+      - https://github.com/settings/developers -> New OAuth App
+      - Configure the callback url to `http://<domain|ip:port>/api/auth/callback/github`
+      - Add `NEXT_PUBLIC_GITHUB_CLIENT_ID` and `NEXT_GITHUB_SECRET` to the `.env` file with the values from the OAuth App
+      - **Usage**: Only registered users (per credentials) can login with auth2, which links the oauth2 with the existing user account in the database
+    - **Setup Registration Code**
+      - Go to the settings page and add/generate the registration code
+    - **Setup Google OAuth**
+      - TBD
 
 ## Contributing
 

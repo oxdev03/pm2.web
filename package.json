@@ -24,6 +24,8 @@
     "graph": "turbo run build --graph",
     "build:apps": "turbo run build --filter=./apps/*",
     "build:packages": "turbo run build --filter=./packages/*",
+    "build:apps:dashboard": "turbo run build --filter=dashboard",
+    "build:apps:backend": "turbo run build --filter=backend",
     "dev:apps:dashboard": "turbo run dev --filter=dashboard",
     "dev:turbo:apps:dashboard": "turbo run dev:turbo --filter=dashboard",
     "dev:apps:backend": "turbo run dev --filter=backend",

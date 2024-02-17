@@ -2,7 +2,7 @@ import cx from "clsx";
 import uniqBy from "lodash/uniqBy";
 import ms from "ms";
 import { GetServerSideProps, GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
-import { DefaultSession, type } from "next-auth";
+import { DefaultSession } from "next-auth";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
 import { useRouter } from "next/router";

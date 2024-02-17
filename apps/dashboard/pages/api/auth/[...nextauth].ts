@@ -20,7 +20,6 @@ const providers = () => {
         userinfo: {
           url: "https://api.github.com/user",
           async request({ client, tokens }) {
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             const profile = await client.userinfo(tokens.access_token!);
 
             if (!profile.email) {
