@@ -18,6 +18,7 @@
 # misc
 .DS_Store
 *.pem
+cypress/e2e/2-advanced-examples
 
 # debug
 npm-debug.log*
@@ -26,8 +27,9 @@ yarn-error.log*
 
 # local env files
 .env*.local
-.env.development
-.env.production
+.env.*
+
+!.env.example
 
 # vercel
 .vercel
