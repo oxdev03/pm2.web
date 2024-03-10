@@ -1,0 +1,14 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "extends": ["//"],
+  "pipeline": {
+    "test:start": {
+      "dependsOn": ["^build"]
+    },
+    "test:wait": {},
+    "test:db": {},
+    "test": {
+      "dependsOn": ["test:wait"]
+    }
+  }
+}
