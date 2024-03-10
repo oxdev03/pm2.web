@@ -1,3 +1,7 @@
+# 1.3.0
+
+- setup test suite for dashboard (wip)
+
 # 1.2.0
 
 - setup project as monorepo
