@@ -16,6 +16,7 @@
     "test": {
       "dependsOn": ["^build"]
     },
-    "format": {}
+    "format": {},
+    "format:check": {}
   }
 }

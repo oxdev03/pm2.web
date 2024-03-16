@@ -24,7 +24,8 @@
     "test:watch": "cypress open",
     "start": "next start",
     "lint": "next lint",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "dependencies": {
     "@mantine/code-highlight": "^7.6.1",

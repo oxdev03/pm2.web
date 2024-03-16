@@ -20,6 +20,7 @@
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "format": "turbo run format",
+    "format:check":"turbo run format:check",
     "start": "turbo run start",
     "graph": "turbo run build --graph",
     "build:apps": "turbo run build --filter=./apps/*",
