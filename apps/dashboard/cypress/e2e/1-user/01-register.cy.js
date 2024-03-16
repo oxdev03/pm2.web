@@ -39,6 +39,9 @@ describe("pm2.web register", () => {
     cy.get(`input[type="checkbox"]`).click();
     cy.get("form").submit();
     cy.url().should("not.eq", "http://localhost:3000/");
-    cy.get(".mantine-Alert-message").should("have.text", "An account with the same email address already exists. Please sign in instead.");
+    cy.get(".mantine-Alert-message").should(
+      "have.text",
+      "An account with the same email address already exists. Please sign in instead.",
+    );
   });
 });

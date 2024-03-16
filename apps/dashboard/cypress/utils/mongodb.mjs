@@ -11,5 +11,5 @@ console.log(`Database started: ${uri}`);
 
 process.on("exit", async () => {
   await mongod.stop();
-  console.log("[Database] Closed Connection!")
+  console.log("[Database] Closed Connection!");
 });
