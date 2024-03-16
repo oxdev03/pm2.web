@@ -31,7 +31,7 @@
     "dev:apps:backend": "turbo run dev --filter=backend",
     "start:apps:dashboard": "turbo run start --filter=dashboard",
     "start:apps:backend": "turbo run start --filter=backend",
-    "test:apps:dashboard": "turbo run test:start test:db test --filter=dashboard"
+    "test:apps:dashboard": "turbo run test --filter=dashboard"
   },
   "devDependencies": {
     "prettier": "^3.2.5",
