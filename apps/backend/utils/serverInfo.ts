@@ -1,12 +1,12 @@
-import si from 'systeminformation';
+import si from "systeminformation";
 
-import { ServerInfo } from '@pm2.web/typings';
+import { ServerInfo } from "@pm2.web/typings";
 
 export default async function getServerInfo(): Promise<ServerInfo> {
   const mem = await si.mem();
   return {
-    name: (await si.osInfo())?.hostname ?? '',
-    uuid: (await si.system())?.uuid || (await si.uuid())?.os || '',
+    name: (await si.osInfo())?.hostname ?? "",
+    uuid: (await si.system())?.uuid || (await si.uuid())?.os || "",
     stats: {
       cpu: (await si.currentLoad())?.currentLoad ?? 0,
       memory: mem?.used ?? 0,

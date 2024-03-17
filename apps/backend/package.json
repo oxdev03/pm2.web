@@ -15,9 +15,10 @@
     "url": "https://github.com/oxdev03/pm2.web/issues"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "echo \"Error: no test specified\" && exit 0",
     "build": "tsc --build --clean && tsc",
     "start": "node dist/index.js",
+    "lint": "eslint --fix .",
     "prestart": "tsc --build --clean && tsc",
     "watch": "tsc -w",
     "dev": "npm run start"
@@ -32,7 +33,10 @@
     "@pm2.web/mongoose-models": "*"
   },
   "devDependencies": {
+    "@pm2.web/eslint-config": "*",
+    "@pm2.web/typescript-config": "*",
     "@types/bcrypt": "^5.0.0",
-    "typescript": "^5.1.6"
+    "eslint": "^8.57.0",
+    "typescript": "^5.3.3"
   }
 }

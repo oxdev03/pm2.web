@@ -1,5 +1,4 @@
 {
   "cssvar.files": ["apps/dashboard/node_modules/@mantine/core/styles.css"],
-  "cssvar.extensions": ["css", "scss", "tsx", "jsx"],
-  "eslint.workingDirectories": [{ "pattern": "apps/*/" }, { "pattern": "packages/*/" }]
+  "cssvar.extensions": ["css", "scss", "tsx", "jsx"]
 }

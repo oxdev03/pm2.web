@@ -1,0 +1,3 @@
+{
+  "extends": "@pm2.web/typescript-config/base.json"
+}
