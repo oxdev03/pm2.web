@@ -17,7 +17,7 @@ const getProcessInfo = async (): Promise<ProcessInfo[]> => {
 
   const processList = pm2List
     .map((item) => {
-      if (item.pm_id == undefined) return null;
+      if (item.pm_id === undefined) return null;
       return {
         name: item.name || item.pm_id,
         pm_id: item.pm_id,

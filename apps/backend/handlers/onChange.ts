@@ -70,7 +70,7 @@ export default async (serverId: string) => {
       let _status = process?.status;
       if (process) {
         await new Promise<void>((resolve, reject) => {
-          if (_status == "online") {
+          if (_status === "online") {
             pm2.stop(process.pm_id, (err) => {
               if (err) {
                 reject(err);

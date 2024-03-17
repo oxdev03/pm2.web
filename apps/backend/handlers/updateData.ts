@@ -1,10 +1,13 @@
-import { processModel, serverModel } from '@pm2.web/mongoose-models';
-import { ISetting, QueuedLog, UpdateDataResponse } from '@pm2.web/typings';
+import { processModel, serverModel } from "@pm2.web/mongoose-models";
+import { ISetting, QueuedLog, UpdateDataResponse } from "@pm2.web/typings";
 
-import processInfo from '../utils/processInfo.js';
-import serverInfo from '../utils/serverInfo.js';
+import processInfo from "../utils/processInfo.js";
+import serverInfo from "../utils/serverInfo.js";
 
-export default async function updateData(queuedLogs: QueuedLog[], settings: ISetting): Promise<UpdateDataResponse> {
+export default async function updateData(
+  queuedLogs: QueuedLog[],
+  settings: ISetting,
+): Promise<UpdateDataResponse> {
   const server = await serverInfo();
   const processes = await processInfo();
   // check if server exists
@@ -43,14 +46,18 @@ export default async function updateData(queuedLogs: QueuedLog[], settings: ISet
 
   for (let i = 0; i < processes.length; i++) {
     const process = processes[i];
+    if (!process) continue;
     const logs = queuedLogs
       .filter((log) => log.id === process.pm_id)
       .map((x) => {
-        //@ts-ignore //TODO: fix this
+        //@ts-expect-error //TODO: fix this
         delete x.id;
         return x;
       });
-    const processExists = await processModel.findOne({ pm_id: process.pm_id, server: currentServer._id }, { _id: 1 });
+    const processExists = await processModel.findOne(
+      { pm_id: process.pm_id, server: currentServer._id },
+      { _id: 1 },
+    );
     if (!processExists) {
       // create process
       const newProcess = new processModel({
@@ -90,16 +97,22 @@ export default async function updateData(queuedLogs: QueuedLog[], settings: ISet
             },
           },
           updatedAt: new Date(),
-        }
+        },
       );
     }
   }
 
   // delete not existing processes
-  const deleted = await processModel.deleteMany({ server: currentServer._id, pm_id: { $nin: processes.map((p) => p.pm_id) } }).catch((err: Error) => {
-    console.log(err);
-  });
-  if (deleted?.deletedCount) console.log(`Deleted ${deleted.deletedCount} processes`);
+  const deleted = await processModel
+    .deleteMany({
+      server: currentServer._id,
+      pm_id: { $nin: processes.map((p) => p.pm_id) },
+    })
+    .catch((err: Error) => {
+      console.log(err);
+    });
+  if (deleted?.deletedCount)
+    console.log(`Deleted ${deleted.deletedCount} processes`);
 
   return {
     server: currentServer,

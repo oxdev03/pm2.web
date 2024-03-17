@@ -1,10 +1,10 @@
-import * as dotenv from 'dotenv';
+import * as dotenv from "dotenv";
 
-import LogCapture from './handlers/captureLogs.js';
-import connectDb from './handlers/connectDb.js';
-import onChange from './handlers/onChange.js';
-import updateData from './handlers/updateData.js';
-import { getCachedSettings } from './utils/cachedSettings.js';
+import LogCapture from "./handlers/captureLogs.js";
+import connectDb from "./handlers/connectDb.js";
+import onChange from "./handlers/onChange.js";
+import updateData from "./handlers/updateData.js";
+import { getCachedSettings } from "./utils/cachedSettings.js";
 
 dotenv.config();
 
