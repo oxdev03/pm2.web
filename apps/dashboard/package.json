@@ -35,7 +35,7 @@
     "@mantine/notifications": "^7.6.2",
     "@pm2.web/mongoose-models": "*",
     "@pm2.web/typings": "*",
-    "@tabler/icons-react": "^2.47.0",
+    "@tabler/icons-react": "^3.1.0",
     "bcrypt": "^5.1.1",
     "cookies-next": "^4.1.1",
     "dotenv": "^16.4.5",
