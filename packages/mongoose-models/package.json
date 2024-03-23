@@ -6,12 +6,16 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "watch": "tsc -w"
+    "watch": "tsc -w",
+    "format": "prettier --write \"**/*.{ts,json,css,scss,md}\"",
+    "format:check": "prettier --check  \"**/*.{ts,json,css,scss,md}\""
   },
   "dependencies": {
     "@pm2.web/typings": "*",
+    "@pm2.web/eslint-config": "*",
+    "@pm2.web/typescript-config": "*",
     "bcrypt": "^5.1.1",
-    "mongoose": "^8.2.1"
+    "mongoose": "^8.2.3"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",

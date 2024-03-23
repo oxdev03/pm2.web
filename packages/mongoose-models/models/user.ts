@@ -1,9 +1,9 @@
-import bcrypt from 'bcrypt';
-import mongoose, { Model } from 'mongoose';
+import bcrypt from "bcrypt";
+import mongoose, { Model } from "mongoose";
 
-import { MUser, MUserMethods } from '@pm2.web/typings';
+import { MUser, MUserMethods } from "@pm2.web/typings";
 
-type UserModel = Model<MUser, {}, MUserMethods>;
+type UserModel = Model<MUser, object, MUserMethods>;
 
 const userSchema = new mongoose.Schema<MUser, UserModel, MUserMethods>({
   email: {
@@ -23,14 +23,14 @@ const userSchema = new mongoose.Schema<MUser, UserModel, MUserMethods>({
       {
         server: {
           type: mongoose.Schema.Types.ObjectId,
-          ref: 'Server',
+          ref: "Server",
         },
         perms: Number,
         processes: [
           {
             process: {
               type: mongoose.Schema.Types.ObjectId,
-              ref: 'Process',
+              ref: "Process",
             },
             perms: Number,
           },
@@ -50,19 +50,18 @@ const userSchema = new mongoose.Schema<MUser, UserModel, MUserMethods>({
   createdAt: Date,
 });
 // Hash the password before saving the user
-userSchema.pre('save', async function (next) {
-  const user = this;
+userSchema.pre("save", async function (next) {
   const now = new Date();
-  user.updatedAt = now;
-  if (!user.createdAt) {
-    user.createdAt = now;
+  this.updatedAt = now;
+  if (!this.createdAt) {
+    this.createdAt = now;
   }
 
-  if (!user.isModified('password')) {
+  if (!this.isModified("password")) {
     return next();
   }
   const salt = await bcrypt.genSalt(10);
-  if (user.password) user.password = await bcrypt.hash(user.password, salt);
+  if (this.password) this.password = await bcrypt.hash(this.password, salt);
   next();
 });
 
@@ -75,7 +74,13 @@ userSchema.methods.checkPassword = async function (password: string) {
 userSchema.methods.toJSON = function () {
   const user = this.toObject();
   delete user.password;
-  return { ...user, updatedAt: user.updatedAt.toISOString(), createdAt: user.createdAt.toISOString() };
+  return {
+    ...user,
+    updatedAt: user.updatedAt.toISOString(),
+    createdAt: user.createdAt.toISOString(),
+  };
 };
 
-export const userModel = (mongoose.models.User as UserModel & mongoose.Document) || mongoose.model<MUser, UserModel>('User', userSchema);
+export const userModel =
+  (mongoose.models.User as UserModel & mongoose.Document) ||
+  mongoose.model<MUser, UserModel>("User", userSchema);

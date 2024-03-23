@@ -1,17 +1,7 @@
 {
-    "compilerOptions": {
-      "target": "ES6",
-      "outDir": "./dist",
-      "module": "CommonJS",
-      "esModuleInterop": true,
-      "forceConsistentCasingInFileNames": true,
-      "strict": true,
-      "declaration": true,
-      "moduleResolution": "node",
-      "resolveJsonModule": true,
-      "skipLibCheck": true,
-      "baseUrl": "."
-    },
-    "include": ["**/*", "./.env"]
+  "extends": "@pm2.web/typescript-config/base.json",
+  "exclude": ["node_modules", "dist"],
+  "compilerOptions": {
+    "outDir": "./dist"
   }
-  
+}

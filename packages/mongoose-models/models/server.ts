@@ -1,8 +1,8 @@
-import mongoose, { Model } from 'mongoose';
+import mongoose, { Model } from "mongoose";
 
-import { MServer } from '@pm2.web/typings';
+import { MServer } from "@pm2.web/typings";
 
-type ServerModel = Model<MServer, {}, {}>;
+type ServerModel = Model<MServer, object, object>;
 
 const serverSchema = new mongoose.Schema({
   name: {
@@ -28,7 +28,7 @@ const serverSchema = new mongoose.Schema({
   },
 });
 
-serverSchema.pre('save', function (next) {
+serverSchema.pre("save", function (next) {
   const now = new Date();
   this.updatedAt = now;
   if (!this.createdAt) {
@@ -37,4 +37,6 @@ serverSchema.pre('save', function (next) {
   next();
 });
 
-export const serverModel = (mongoose.models.Server as ServerModel & mongoose.Document) || mongoose.model<MServer, ServerModel>('Server', serverSchema);
+export const serverModel =
+  (mongoose.models.Server as ServerModel & mongoose.Document) ||
+  mongoose.model<MServer, ServerModel>("Server", serverSchema);

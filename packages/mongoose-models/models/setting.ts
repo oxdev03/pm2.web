@@ -1,8 +1,8 @@
-import mongoose, { Model } from 'mongoose';
+import mongoose, { Model } from "mongoose";
 
-import { ISetting } from '@pm2.web/typings';
+import { ISetting } from "@pm2.web/typings";
 
-type SettingModel = Model<ISetting, {}, {}>;
+type SettingModel = Model<ISetting, object, object>;
 
 const settingSchema = new mongoose.Schema({
   polling: {
@@ -23,7 +23,7 @@ const settingSchema = new mongoose.Schema({
   updatedAt: Date,
 });
 
-settingSchema.pre('save', function (next) {
+settingSchema.pre("save", function (next) {
   const now = new Date();
   this.updatedAt = now;
   if (!this.createdAt) {
@@ -32,4 +32,6 @@ settingSchema.pre('save', function (next) {
   next();
 });
 
-export const settingModel = (mongoose.models.Setting as SettingModel & mongoose.Document) || mongoose.model<ISetting, SettingModel>('Setting', settingSchema);
+export const settingModel =
+  (mongoose.models.Setting as SettingModel & mongoose.Document) ||
+  mongoose.model<ISetting, SettingModel>("Setting", settingSchema);

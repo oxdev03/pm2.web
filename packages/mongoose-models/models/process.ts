@@ -1,8 +1,8 @@
-import mongoose, { Model } from 'mongoose';
+import mongoose, { Model } from "mongoose";
 
-import { IProcess } from '@pm2.web/typings';
+import { IProcess } from "@pm2.web/typings";
 
-type ProcessModel = Model<IProcess, {}, {}>;
+type ProcessModel = Model<IProcess, object, object>;
 
 const processSchema = new mongoose.Schema({
   pm_id: {
@@ -11,7 +11,7 @@ const processSchema = new mongoose.Schema({
   },
   server: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Server',
+    ref: "Server",
     required: true,
   },
   name: {
@@ -21,7 +21,18 @@ const processSchema = new mongoose.Schema({
   type: {
     type: String,
     required: true,
-    enum: ['node', 'python', 'ruby', 'php', 'bash', 'go', 'dotnet', 'shell', 'java', 'other'],
+    enum: [
+      "node",
+      "python",
+      "ruby",
+      "php",
+      "bash",
+      "go",
+      "dotnet",
+      "shell",
+      "java",
+      "other",
+    ],
   },
   stats: {
     cpu: Number,
@@ -34,7 +45,7 @@ const processSchema = new mongoose.Schema({
       type: {
         type: String,
         required: true,
-        enum: ['info', 'error', 'success'],
+        enum: ["info", "error", "success"],
       },
       message: {
         type: String,
@@ -48,7 +59,14 @@ const processSchema = new mongoose.Schema({
   ],
   status: {
     type: String,
-    enum: ['online', 'stopping', 'stopped', 'launching', 'errored', 'one-launch-status'],
+    enum: [
+      "online",
+      "stopping",
+      "stopped",
+      "launching",
+      "errored",
+      "one-launch-status",
+    ],
   },
   restartCount: Number,
   toggleCount: Number,
@@ -57,7 +75,7 @@ const processSchema = new mongoose.Schema({
   updatedAt: Date,
 });
 
-processSchema.pre('save', function (next) {
+processSchema.pre("save", function (next) {
   const now = new Date();
   this.updatedAt = now;
   if (!this.createdAt) {
@@ -66,4 +84,6 @@ processSchema.pre('save', function (next) {
   next();
 });
 
-export const processModel = (mongoose.models.Process as ProcessModel & mongoose.Document) || mongoose.model<IProcess, ProcessModel>('Process', processSchema);
+export const processModel =
+  (mongoose.models.Process as ProcessModel & mongoose.Document) ||
+  mongoose.model<IProcess, ProcessModel>("Process", processSchema);
