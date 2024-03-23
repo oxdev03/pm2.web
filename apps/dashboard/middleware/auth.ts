@@ -1,4 +1,3 @@
-import { ObjectId } from "mongodb";
 import { Document } from "mongoose";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getToken } from "next-auth/jwt";
@@ -14,7 +13,7 @@ const authHandler =
     await connectDB();
     const token = await getToken({ req });
     if (!token) return res.status(401).end();
-    const user = await UserModel.findOne({ _id: new ObjectId(token.sub) });
+    const user = await UserModel.findById(token.sub);
     if (!user) return res.status(401).end();
     return handler(req, res, user);
   };
