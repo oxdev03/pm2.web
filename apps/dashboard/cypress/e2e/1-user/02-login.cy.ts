@@ -2,6 +2,12 @@
 
 describe("pm2.web login", () => {
   beforeEach(() => {
+    cy.task("clearDB");
+    cy.task("createUser", {
+      name: "example",
+      email: "mail@example.com",
+      password: "mail@example.com",
+    });
     cy.visit("http://localhost:3000");
   });
 

@@ -38,6 +38,7 @@
     "@tabler/icons-react": "^2.47.0",
     "bcrypt": "^5.1.1",
     "cookies-next": "^4.1.1",
+    "dotenv": "^16.4.5",
     "dotenv-cli": "^7.4.1",
     "lodash": "^4.17.21",
     "mongodb-memory-server": "^9.1.6",
