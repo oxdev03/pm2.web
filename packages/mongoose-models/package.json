@@ -8,7 +8,8 @@
     "build": "tsc",
     "watch": "tsc -w",
     "format": "prettier --write \"**/*.{ts,json,css,scss,md}\"",
-    "format:check": "prettier --check  \"**/*.{ts,json,css,scss,md}\""
+    "format:check": "prettier --check  \"**/*.{ts,json,css,scss,md}\"",
+    "lint": "eslint --ext ts"
   },
   "dependencies": {
     "@pm2.web/typings": "*",
