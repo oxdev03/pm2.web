@@ -19,6 +19,8 @@
     "build": "tsc --build --clean && tsc",
     "start": "node dist/index.js",
     "lint": "eslint --fix .",
+    "format": "prettier --write \"**/*.{ts,json,css,scss,md}\"",
+    "format:check": "prettier --check  \"**/*.{ts,json,css,scss,md}\"",
     "prestart": "tsc --build --clean && tsc",
     "watch": "tsc -w",
     "dev": "npm run start"
