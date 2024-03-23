@@ -1,6 +1,7 @@
 # 1.3.0
 
-- setup test suite for dashboard (wip)
+- setup test suite for dashboard
+- configure eslint/prettier for monorepo
 
 # 1.2.0
 
