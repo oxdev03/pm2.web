@@ -20,7 +20,7 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
-    "typescript": "^5.4.2"
+    "typescript": "^5.4.3"
   },
   "author": "oxdev03",
   "license": "GPL-3.0-only"
