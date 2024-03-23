@@ -39,6 +39,6 @@
     "@pm2.web/eslint-config": "*",
     "@pm2.web/typescript-config": "*",
     "prettier": "^3.2.5",
-    "turbo": "^1.12.5"
+    "turbo": "^1.13.0"
   }
 }
