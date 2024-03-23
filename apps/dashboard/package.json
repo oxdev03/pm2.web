@@ -62,6 +62,6 @@
     "postcss-preset-mantine": "^1.13.0",
     "postcss-simple-vars": "^7.0.1",
     "start-server-and-test": "^2.0.3",
-    "typescript": "5.4.2"
+    "typescript": "5.4.3"
   }
 }
