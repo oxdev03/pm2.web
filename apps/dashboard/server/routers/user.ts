@@ -1,6 +1,6 @@
 import { object, z } from "zod";
 import { adminProcedure, protectedProcedure, publicProcedure, router } from "../trpc";
-import { processModel, serverModel, statModel } from "@pm2.web/mongoose-models";
+import { processModel, serverModel, statModel, userModel } from "@pm2.web/mongoose-models";
 import { TRPCError } from "@trpc/server";
 
 export const userRouter = router({
@@ -30,7 +30,15 @@ export const userRouter = router({
 
       return "Password updated successfully!";
     }),
-  deleteAccount: protectedProcedure.input(z.object({ password: z.string() })).mutation(async (opts) => {}),
+  deleteAccount: protectedProcedure.input(z.object({ password: z.string() })).mutation(async (opts) => {
+    const { password } = opts.input;
+    const { user } = opts.ctx;
+    if (!(await user.checkPassword(password))) {
+      throw new TRPCError({ code: "BAD_REQUEST", message: "Password is incorrect" });
+    }
+    await userModel.findByIdAndDelete(user._id);
+    return "Deleted User";
+  }),
 });
 
 export type userRouter = typeof userRouter;
