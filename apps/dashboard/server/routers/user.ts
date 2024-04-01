@@ -51,6 +51,30 @@ export const userRouter = router({
 
     return `${currentProvider?.toLocaleUpperCase()} OAuth2 unlinked`;
   }),
+  deleteUser: adminProcedure.input(z.object({ userId: z.string() })).mutation(async ({ input, ctx }) => {
+    const { userId } = input;
+    const authUser = ctx.user;
+
+    const user = await userModel.findById(userId);
+
+    if (!user) {
+      throw new TRPCError({ code: "BAD_REQUEST", message: "User doesn't exists" });
+    }
+
+    if (user.acl?.owner) {
+      throw new TRPCError({ code: "BAD_REQUEST", message: "Owner cannot be deleted" });
+    }
+    if (user.acl?.admin && !authUser.acl?.owner) {
+      throw new TRPCError({ code: "UNAUTHORIZED", message: "Owner has higher permission than authenticated user." });
+    }
+
+    try {
+      await userModel.findByIdAndDelete(userId);
+      return "User deleted successfully";
+    } catch (error) {
+      throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Failed deleting user." });
+    }
+  }),
 });
 
 export type userRouter = typeof userRouter;
