@@ -1,5 +1,5 @@
 import { object, z } from "zod";
-import { adminProcedure, protectedProcedure, publicProcedure, router } from "../trpc";
+import { adminProcedure, ownerProcedure, protectedProcedure, publicProcedure, router } from "../trpc";
 import { processModel, serverModel, statModel, userModel } from "@pm2.web/mongoose-models";
 import { TRPCError } from "@trpc/server";
 
@@ -75,6 +75,44 @@ export const userRouter = router({
       throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Failed deleting user." });
     }
   }),
+  updateRole: adminProcedure
+    .input(z.object({ userId: z.string(), role: z.enum(["OWNER", "ADMIN", "CUSTOM", "NONE"]) }))
+    .mutation(async ({ ctx, input }) => {
+      const { userId, role } = input;
+      const authUser = ctx.user;
+      const user = await userModel.findById(userId);
+
+      if (!user) {
+        throw new TRPCError({ code: "BAD_REQUEST", message: "User doesn't exists" });
+      }
+
+      if (user.acl?.owner && !authUser.acl?.owner) {
+        throw new TRPCError({ code: "BAD_REQUEST", message: "Insufficient permission to change role of owner" });
+      }
+
+      if (authUser.acl.admin && !authUser.acl.owner && role == "OWNER") {
+        throw new TRPCError({ code: "BAD_REQUEST", message: "Insufficient permission to change role to owner" });
+      }
+
+      if (authUser._id.toString() == user._id.toString() && user.acl?.owner && role != "OWNER") {
+        // check if other owners exist
+        const owners = await userModel.find({ "acl.owner": true });
+        if (owners.length <= 1) {
+          throw new TRPCError({ code: "BAD_REQUEST", message: "Their needs to be at least one owner." });
+        }
+      }
+
+      user.acl = {
+        owner: role === "OWNER",
+        admin: role === "ADMIN",
+        servers: [],
+      };
+      await user.save().catch((err) => console.error(err));
+      return "Updated role successfully";
+    }),
+  setCustomPermission: adminProcedure
+    .input(z.object({ userIds: z.array(z.string()) }))
+    .mutation(async ({ ctx, input }) => {}),
 });
 
 export type userRouter = typeof userRouter;
