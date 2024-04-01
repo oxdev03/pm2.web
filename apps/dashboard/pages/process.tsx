@@ -31,6 +31,7 @@ import {
 } from "@tabler/icons-react";
 
 import classes from "../styles/process.module.css";
+import { trpc } from "@/utils/trpc";
 
 function Process({ settings }: { settings: ISetting }) {
   const [selection, setSelection] = useState<string[]>([]);
@@ -38,13 +39,14 @@ function Process({ settings }: { settings: ISetting }) {
   const [processState, setProcessState] = useState<
     {
       _id: string;
-      action: "restart" | "stop" | "delete" | null | undefined;
+      action: "RESTART" | "STOP" | "DELETE" | null | undefined;
     }[]
   >([]);
   const [logs, setLogs] = useState<(Log & { process: string })[]>([]);
   const toggleRow = (id: string) =>
     setSelection((current) => (current.includes(id) ? current.filter((item) => item !== id) : [...current, id]));
   const { servers, selectItem, selectedItem } = useSelected();
+  const processAction = trpc.action.useMutation();
   const { data: session } = useSession();
   const router = useRouter();
 
@@ -91,7 +93,7 @@ function Process({ settings }: { settings: ISetting }) {
     if (property === "cpu") return Number(process.stats?.cpu || 0).toFixed(0) + "%";
   };
 
-  const triggerAction = async (id: string, action: "restart" | "stop" | "delete") => {
+  const triggerAction = async (id: string, action: "RESTART" | "STOP" | "DELETE") => {
     const newProcessState = [...processState];
     const processIndex = newProcessState.findIndex((x) => x._id == id);
     if (processIndex == -1) {
@@ -104,15 +106,9 @@ function Process({ settings }: { settings: ISetting }) {
     }
     setProcessState(newProcessState);
     try {
-      const res = await fetch("/api/action", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          action,
-          id,
-        }),
+      await processAction.mutateAsync({
+        action: action,
+        processId: id,
       });
     } catch (e) {
       newProcessState[processIndex].action = null;
@@ -245,8 +241,8 @@ function Process({ settings }: { settings: ISetting }) {
                     color="blue"
                     radius="sm"
                     size={"lg"}
-                    loading={!!processState.find((x) => x._id == process._id && x.action == "restart")}
-                    onClick={() => triggerAction(process._id, "restart")}
+                    loading={!!processState.find((x) => x._id == process._id && x.action == "RESTART")}
+                    onClick={() => triggerAction(process._id, "RESTART")}
                     disabled={!hasPermission(process._id, process.server, "RESTART")}
                   >
                     <IconReload size="1.4rem" />
@@ -256,8 +252,8 @@ function Process({ settings }: { settings: ISetting }) {
                     color="orange"
                     radius="sm"
                     size={"lg"}
-                    loading={!!processState.find((x) => x._id == process._id && x.action == "stop")}
-                    onClick={() => triggerAction(process._id, "stop")}
+                    loading={!!processState.find((x) => x._id == process._id && x.action == "STOP")}
+                    onClick={() => triggerAction(process._id, "STOP")}
                     disabled={!hasPermission(process._id, process.server, "STOP")}
                   >
                     <IconPower size="1.4rem" />
@@ -271,8 +267,8 @@ function Process({ settings }: { settings: ISetting }) {
                     color="red"
                     radius="sm"
                     size={"lg"}
-                    loading={!!processState.find((x) => x._id == process._id && x.action == "delete")}
-                    onClick={() => triggerAction(process._id, "delete")}
+                    loading={!!processState.find((x) => x._id == process._id && x.action == "DELETE")}
+                    onClick={() => triggerAction(process._id, "DELETE")}
                     disabled={!hasPermission(process._id, process.server, "DELETE")}
                   >
                     <IconTrash size="1.4rem" />

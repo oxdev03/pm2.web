@@ -34,3 +34,9 @@ const enforceUserIsAuthed = t.middleware(async ({ ctx, next }) => {
 });
 
 export const protectedProcedure = t.procedure.use(enforceUserIsAuthed);
+export const adminProcedure = protectedProcedure.use(async ({ ctx, next }) => {
+  if (!ctx.user?.acl?.admin || !ctx.user?.acl?.owner) {
+    throw new TRPCError({ code: "UNAUTHORIZED", message: "Owner/Admin permssion required!" });
+  }
+  return next({ ctx });
+});
