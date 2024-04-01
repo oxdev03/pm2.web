@@ -39,6 +39,18 @@ export const userRouter = router({
     await userModel.findByIdAndDelete(user._id);
     return "Deleted User";
   }),
+  unlinkOAuth2: protectedProcedure.mutation(async ({ ctx }) => {
+    const { user } = ctx;
+    if (!user.oauth2?.provider) {
+      throw new TRPCError({ code: "PRECONDITION_FAILED", message: "Account is not linked to an OAuth2 Provider" });
+    }
+
+    const currentProvider = user.oauth2?.provider;
+    user.oauth2 = undefined;
+    await user.save();
+
+    return `${currentProvider?.toLocaleUpperCase()} OAuth2 unlinked`;
+  }),
 });
 
 export type userRouter = typeof userRouter;
