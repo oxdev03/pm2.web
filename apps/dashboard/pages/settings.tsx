@@ -35,6 +35,7 @@ import { notifications } from "@mantine/notifications";
 import { IconCheck, IconCopy, IconDeviceFloppy, IconRefresh, IconTrash, IconUnlink, IconX } from "@tabler/icons-react";
 
 import classes from "../styles/settings.module.css";
+import { trpc } from "@/utils/trpc";
 
 export default function Settings({ settings }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { data: session } = useSession();
@@ -90,6 +91,9 @@ export default function Settings({ settings }: InferGetServerSidePropsType<typeo
     },
   });
 
+  const deleteAll = trpc.setting.deleteAll.useMutation();
+  const truncateLogs = trpc.setting.truncateLogs.useMutation();
+
   const notification = (id: string, title: string, message: string, status: "pending" | "success" | "error") => {
     if (status == "pending") {
       notifications.show({
@@ -115,20 +119,8 @@ export default function Settings({ settings }: InferGetServerSidePropsType<typeo
 
   const handleDatabaseAction = async (action: "delete" | "delete_logs") => {
     notification(action, "Performing Action", "Please wait...", "pending");
-    const res = await fetch(`/api/settings/action`, {
-      method: "POST",
-      body: JSON.stringify({ action }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const statusCode = res.status;
-    const data = await res.json();
-    if (statusCode == 200) {
-      notification(action, "Success", data.message, "success");
-    } else {
-      notification(action, "Error", data.message, "error");
-    }
+    const message = await (action == "delete" ? deleteAll : truncateLogs).mutateAsync();
+    notification(action, "Success", message, "success");
   };
 
   const handleConfigurationUpdate = async (values: typeof globalConfiguration.values) => {
