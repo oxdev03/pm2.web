@@ -1,6 +1,7 @@
-import { z } from "zod";
+import { boolean, z } from "zod";
 import { adminProcedure, protectedProcedure, publicProcedure, router } from "../trpc";
-import { processModel, serverModel, statModel } from "@pm2.web/mongoose-models";
+import { processModel, serverModel, settingModel, statModel } from "@pm2.web/mongoose-models";
+import { defaultSettings } from "@/utils/constants";
 
 export const settingRouter = router({
   deleteAll: adminProcedure.mutation(async (opts) => {
@@ -14,6 +15,35 @@ export const settingRouter = router({
     await statModel.deleteMany({});
     return `Truncated logs for ${processes.modifiedCount} processes`;
   }),
+  updateSetting: adminProcedure
+    .input(
+      z.object({
+        polling: z.object({
+          frontend: z.number(),
+          backend: z.number(),
+        }),
+        logRotation: z.number(),
+        registrationCode: z.string().length(6),
+        excludeDaemon: z.boolean(),
+      }),
+    )
+    .mutation(async ({ input }) => {
+      const setting = await settingModel.findOne({});
+      if (!setting) {
+        // create new setting
+        const newSetting = new settingModel({ ...defaultSettings, ...input });
+        await newSetting.save();
+        return "Configuration updated successfully";
+      }
+
+      setting.polling = input.polling;
+      setting.logRotation = input.logRotation;
+      setting.registrationCode = input.registrationCode;
+      setting.excludeDaemon = input.excludeDaemon;
+
+      await setting.save();
+      return "Configuration updated successfully";
+    }),
 });
 
 export type SettingRouter = typeof settingRouter;
