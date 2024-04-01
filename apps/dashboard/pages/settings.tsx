@@ -32,7 +32,6 @@ import {
 import { useForm } from "@mantine/form";
 import { randomId } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
-import { Acl } from "@pm2.web/typings";
 import { IconCheck, IconCopy, IconDeviceFloppy, IconRefresh, IconTrash, IconUnlink, IconX } from "@tabler/icons-react";
 
 import classes from "../styles/settings.module.css";
@@ -210,10 +209,7 @@ export default function Settings({ settings }: InferGetServerSidePropsType<typeo
   };
 
   useEffect(() => {
-    type DefaultSessionUser = DefaultSession & {
-      acl: Acl;
-    };
-    const user = session?.user as DefaultSessionUser;
+    const user = session?.user;
     if (user?.acl?.owner || user?.acl?.admin) {
       setAcl(true);
     } else {

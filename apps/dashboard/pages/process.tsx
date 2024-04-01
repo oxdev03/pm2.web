@@ -18,7 +18,7 @@ import { formatBytes } from "@/utils/format";
 import { IPermissionConstants, PERMISSIONS } from "@/utils/permission";
 import { ActionIcon, Flex, Indicator, Paper, ScrollArea, Text, Transition } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
-import { Acl, IProcess, IServer, ISetting, Log } from "@pm2.web/typings";
+import { IProcess, IServer, ISetting } from "@pm2.web/typings";
 import {
   IconBrandJavascript,
   IconCpu,
@@ -49,10 +49,7 @@ function Process({ settings }: { settings: ISetting }) {
   const router = useRouter();
 
   const hasPermission = (process_id: string, server_id: string, permission?: keyof IPermissionConstants) => {
-    type DefaultSessionUser = DefaultSession & {
-      acl: Acl;
-    };
-    const user = session?.user as DefaultSessionUser;
+    const user = session?.user;
     if (!user || !user.acl) return false;
     if (!user?.acl?.owner && !user?.acl?.admin) {
       if (permission)
