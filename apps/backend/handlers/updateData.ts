@@ -1,15 +1,17 @@
-import { processModel, serverModel } from "@pm2.web/mongoose-models";
-import { ISetting, QueuedLog, UpdateDataResponse } from "@pm2.web/typings";
+import { processModel, serverModel, statModel } from "@pm2.web/mongoose-models";
+import { ISettingModel } from "@pm2.web/typings";
 
 import processInfo from "../utils/processInfo.js";
 import serverInfo from "../utils/serverInfo.js";
+import { QueuedLog, UpdateDataResponse } from "../types/handler.js";
 
 export default async function updateData(
   queuedLogs: QueuedLog[],
-  settings: ISetting,
+  settings: ISettingModel,
 ): Promise<UpdateDataResponse> {
   const server = await serverInfo();
   const processes = await processInfo();
+  const timestamp = new Date();
   // check if server exists
   let currentServer = await serverModel.findOne({ uuid: server.uuid });
   if (!currentServer) {
@@ -17,32 +19,14 @@ export default async function updateData(
     const newServer = new serverModel({
       name: server.name,
       uuid: server.uuid,
-      stats: {
-        cpu: server.stats.cpu,
-        memory: server.stats.memory,
-        memoryMax: server.stats.memoryMax,
-        uptime: server.stats.uptime,
-      },
     });
     await newServer.save().catch((err: Error) => {
       console.log(err);
     });
     currentServer = newServer;
-  } else {
-    // update server
-    currentServer.stats = {
-      cpu: server.stats.cpu,
-      memory: server.stats.memory,
-      memoryMax: server.stats.memoryMax,
-      uptime: server.stats.uptime,
-    };
-
-    await currentServer.save().catch((err: Error) => {
-      console.log(err);
-    });
   }
 
-  // check if process exists
+  const processStats = [];
 
   for (let i = 0; i < processes.length; i++) {
     const process = processes[i];
@@ -50,14 +34,13 @@ export default async function updateData(
     const logs = queuedLogs
       .filter((log) => log.id === process.pm_id)
       .map((x) => {
-        //@ts-expect-error //TODO: fix this
+        // eslint-disable-next-line
+        //@ts-expect-error
         delete x.id;
         return x;
       });
-    const processExists = await processModel.findOne(
-      { pm_id: process.pm_id, server: currentServer._id },
-      { _id: 1 },
-    );
+    const processQuery = { pm_id: process.pm_id, server: currentServer._id };
+    let processExists = await processModel.findOne(processQuery, { _id: 1 });
     if (!processExists) {
       // create process
       const newProcess = new processModel({
@@ -65,11 +48,6 @@ export default async function updateData(
         server: currentServer._id,
         name: process.name,
         type: process.type,
-        stats: {
-          cpu: process.stats.cpu,
-          memory: process.stats.memory,
-          uptime: process.stats.uptime,
-        },
         logs: logs,
         status: process.status,
         restartCount: 0,
@@ -80,30 +58,51 @@ export default async function updateData(
         console.log(err);
       });
     } else {
-      await processModel.updateOne(
-        { pm_id: process.pm_id, server: currentServer._id },
-        {
-          name: process.name,
-          stats: {
-            cpu: process.stats.cpu,
-            memory: process.stats.memory,
-            uptime: process.stats.uptime,
+      processExists = await processModel.findOne(processQuery, { _id: 1 });
+      await processModel.updateOne(processQuery, {
+        name: process.name,
+        status: process.status,
+        $push: {
+          logs: {
+            $each: logs,
+            $slice: -settings.logRotation,
           },
-          status: process.status,
-          $push: {
-            logs: {
-              $each: logs,
-              $slice: -settings.logRotation,
-            },
-          },
-          updatedAt: new Date(),
         },
-      );
+      });
     }
+
+    processStats.push({
+      source: {
+        server: currentServer._id,
+        process: processExists?._id,
+      },
+      cpu: process.stats.cpu,
+      memory: process.stats.memory,
+      memoryMax: process.stats.memoryMax || server.stats.memoryMax,
+      uptime: process.stats.uptime,
+      timestamp: timestamp,
+    });
   }
 
+  // insert stats
+  const stats = [
+    {
+      source: {
+        server: currentServer._id,
+      },
+      cpu: server.stats.cpu,
+      memory: server.stats.memory,
+      memoryMax: server.stats.memoryMax,
+      uptime: server.stats.uptime,
+      timestamp: timestamp,
+    },
+    ...processStats,
+  ];
+
+  await statModel.insertMany(stats);
+
   // delete not existing processes
-  const deleted = await processModel
+  const deletedProcess = await processModel
     .deleteMany({
       server: currentServer._id,
       pm_id: { $nin: processes.map((p) => p.pm_id) },
@@ -111,8 +110,8 @@ export default async function updateData(
     .catch((err: Error) => {
       console.log(err);
     });
-  if (deleted?.deletedCount)
-    console.log(`Deleted ${deleted.deletedCount} processes`);
+  if (deletedProcess?.deletedCount)
+    console.log(`Deleted ${deletedProcess.deletedCount} processes`);
 
   return {
     server: currentServer,

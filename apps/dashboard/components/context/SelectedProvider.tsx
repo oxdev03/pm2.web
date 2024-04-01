@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
-import { IServer, SelectItem, StateSelectedItem } from "@pm2.web/typings";
+import { IServer, StateSelectedItem } from "@pm2.web/typings";
 
 interface SelectedContextType {
   selectedItem: StateSelectedItem;

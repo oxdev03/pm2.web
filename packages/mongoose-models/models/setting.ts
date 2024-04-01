@@ -1,37 +1,29 @@
 import mongoose, { Model } from "mongoose";
 
-import { ISetting } from "@pm2.web/typings";
+import { ISettingModel } from "@pm2.web/typings";
 
-type SettingModel = Model<ISetting, object, object>;
+type SettingModel = Model<ISettingModel>;
 
-const settingSchema = new mongoose.Schema({
-  polling: {
-    backend: {
-      type: Number,
-      default: 3000,
+const settingSchema = new mongoose.Schema(
+  {
+    polling: {
+      backend: {
+        type: Number,
+        default: 3000,
+      },
+      frontend: {
+        type: Number,
+        default: 3000,
+      },
     },
-    frontend: {
-      type: Number,
-      default: 3000,
-    },
+    logRotation: Number,
+    logRetention: Number,
+    excludeDaemon: Boolean,
+    registrationCode: String,
   },
-  logRotation: Number,
-  logRetention: Number,
-  excludeDaemon: Boolean,
-  registrationCode: String,
-  createdAt: Date,
-  updatedAt: Date,
-});
-
-settingSchema.pre("save", function (next) {
-  const now = new Date();
-  this.updatedAt = now;
-  if (!this.createdAt) {
-    this.createdAt = now;
-  }
-  next();
-});
+  { timestamps: true },
+);
 
 export const settingModel =
-  (mongoose.models.Setting as SettingModel & mongoose.Document) ||
-  mongoose.model<ISetting, SettingModel>("Setting", settingSchema);
+  (mongoose.models.Setting as SettingModel) ??
+  mongoose.model<ISettingModel>("Setting", settingSchema);

@@ -1,16 +1,19 @@
-interface ProcessInfo {
+import { IProcessStatus } from "@pm2.web/typings";
+
+interface IProcessInfo {
   name: string;
   pm_id: number;
   stats: {
     cpu: number;
     memory: number;
+    memoryMax: number;
     uptime: number;
   };
-  status: 'online' | 'stopping' | 'stopped' | 'launching' | 'errored' | 'one-launch-status';
+  status: IProcessStatus;
   type: string;
 }
 
-interface ServerInfo {
+interface IServerInfo {
   name: string;
   uuid: string;
   stats: {
@@ -22,4 +25,4 @@ interface ServerInfo {
   heartbeatAt: number;
 }
 
-export type { ProcessInfo, ServerInfo };
+export type { IProcessInfo, IServerInfo };

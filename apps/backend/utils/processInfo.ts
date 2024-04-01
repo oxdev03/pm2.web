@@ -1,8 +1,8 @@
 import pm2 from "pm2";
 
-import { ProcessInfo } from "@pm2.web/typings";
+import { IProcessInfo } from "../types/info";
 
-const getProcessInfo = async (): Promise<ProcessInfo[]> => {
+const getProcessInfo = async (): Promise<IProcessInfo[]> => {
   const pm2List = await new Promise<pm2.ProcessDescription[]>(
     (resolve, reject) => {
       pm2.list((err, list) => {
@@ -24,13 +24,14 @@ const getProcessInfo = async (): Promise<ProcessInfo[]> => {
         stats: {
           cpu: item?.monit?.cpu || 0,
           memory: item?.monit?.memory || 0,
+          memoryMax: 0,
           uptime: Date.now() - (item?.pm2_env?.pm_uptime || 0),
         },
         status: item?.pm2_env?.status || "offline",
         type: item?.pm2_env?.exec_interpreter || "",
       };
     })
-    .filter((item) => !!item) as ProcessInfo[];
+    .filter((item) => !!item) as IProcessInfo[];
 
   return processList;
 };

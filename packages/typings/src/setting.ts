@@ -12,4 +12,6 @@ type ISetting = {
   updatedAt: string;
 };
 
-export type { ISetting };
+type ISettingModel = ISetting;
+
+export type { ISetting, ISettingModel };

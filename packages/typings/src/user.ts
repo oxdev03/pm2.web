@@ -1,22 +1,22 @@
-interface Process {
+interface IAclProcess {
   process: string;
   perms: number;
 }
 
-interface Server {
+interface IAclServer {
   server: string;
   perms: number;
-  processes: Process[];
+  processes: IAclProcess[];
 }
 
-interface Acl {
+interface IAcl {
   owner: boolean;
   admin: boolean;
-  servers: Server[];
+  servers: IAclServer[];
 }
 
-interface Oauth2 {
-  provider: 'github' | 'google';
+interface IOauth2 {
+  provider: "github" | "google";
   providerUserId: string;
 }
 
@@ -25,19 +25,25 @@ interface IUser {
   email: string;
   name: string;
   password?: string;
-  acl: Acl;
-  oauth2?: Oauth2;
+  acl: IAcl;
+  oauth2?: IOauth2;
   updatedAt?: string;
   createdAt?: string;
 }
 
-interface MUser extends Omit<IUser, 'updatedAt' | 'createdAt'> {
-  updatedAt: Date;
-  createdAt: Date;
-}
-interface MUserMethods {
+interface IUserModel extends IUser {}
+
+interface IUserModelMethods {
   checkPassword: (password: string) => Promise<boolean>;
-  toJSON: () => IUser extends { password: string } ? Omit<IUser, 'password'> : IUser;
+  toJSON: () => Omit<IUser, "password">;
 }
 
-export type { MUserMethods, IUser, MUser, Acl, Oauth2, Server, Process };
+export type {
+  IUserModel,
+  IUserModelMethods,
+  IUser,
+  IAcl,
+  IOauth2,
+  IAclServer,
+  IAclProcess,
+};
