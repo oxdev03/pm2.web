@@ -2,7 +2,6 @@ import { NextApiRequest, NextApiResponse } from "next";
 
 import authHandler from "@/middleware/auth";
 import { userModel } from "@pm2.web/mongoose-models";
-import { Server } from "@pm2.web/typings";
 
 export default authHandler(async (req: NextApiRequest, res: NextApiResponse<{ message: string }>, reqUser) => {
   if (!reqUser?.acl?.admin && !reqUser?.acl?.owner) return res.status(403).json({ message: "Unauthorized" });

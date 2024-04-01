@@ -5,7 +5,7 @@ import { defaultSettings } from "@/utils/constants";
 import { settingModel } from "@pm2.web/mongoose-models";
 
 export default authHandler(async (req: NextApiRequest, res: NextApiResponse<{ message: string }>, user) => {
-  if (!user?.acl?.admin && !user?.acl?.owner) return res.status(403).json({ message: "Unauthorized" });
+  if (!user.acl?.admin && !user.acl?.owner) return res.status(403).json({ message: "Unauthorized" });
   const setting = await settingModel.findOne({});
   if (!setting) {
     // create new setting

@@ -5,7 +5,7 @@ import authHandler from "@/middleware/auth";
 import Access from "@/utils/acess";
 import { PERMISSIONS } from "@/utils/permission";
 import { processModel } from "@pm2.web/mongoose-models";
-import { Status } from "@pm2.web/typings";
+import { Status } from "@/types/status";
 
 export default authHandler(async (req: NextApiRequest, res: NextApiResponse<Status[]>, user) => {
   const result = await processModel.aggregate([
