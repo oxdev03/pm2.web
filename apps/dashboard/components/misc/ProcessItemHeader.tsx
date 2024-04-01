@@ -11,7 +11,6 @@ import {
   IconBrandPython,
   IconCode,
   IconCoffee,
-  TablerIconsProps,
 } from "@tabler/icons-react";
 
 export default function ProcessItemHeader({
