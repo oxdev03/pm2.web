@@ -1,3 +1,9 @@
+# 1.4.0 - TBD
+- refactor typings and mongoose models
+- use time series for statistics
+- migrate api endpoints to trpc
+- refactor react components
+
 # 1.3.0
 
 - setup test suite for dashboard
