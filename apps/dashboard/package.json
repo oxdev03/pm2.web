@@ -36,7 +36,7 @@
     "@pm2.web/mongoose-models": "*",
     "@pm2.web/typings": "*",
     "@tabler/icons-react": "^3.1.0",
-    "@tanstack/react-query": "^5.28.9",
+    "@tanstack/react-query": "^5.29.0",
     "@trpc/client": "^11.0.0-rc.329",
     "@trpc/next": "^11.0.0-rc.329",
     "@trpc/react-query": "^11.0.0-rc.329",
@@ -57,10 +57,10 @@
     "@types/bcrypt": "^5.0.2",
     "@types/lodash": "^4.17.0",
     "@types/ms": "^0.7.34",
-    "@types/node": "20.12.2",
-    "@types/react": "^18.2.73",
-    "@types/react-dom": "^18.2.23",
-    "cypress": "^13.7.1",
+    "@types/node": "20.12.5",
+    "@types/react": "^18.2.74",
+    "@types/react-dom": "^18.2.24",
+    "cypress": "^13.7.2",
     "eslint": "8.57.0",
     "eslint-config-next": "^14.1.4",
     "eslint-config-prettier": "^9.1.0",
@@ -68,6 +68,6 @@
     "postcss-preset-mantine": "^1.13.0",
     "postcss-simple-vars": "^7.0.1",
     "start-server-and-test": "^2.0.3",
-    "typescript": "5.4.3"
+    "typescript": "5.4.4"
   }
 }
