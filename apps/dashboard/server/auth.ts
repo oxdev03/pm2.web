@@ -1,5 +1,5 @@
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
-import { IAcl } from "@pm2.web/typings";
+import { IAcl, IOauth2 } from "@pm2.web/typings";
 import { GetServerSidePropsContext } from "next";
 import { getServerSession } from "next-auth";
 
@@ -10,6 +10,7 @@ declare module "next-auth" {
     user?: {
       id: string;
       acl?: IAcl;
+      oauth2?: IOauth2;
     } & DefaultSession["user"];
   }
 }

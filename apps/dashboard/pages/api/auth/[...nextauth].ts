@@ -193,7 +193,10 @@ export const authOptions = {
         token.accessToken = account.access_token;
         token.id = user.id;
       }
-      if (user) token.acl = user.acl;
+      if (user) {
+        token.acl = user.acl;
+        token.oauth2 = user.oauth2;
+      }
       return token;
     },
     async session({ session, token, user }: { session: any; token: JWT; user: any }) {
@@ -201,6 +204,7 @@ export const authOptions = {
       session.accessToken = token.accessToken;
       session.user.id = token.id;
       session.user.acl = token.acl;
+      session.user.oauth2 = token.oauth2;
 
       return session;
     },

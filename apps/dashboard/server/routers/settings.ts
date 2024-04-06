@@ -10,10 +10,10 @@ export const settingRouter = router({
     const stats = await statModel.deleteMany({});
     return `Deleted ${servers.deletedCount} Servers, ${processes.deletedCount} Processes, ${stats.deletedCount} Stats`;
   }),
-  truncateLogs: adminProcedure.mutation(async (opts) => {
+  deleteLogs: adminProcedure.mutation(async (opts) => {
     const processes = await processModel.updateMany({}, { $set: { logs: [] } });
     await statModel.deleteMany({});
-    return `Truncated logs for ${processes.modifiedCount} processes`;
+    return `Deleted logs for ${processes.modifiedCount} processes`;
   }),
   updateSetting: adminProcedure
     .input(

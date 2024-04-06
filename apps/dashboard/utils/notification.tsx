@@ -28,3 +28,21 @@ export function actionNotification(
     });
   }
 }
+
+export function sendNotification(id: string, title: string, message: string, status: "success" | "error") {
+  notifications.show({
+    id,
+    title,
+    message,
+    color: status == "success" ? "green" : "red",
+    icon: status == "success" ? <IconCheck /> : <IconX />,
+    autoClose: 1500,
+    withCloseButton: true,
+  });
+}
+
+export function randomId(length = 6) {
+  return Math.random()
+    .toString(36)
+    .substring(2, length + 2);
+}

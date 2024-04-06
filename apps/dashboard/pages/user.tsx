@@ -1,18 +1,15 @@
-import { GetServerSideProps, GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
+import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import React, { forwardRef, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
-import { GithubIcon } from "@/components/icons/github";
-import { GoogleIcon } from "@/components/icons/google";
 import { Dashboard } from "@/components/layouts/Dashboard";
-import { CustomMultiSelect, IItem } from "@/components/misc/MultiSelect/CustomMultiSelect";
+import { CustomMultiSelect } from "@/components/misc/MultiSelect/CustomMultiSelect";
 import connectDB from "@/middleware/mongodb";
 import { fetchServer, fetchSettings } from "@/utils/fetchSSRProps";
 import { IPermissionConstants, Permission, PERMISSIONS } from "@/utils/permission";
 import {
   Accordion,
-  ActionIcon,
   Avatar,
   Badge,
   Box,
@@ -22,8 +19,6 @@ import {
   Flex,
   Grid,
   Group,
-  MultiSelect,
-  NativeSelect,
   Overlay,
   Paper,
   rem,
@@ -33,23 +28,18 @@ import {
   Title,
   Transition,
 } from "@mantine/core";
-import { notifications } from "@mantine/notifications";
 import { userModel } from "@pm2.web/mongoose-models";
-import { IServer, IUser, IAclServer } from "@pm2.web/typings";
+import { IUser, IAclServer } from "@pm2.web/typings";
 import {
   IconChartBar,
-  IconCheck,
   IconCircleFilled,
   IconDeviceFloppy,
   IconHistory,
-  IconMail,
   IconPower,
   IconReload,
   IconTrash,
-  IconX,
 } from "@tabler/icons-react";
 
-import clsx from "clsx";
 import classes from "../styles/user.module.css";
 import { trpc } from "@/utils/trpc";
 import UserItem from "@/components/user/table/UserItem";
