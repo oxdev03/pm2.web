@@ -107,7 +107,7 @@ export const userRouter = router({
       }
 
       if (authUser.acl.admin && !authUser.acl.owner && role == "OWNER") {
-        throw new TRPCError({ code: "BAD_REQUEST", message: "Insufficient permission to change role to owner" });
+        throw new TRPCError({ code: "BAD_REQUEST", message: `Insufficient permission to change role to ${role}` });
       }
 
       if (authUser._id.toString() == user._id.toString() && user.acl?.owner && role != "OWNER") {
@@ -144,7 +144,7 @@ export const userRouter = router({
       user.acl.servers = filteredPerms;
       await user.save().catch((err) => console.error(err));
     }
-    
+
     return "Updated permissions successfully";
   }),
 });

@@ -1,7 +1,3 @@
-.rowSelected {
-  background-color: var(--mantine-color-blue-light);
-}
-
 .value {
   margin-left: rem(1);
   margin-right: rem(1);

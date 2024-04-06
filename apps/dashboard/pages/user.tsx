@@ -35,7 +35,7 @@ import {
 } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { userModel } from "@pm2.web/mongoose-models";
-import { IServer, IUser, Server } from "@pm2.web/typings";
+import { IServer, IUser, IAclServer } from "@pm2.web/typings";
 import {
   IconChartBar,
   IconCheck,
@@ -49,7 +49,10 @@ import {
   IconX,
 } from "@tabler/icons-react";
 
+import clsx from "clsx";
 import classes from "../styles/user.module.css";
+import { trpc } from "@/utils/trpc";
+import UserItem from "@/components/user/table/UserItem";
 
 const permissionData = [
   {
@@ -109,7 +112,7 @@ export default function User({ users, servers }: InferGetServerSidePropsType<typ
     delete: false,
   };
   const [selection, setSelection] = useState<string[]>([]);
-  const [perms, setPerms] = useState<Server[]>(
+  const [perms, setPerms] = useState<IAclServer[]>(
     servers.map((server) => ({
       server: server._id,
       processes: server.processes.map((process) => ({
@@ -154,44 +157,6 @@ export default function User({ users, servers }: InferGetServerSidePropsType<typ
     }
   };
 
-  const deleteUser = async (id: string) => {
-    const rnd = Math.random().toString(36).substring(7);
-    notification(`delete-user-${id}-${rnd}`, "Deleting user", "Please wait...", "pending");
-    const res = await fetch(`/api/user?id=${id}`, {
-      method: "DELETE",
-    });
-    const statusCode = res.status;
-    const data = await res.json();
-
-    router.replace(router.asPath); // hacky way to refresh page
-
-    if (statusCode !== 200) notification(`delete-user-${id}-${rnd}`, "Failed to delete user", data.message, "error");
-    else if (statusCode === 200) notification(`delete-user-${id}-${rnd}`, "User deleted", data.message, "success");
-  };
-
-  const updateRole = async (id: string, permission: string) => {
-    const rnd = Math.random().toString(36).substring(7);
-    notification(`update-user-${id}-${rnd}`, "Updating user", "Please wait...", "pending");
-    const res = await fetch(`/api/user`, {
-      method: "PATCH",
-      body: JSON.stringify({
-        id,
-        permission,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const statusCode = res.status;
-    const data = await res.json();
-
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    router.replace(router.asPath); // hacky way to refresh page
-
-    if (statusCode !== 200) notification(`update-user-${id}-${rnd}`, "Failed to update user", data.message, "error");
-    else if (statusCode === 200) notification(`update-user-${id}-${rnd}`, "User updated", data.message, "success");
-  };
-
   const updatePermsState = (server_id: string, process_id: string, new_perms: string[]) => {
     const newPerms = [...perms];
     const serverIndex = newPerms.findIndex((x) => x.server == server_id);
@@ -232,6 +197,10 @@ export default function User({ users, servers }: InferGetServerSidePropsType<typ
     return [];
   };
 
+  const getUserRole = (item: Omit<IUser, "password" | "updatedAt">) => {
+    return item.acl?.owner ? "owner" : item.acl?.admin ? "admin" : item.acl?.servers?.length ? "custom" : "none";
+  };
+
   const updatePerms = async () => {
     const rnd = Math.random().toString(36).substring(7);
     notification(`update-perms-${rnd}`, "Updating permissions", "Please wait...", "pending");
@@ -253,6 +222,10 @@ export default function User({ users, servers }: InferGetServerSidePropsType<typ
 
     if (statusCode !== 200) notification(`update-perms-${rnd}`, "Failed to update permissions", data.message, "error");
     else if (statusCode === 200) notification(`update-perms-${rnd}`, "Permissions updated", data.message, "success");
+  };
+
+  const refreshSSRProps = () => {
+    router.replace(router.asPath);
   };
 
   useEffect(() => {
@@ -321,66 +294,19 @@ export default function User({ users, servers }: InferGetServerSidePropsType<typ
                     </Table.Tr>
                   </Table.Thead>
                   <Table.Tbody>
-                    {users.map((item) => {
-                      const selected = selection.includes(item._id);
-                      return (
-                        <Table.Tr key={item._id} className={`${selected ? classes.rowSelected : ""}`}>
-                          <Table.Td>
-                            <Checkbox
-                              checked={selection.includes(item._id)}
-                              onChange={() => toggleRow(item._id)}
-                              disabled={item.acl.admin || item.acl.owner}
-                            />
-                          </Table.Td>
-                          <Table.Td>
-                            <Group gap="sm">
-                              <>
-                                {!item.oauth2 && <IconMail />}
-                                {item?.oauth2?.provider == "github" && <GithubIcon />}
-                                {item.oauth2?.provider == "google" && <GoogleIcon />}
-                              </>
-                              <Text size="sm" fw={500}>
-                                {item.name}
-                              </Text>
-                            </Group>
-                          </Table.Td>
-                          <Table.Td>{item.email}</Table.Td>
-                          <Table.Td>
-                            <NativeSelect
-                              data={["Owner", "Admin", "Custom", "None"].map((x) => {
-                                return {
-                                  label: x,
-                                  value: x.toLowerCase(),
-                                  disabled: x == "Custom",
-                                };
-                              })}
-                              variant="filled"
-                              value={
-                                item.acl?.owner
-                                  ? "owner"
-                                  : item.acl?.admin
-                                    ? "admin"
-                                    : item.acl?.servers?.length
-                                      ? "custom"
-                                      : "none"
-                              }
-                              onChange={(e) => updateRole(item._id, e.currentTarget.value)}
-                            />
-                          </Table.Td>
-                          <Table.Td>
-                            <ActionIcon
-                              variant="light"
-                              color="red.4"
-                              radius="sm"
-                              size={"lg"}
-                              onClick={() => deleteUser(item._id)}
-                            >
-                              <IconTrash size="1.4rem" />
-                            </ActionIcon>
-                          </Table.Td>
-                        </Table.Tr>
-                      );
-                    })}
+                    {users.map((item) => (
+                      <UserItem
+                        key={item._id}
+                        selected={selection.includes(item._id)}
+                        selectUser={toggleRow}
+                        authProvider={item?.oauth2?.provider}
+                        userId={item._id}
+                        email={item.email}
+                        name={item.name}
+                        refresh={refreshSSRProps}
+                        role={getUserRole(item)}
+                      />
+                    ))}
                   </Table.Tbody>
                 </Table>
               </ScrollArea>
