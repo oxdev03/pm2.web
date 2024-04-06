@@ -53,6 +53,7 @@ import clsx from "clsx";
 import classes from "../styles/user.module.css";
 import { trpc } from "@/utils/trpc";
 import UserItem from "@/components/user/table/UserItem";
+import { actionNotification } from "@/utils/notification";
 
 const permissionData = [
   {
@@ -103,14 +104,6 @@ const PillComponent = (item: (typeof permissionData)[0]) => (
 );
 
 export default function User({ users, servers }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const aclPerms = {
-    logs: false,
-    monitoring: false,
-    settings: false,
-    restart: false,
-    stop: false,
-    delete: false,
-  };
   const [selection, setSelection] = useState<string[]>([]);
   const [perms, setPerms] = useState<IAclServer[]>(
     servers.map((server) => ({
@@ -123,6 +116,19 @@ export default function User({ users, servers }: InferGetServerSidePropsType<typ
     })),
   );
 
+  const updatePerms = trpc.user.setCustomPermission.useMutation({
+    onMutate() {
+      actionNotification(`update-perms`, "Updating permissions", "Please wait...", "pending");
+    },
+    onError(error) {
+      actionNotification(`update-perms`, "Failed to update permissions", error.message, "error");
+    },
+    onSuccess(data) {
+      actionNotification(`update-perms`, "Permissions updated", data, "success");
+      refreshSSRProps();
+    },
+  });
+
   const toggleRow = (id: string) =>
     setSelection((current) => (current.includes(id) ? current.filter((item) => item !== id) : [...current, id]));
   const toggleAll = () =>
@@ -133,29 +139,6 @@ export default function User({ users, servers }: InferGetServerSidePropsType<typ
     );
 
   const router = useRouter();
-
-  const notification = (id: string, title: string, message: string, status: "pending" | "success" | "error") => {
-    if (status == "pending") {
-      notifications.show({
-        id,
-        title,
-        message,
-        color: "blue",
-        autoClose: false,
-        withCloseButton: false,
-      });
-    } else {
-      notifications.update({
-        id,
-        title,
-        message,
-        color: status == "success" ? "green" : "red",
-        icon: status == "success" ? <IconCheck /> : <IconX />,
-        autoClose: 5000,
-        withCloseButton: true,
-      });
-    }
-  };
 
   const updatePermsState = (server_id: string, process_id: string, new_perms: string[]) => {
     const newPerms = [...perms];
@@ -199,29 +182,6 @@ export default function User({ users, servers }: InferGetServerSidePropsType<typ
 
   const getUserRole = (item: Omit<IUser, "password" | "updatedAt">) => {
     return item.acl?.owner ? "owner" : item.acl?.admin ? "admin" : item.acl?.servers?.length ? "custom" : "none";
-  };
-
-  const updatePerms = async () => {
-    const rnd = Math.random().toString(36).substring(7);
-    notification(`update-perms-${rnd}`, "Updating permissions", "Please wait...", "pending");
-    const res = await fetch(`/api/user`, {
-      method: "POST",
-      body: JSON.stringify({
-        perms,
-        users: selection,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const statusCode = res.status;
-    const data = await res.json();
-
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    router.replace(router.asPath); // hacky way to refresh page
-
-    if (statusCode !== 200) notification(`update-perms-${rnd}`, "Failed to update permissions", data.message, "error");
-    else if (statusCode === 200) notification(`update-perms-${rnd}`, "Permissions updated", data.message, "success");
   };
 
   const refreshSSRProps = () => {
@@ -310,7 +270,7 @@ export default function User({ users, servers }: InferGetServerSidePropsType<typ
                   </Table.Tbody>
                 </Table>
               </ScrollArea>
-            </Paper>{" "}
+            </Paper>
           </Grid.Col>
           <Grid.Col span={{ lg: 6, md: 12 }}>
             <Paper shadow="sm" radius="md" style={{ height: "100%" }} p={"lg"} px={"md"} pb={"sm"}>
@@ -448,8 +408,14 @@ export default function User({ users, servers }: InferGetServerSidePropsType<typ
                       radius="sm"
                       size={"sm"}
                       leftSection={<IconDeviceFloppy />}
+                      loading={updatePerms.isPending}
                       disabled={!selection.length}
-                      onClick={updatePerms}
+                      onClick={() =>
+                        updatePerms.mutate({
+                          userIds: selection,
+                          perms: perms,
+                        })
+                      }
                     >
                       Save
                     </Button>
