@@ -32,11 +32,13 @@ export async function fetchServer(excludeDaemon?: boolean): Promise<IServer[]> {
     )
     .lean();
 
+  const settings = await fetchSettings();
+
   console.log(`[DATABASE] ${servers.length} servers, ${processes.length} processes`);
-  // override online status ,m, if last updatedAt > 4 minutes ago
+  // override online status ,m, if last updatedAt > 10 seconds ago
+  const updateInterval = settings.polling.backend + 3000;
   for (let i = 0; i < processes.length; i++) {
-    if (processes[i].status == "online" && new Date(processes[i].updatedAt).getTime() < Date.now() - 1000 * 60 * 3) {
-      // 3 minutes
+    if (processes[i].status == "online" && new Date(processes[i].updatedAt).getTime() < Date.now() - updateInterval) {
       processes[i].status = "offline";
     }
   }

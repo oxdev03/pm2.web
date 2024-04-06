@@ -13,7 +13,7 @@ import {
   IconCoffee,
 } from "@tabler/icons-react";
 
-export default function ProcessItemHeader({
+export default function ProcessHeader({
   statusColor,
   interpreter,
   name,

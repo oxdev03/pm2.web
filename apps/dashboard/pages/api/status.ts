@@ -2,7 +2,7 @@
 import { ObjectId } from "mongodb";
 
 import authHandler from "@/middleware/auth";
-import Access from "@/utils/acess";
+import Access from "@/utils/access";
 import { PERMISSIONS } from "@/utils/permission";
 import { processModel } from "@pm2.web/mongoose-models";
 import { Status } from "@pm2.web/typings";

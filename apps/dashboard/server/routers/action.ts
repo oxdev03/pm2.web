@@ -2,7 +2,7 @@ import { z } from "zod";
 import { protectedProcedure, publicProcedure, router } from "../trpc";
 import { processModel } from "@pm2.web/mongoose-models";
 import { TRPCError } from "@trpc/server";
-import Access from "@/utils/acess";
+import Access from "@/utils/access";
 import { PERMISSIONS } from "@/utils/permission";
 
 export const actionRouter = protectedProcedure
