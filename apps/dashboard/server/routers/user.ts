@@ -3,6 +3,22 @@ import { adminProcedure, ownerProcedure, protectedProcedure, publicProcedure, ro
 import { processModel, serverModel, statModel, userModel } from "@pm2.web/mongoose-models";
 import { TRPCError } from "@trpc/server";
 
+const CustomPermissionSchema = z.object({
+  userIds: z.array(z.string()),
+  perms: z.array(
+    z.object({
+      server: z.string(),
+      perms: z.number(),
+      processes: z.array(
+        z.object({
+          process: z.string(),
+          perms: z.number(),
+        }),
+      ),
+    }),
+  ),
+});
+
 export const userRouter = router({
   changePassword: protectedProcedure
     .input(
@@ -110,9 +126,27 @@ export const userRouter = router({
       await user.save().catch((err) => console.error(err));
       return "Updated role successfully";
     }),
-  setCustomPermission: adminProcedure
-    .input(z.object({ userIds: z.array(z.string()) }))
-    .mutation(async ({ ctx, input }) => {}),
+  setCustomPermission: adminProcedure.input(CustomPermissionSchema).mutation(async ({ ctx, input }) => {
+    const { userIds, perms } = input;
+    const users = await userModel.find({ _id: { $in: userIds } });
+    // check if users exists
+    if (!users.length) {
+      throw new TRPCError({ code: "BAD_REQUEST", message: "Users not found" });
+    }
+
+    // remove process if perms equals to server perms => save db storage
+    const filteredPerms = perms.filter((server) => {
+      server.processes = server.processes.filter((process) => !(process.perms === server.perms));
+      return server.processes.length > 0 || server.perms !== 0;
+    });
+
+    for (const user of users) {
+      user.acl.servers = filteredPerms;
+      await user.save().catch((err) => console.error(err));
+    }
+    
+    return "Updated permissions successfully";
+  }),
 });
 
 export type userRouter = typeof userRouter;
