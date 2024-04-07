@@ -1,5 +1,6 @@
 import "@mantine/core/styles.css";
 import "@mantine/notifications/styles.css";
+import '@mantine/charts/styles.css';
 
 import { SessionProvider } from "next-auth/react";
 

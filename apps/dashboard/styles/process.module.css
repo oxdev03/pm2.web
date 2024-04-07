@@ -4,9 +4,9 @@
 }
 
 .processItem.opened {
-  max-height: 200px;
+  max-height: 400px;
   @media (max-width: $mantine-breakpoint-xs) {
-    max-height: 240px;
+    max-height: 440px;
   }
 }
 

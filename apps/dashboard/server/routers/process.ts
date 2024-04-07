@@ -26,6 +26,22 @@ export const processRouter = router({
 
     return stat;
   }),
+  getStats: protectedProcedure
+    .input(z.object({ processId: z.string(), range: z.enum(["seconds"]) }))
+    .query(async ({ ctx, input }) => {
+      const process = await processModel.findById(input.processId);
+      checkPermission(process, ctx.user, [PERMISSIONS.MONITORING]);
+
+      const stats = await statModel
+        .find({
+          source: { process: process?._id, server: process?.server },
+        })
+        .sort({ timestamp: -1 })
+        .limit(10)
+        .lean();
+
+      return stats;
+    }),
   action: protectedProcedure
     .input(
       z.object({
