@@ -2,6 +2,8 @@ import { Flex, ActionIcon } from "@mantine/core";
 import { IconReload, IconPower, IconTrash, IconSquareRoundedMinus } from "@tabler/icons-react";
 
 import classes from "@/styles/process.module.css";
+import { trpc } from "@/utils/trpc";
+import { sendNotification } from "@/utils/notification";
 
 interface ProcessActionProps {
   processId: string;
@@ -9,6 +11,14 @@ interface ProcessActionProps {
 }
 
 export default function ProcessAction({ processId, collapse }: ProcessActionProps) {
+  const processAction = trpc.process.action.useMutation({
+    onSuccess(data, variables) {
+      if (!data) {
+        sendNotification(variables.action + processId, `Failed ${variables.action}`, `Server didn't respond`, `error`);
+      }
+    },
+  });
+
   return (
     <Flex gap={"5px"}>
       <ActionIcon
@@ -16,9 +26,14 @@ export default function ProcessAction({ processId, collapse }: ProcessActionProp
         color="blue"
         radius="sm"
         size={"lg"}
-        loading={true}
-        onClick={() => undefined}
-        disabled={false}
+        loading={processAction.isPending && processAction.variables.action === "RESTART"}
+        onClick={() =>
+          processAction.mutate({
+            processId,
+            action: "RESTART",
+          })
+        }
+        disabled={processAction.isPending}
       >
         <IconReload size="1.4rem" />
       </ActionIcon>
@@ -27,9 +42,14 @@ export default function ProcessAction({ processId, collapse }: ProcessActionProp
         color="orange"
         radius="sm"
         size={"lg"}
-        loading={true}
-        onClick={() => undefined}
-        disabled={false}
+        loading={processAction.isPending && processAction.variables.action === "STOP"}
+        onClick={() =>
+          processAction.mutate({
+            processId,
+            action: "STOP",
+          })
+        }
+        disabled={processAction.isPending}
       >
         <IconPower size="1.4rem" />
       </ActionIcon>
@@ -38,9 +58,14 @@ export default function ProcessAction({ processId, collapse }: ProcessActionProp
         color="red"
         radius="sm"
         size={"lg"}
-        loading={true}
-        onClick={() => undefined}
-        disabled={false}
+        loading={processAction.isPending && processAction.variables.action === "DELETE"}
+        onClick={() =>
+          processAction.mutate({
+            processId,
+            action: "DELETE",
+          })
+        }
+        disabled={processAction.isPending}
       >
         <IconTrash size="1.4rem" />
       </ActionIcon>
