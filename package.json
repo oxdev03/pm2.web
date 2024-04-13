@@ -6,6 +6,9 @@
     "type": "git",
     "url": "https://github.com/oxdev03/pm2.web"
   },
+  "engines": {
+    "node": ">= 18.0.0"
+  },
   "author": {
     "name": "oxdev03"
   },

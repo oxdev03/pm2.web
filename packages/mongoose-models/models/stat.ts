@@ -8,6 +8,7 @@ const statSchema = new mongoose.Schema(
     timestamp: Date,
     cpu: Number,
     memory: Number,
+    heapUsed: Number,
     memoryMax: Number,
     uptime: Number,
     source: {

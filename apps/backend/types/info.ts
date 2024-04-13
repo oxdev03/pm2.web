@@ -6,6 +6,7 @@ interface IProcessInfo {
   stats: {
     cpu: number;
     memory: number;
+    heapUsed: number;
     memoryMax: number;
     uptime: number;
   };

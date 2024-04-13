@@ -27,6 +27,7 @@ export default function ProcessChart({ processId, refetchInterval }: ProcessChar
       ?.map((s) => ({
         CPU: s.cpu,
         RAM: s.memory,
+        HEAP_USED: s.heapUsed,
         date: new Date(s.timestamp).toLocaleTimeString(),
       }))
       ?.reverse() || [];
@@ -42,7 +43,10 @@ export default function ProcessChart({ processId, refetchInterval }: ProcessChar
         valueFormatter={(value) => formatBytes(value)}
         dataKey="date"
         type="default"
-        series={[{ name: "RAM", color: "yellow" }]}
+        series={[
+          { name: "RAM", color: "yellow" },
+          { name: "HEAP_USED", color: "grape", label: "HEAP USED" },
+        ]}
         withLegend
         withGradient
         withDots={false}

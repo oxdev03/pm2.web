@@ -27,12 +27,13 @@
   },
   "license": "LGPL-3.0-or-later",
   "dependencies": {
+    "@pm2.web/mongoose-models": "*",
+    "@pm2.web/typings": "*",
     "bcrypt": "^5.1.1",
+    "bytes-iec": "^3.1.1",
     "dotenv": "^16.4.5",
     "pm2": "^5.3.1",
-    "systeminformation": "^5.22.6",
-    "@pm2.web/typings": "*",
-    "@pm2.web/mongoose-models": "*"
+    "systeminformation": "^5.22.6"
   },
   "devDependencies": {
     "@pm2.web/eslint-config": "*",
