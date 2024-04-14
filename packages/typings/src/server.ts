@@ -4,6 +4,7 @@ interface IServer {
   _id: string;
   name: string;
   uuid: string;
+  heartbeat: number;
   createdAt?: string;
   updatedAt: string;
   processes: IProcess[];

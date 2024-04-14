@@ -6,11 +6,11 @@ import { Dashboard } from "@/components/layouts/Dashboard";
 import { fetchSettings } from "@/utils/fetchSSRProps";
 import { Accordion, Badge, Grid, Overlay, Paper, ScrollArea, Title } from "@mantine/core";
 
-import UpdatePassword from "@/components/setttings/UpdatePassword";
-import DeleteAccount from "@/components/setttings/DeleteAccount";
-import UnlinkOAuth2 from "@/components/setttings/UnlinkOAuth2";
-import DatabaseAction from "@/components/setttings/DatabaseAction";
-import UpdateConfiguration from "@/components/setttings/UpdateConfiguration";
+import UpdatePassword from "@/components/settings/UpdatePassword";
+import DeleteAccount from "@/components/settings/DeleteAccount";
+import UnlinkOAuth2 from "@/components/settings/UnlinkOAuth2";
+import DatabaseAction from "@/components/settings/DatabaseAction";
+import UpdateConfiguration from "@/components/settings/UpdateConfiguration";
 
 export default function Settings({ settings }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { data: session } = useSession();

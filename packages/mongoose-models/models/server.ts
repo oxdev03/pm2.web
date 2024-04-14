@@ -15,6 +15,7 @@ const serverSchema = new mongoose.Schema<IServerModel, ServerModel>(
       required: true,
       unique: true,
     },
+    heartbeat: Number,
   },
   { timestamps: true },
 );
