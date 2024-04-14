@@ -25,7 +25,7 @@ export default async function updateData(
     });
     currentServer = newServer;
   } else {
-    currentServer.updatedAt = new Date().toUTCString();
+    currentServer.heartbeat = Date.now();
     currentServer.save();
   }
 
