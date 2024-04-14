@@ -24,6 +24,8 @@ export default async function updateData(
       console.log(err);
     });
     currentServer = newServer;
+  } else {
+    currentServer.save();
   }
 
   const processStats = [];
