@@ -4,7 +4,7 @@ import { getServerAuthSession } from "./auth";
 import { Session } from "next-auth";
 
 type CreateContextOptions = {
-    session: Session | null;
+  session: Session | null;
 };
 /**
  * This helper generates the "internals" for a tRPC context. If you need to use
@@ -16,9 +16,9 @@ type CreateContextOptions = {
  * @see https://create.t3.gg/en/usage/trpc#-servertrpccontextts
  */
 const createInnerTRPCContext = (opts: CreateContextOptions) => {
-    return {
-        session: opts.session,
-    };
+  return {
+    session: opts.session,
+  };
 };
 /**
  * This is the actual context you'll use in your router. It will be used to
@@ -27,14 +27,14 @@ const createInnerTRPCContext = (opts: CreateContextOptions) => {
  */
 
 export const createTRPCContext = async (opts: CreateNextContextOptions) => {
-    const { req, res } = opts;
+  const { req, res } = opts;
 
-    await connectDB();
+  await connectDB();
 
-    // Get the session from the server using the getServerSession wrapper function
-    const session = await getServerAuthSession({ req, res });
+  // Get the session from the server using the getServerSession wrapper function
+  const session = await getServerAuthSession({ req, res });
 
-    return createInnerTRPCContext({
-        session,
-    });
+  return createInnerTRPCContext({
+    session,
+  });
 };

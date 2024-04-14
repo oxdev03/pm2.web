@@ -4,15 +4,7 @@ import Head from "next/head";
 
 import { Dashboard } from "@/components/layouts/Dashboard";
 import { fetchSettings } from "@/utils/fetchSSRProps";
-import {
-  Accordion,
-  Badge,
-  Grid,
-  Overlay,
-  Paper,
-  ScrollArea,
-  Title,
-} from "@mantine/core";
+import { Accordion, Badge, Grid, Overlay, Paper, ScrollArea, Title } from "@mantine/core";
 
 import UpdatePassword from "@/components/setttings/UpdatePassword";
 import DeleteAccount from "@/components/setttings/DeleteAccount";

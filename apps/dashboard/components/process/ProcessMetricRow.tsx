@@ -20,7 +20,7 @@ export default function ProcessMetricRow({ processId, refetchInterval, showMetri
   );
 
   return (
-    <Flex align={"center"} gap={"xs"} wrap={'wrap'}>
+    <Flex align={"center"} gap={"xs"} wrap={"wrap"}>
       <ProcessItemMetric
         w="75px"
         Icon={IconDeviceSdCard}

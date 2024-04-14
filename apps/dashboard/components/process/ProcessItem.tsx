@@ -54,7 +54,11 @@ export default function ProcessItem({ process, setting }: ProcessItemProps) {
         <Transition transition="scale-y" duration={500} mounted={!collapsed}>
           {(styles) => (
             <div style={{ ...styles }}>
-              <ProcessChart processId={process._id} refetchInterval={setting.polling.frontend} showMetric={process.status == "online"} />
+              <ProcessChart
+                processId={process._id}
+                refetchInterval={setting.polling.frontend}
+                showMetric={process.status == "online"}
+              />
               <ProcessLog processId={process._id} refetchInterval={setting.polling.frontend} />
             </div>
           )}

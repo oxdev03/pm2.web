@@ -32,7 +32,7 @@ export function StatsRing({ stat }: { stat: StatsRingProps }) {
             {stat.title}
           </Text>
           {stat.stats.map((s) => (
-            <Flex gap={"xs"} key={s.label} align={'end'}>
+            <Flex gap={"xs"} key={s.label} align={"end"}>
               <Text fw={700} size="xl" className={classes.statsRingLabel}>
                 {s.label}:
               </Text>
