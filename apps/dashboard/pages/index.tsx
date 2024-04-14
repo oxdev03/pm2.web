@@ -11,117 +11,14 @@ import { StatsRing } from "@/components/stats/StatsRing";
 import { fetchServer, fetchSettings } from "@/utils/fetchSSRProps";
 import { Center, Flex, Paper, ScrollArea, SimpleGrid, Text } from "@mantine/core";
 import { useQueue } from "@mantine/hooks";
-import { IProcess, ISetting, Log, Stats, Status } from "@pm2.web/typings";
+import { IProcess, ISetting } from "@pm2.web/typings";
 import { IconList } from "@tabler/icons-react";
+import DashboardLog from "@/components/dashboard/DashboardLog";
 
 function Home({ settings }: { settings: ISetting }) {
-  const [status, setStatus] = useState<Status | null>();
   const [stats, setStats] = useState<any | null>();
-  const { servers, selectItem, selectedItem } = useSelected();
-  const scrollViewport = useRef<HTMLDivElement>(null);
-  const logsQueue = useQueue<Log>({
-    limit: 400,
-  });
+  const { servers, selectItem, selectedItem, selectedProcesses } = useSelected();
   const router = useRouter();
-
-  useEffect(() => {
-    let lastFetched = Date.now() - 1000 * 60 * 10;
-    const fetchData = async () => {
-      const body: {
-        process?: string[];
-        timestamp?: number;
-      } = {};
-      if (selectedItem?.servers?.length && !selectedItem?.processes?.length)
-        body.process = servers
-          .filter((server) => selectedItem.servers.includes(server.uuid))
-          .map((server) => server.processes.map((process) => process._id))
-          .flat();
-
-      if (selectedItem?.processes?.length) body.process = selectedItem.processes;
-      body.timestamp = lastFetched;
-
-      const res = await fetch("/api/status", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(body),
-      });
-      lastFetched = Date.now() - settings.polling.frontend;
-      if (res.status != 200) return console.error("Error fetching status", res.status, res.statusText);
-      const data = await res.json();
-      setStatus(data);
-    };
-    fetchData();
-    const interval = setInterval(fetchData, settings.polling.frontend);
-    return () => clearInterval(interval);
-  }, [selectedItem]);
-
-  useEffect(() => {
-    //refresh ssr props
-    const interval = setInterval(
-      async () => {
-        router.replace(router.asPath);
-      },
-      Math.min(settings.polling.frontend * 5, 1000 * 50),
-    );
-    return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
-    const prLen = selectedItem?.processes?.length;
-    const KB_TO_GB = 1024 * 1024 * 1024;
-
-    const allProcesses = servers.map((server) => server?.processes?.map((process) => process) || []).flat();
-    const selectedServers = [
-      ...(selectedItem?.servers || []),
-      ...(allProcesses
-        .filter((process) => selectedItem?.processes?.find((item) => item == process._id))
-        .map((process) => process.server)
-        .filter((item) => !selectedItem?.servers.includes(item || "")) || []),
-    ];
-    const filteredServer = servers.filter((server) =>
-      selectedServers.length ? selectedServers.includes(server._id) : true,
-    );
-    const filteredProcess = filteredServer.map((server) => server.processes.map((process) => process)).flat();
-
-    const arbitraryCalc = (key: keyof Stats, defaultValue: number, divideBy?: number) => {
-      let reduced =
-        filteredServer.map((process) => process.stats[key]).reduce((a, b) => a + b, defaultValue) || defaultValue;
-      if (divideBy) reduced /= divideBy;
-      return reduced;
-    };
-
-    const cpu = (((prLen ? status?.cpu : arbitraryCalc("cpu", 0, servers.length)) || 0) / KB_TO_GB).toFixed(0);
-    const memory = (((prLen ? status?.memory : arbitraryCalc("memory", 0)) || 0) / KB_TO_GB).toFixed(1);
-    const load = arbitraryCalc("cpu", 0, servers.length).toFixed(0);
-
-    let memoryMax = Number(arbitraryCalc("memoryMax", 0, KB_TO_GB).toFixed(0));
-    if (prLen) memoryMax = memoryMax - Number(memory);
-    if (Number(memoryMax) < 0.01) memoryMax = Number(memory);
-
-    const online = status?.onlineCount;
-    const total = prLen || filteredProcess.length;
-    const uptime = ms((prLen ? status?.uptime : arbitraryCalc("uptime", 0, filteredServer.length)) || 0);
-
-    const filteredLogs = uniqBy([...(logsQueue.state || []), ...(status?.logs || [])], "_id").sort((a, b) =>
-      new Date(a.createdAt) > new Date(b.createdAt) ? 1 : -1,
-    );
-    // filter logs and add to queue
-    logsQueue.update(() => filteredLogs);
-
-    //scrollViewport?.current?.scrollTo({ top: scrollViewport?.current?.scrollHeight, behavior: 'smooth' });
-
-    setStats({
-      cpu,
-      load,
-      memory,
-      memoryMax,
-      uptime,
-      online,
-      total,
-    });
-  }, [status]);
 
   return (
     <Flex direction={"column"} rowGap={"md"} flex={1}>
@@ -130,8 +27,8 @@ function Home({ settings }: { settings: ISetting }) {
           <StatsRing
             stat={{
               label: "CPU",
-              stats: `Server ~${stats?.load || 0}%`,
-              progress: stats?.cpu || 0,
+              stats: `Server ~0%`,
+              progress: 0,
               color: "blue",
               icon: "up",
             }}
@@ -139,8 +36,8 @@ function Home({ settings }: { settings: ISetting }) {
           <StatsRing
             stat={{
               label: "RAM",
-              stats: `${stats?.memory || 0}/${stats?.memoryMax || 0} GB`,
-              progress: Number((((stats?.memory || 0) / (stats?.memoryMax || 0)) * 100).toFixed(0)),
+              stats: `0 GB`,
+              progress: 0,
               color: "teal",
               icon: "up",
             }}
@@ -148,7 +45,7 @@ function Home({ settings }: { settings: ISetting }) {
           <StatsRing
             stat={{
               label: "Uptime",
-              stats: stats?.uptime || 0,
+              stats: 0 + "",
               progress: 80,
               color: "#8377D1",
               icon: "up",
@@ -157,39 +54,16 @@ function Home({ settings }: { settings: ISetting }) {
           <StatsRing
             stat={{
               label: "Status",
-              stats: `${stats?.online || 0}/${stats?.total || 0} online`,
-              progress: Number((((stats?.online || 0) / (stats?.total || 0)) * 100).toFixed(0)),
-              value: stats?.online || 0,
+              stats: `$0 online`,
+              progress: 0,
+              value: 0,
               color: "#93BEDF",
               icon: "up",
             }}
           />
         </SimpleGrid>
       </div>
-      <Flex gap={"4px"} align={"center"}>
-        <IconList size="1.4rem" stroke={1.5} />
-        <Text size="xl" fw={600}>
-          Logs
-        </Text>
-      </Flex>
-      <ScrollArea.Autosize viewportRef={scrollViewport} flex={1} mah={"64dvh"}>
-        <Paper radius={"md"} p="md" mih={"64dvh"} w={"100%"} maw={"100%"}>
-          {logsQueue.state?.length
-            ? logsQueue.state?.map((log) => (
-                <Text
-                  key={log._id}
-                  size="md"
-                  fw={600}
-                  c={log.type == "success" ? "teal.6" : log.type == "error" ? "red.6" : "blue.4"}
-                  component="pre"
-                  my="0px"
-                >
-                  {log.createdAt.split("T")[1].split(".")[0]} {log.message}
-                </Text>
-              ))
-            : "No logs"}
-        </Paper>
-      </ScrollArea.Autosize>
+      <DashboardLog refetchInterval={settings.polling.frontend} processIds={selectedProcesses.map((p) => p._id)} />
     </Flex>
   );
 }

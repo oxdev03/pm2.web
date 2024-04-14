@@ -1,11 +1,15 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
-import { IServer } from "@pm2.web/typings";
+import { IProcess, IServer } from "@pm2.web/typings";
 import { SelectItem, StateSelectedItem } from "@/types/context";
+import { useSession } from "next-auth/react";
+import Access from "@/utils/access";
+import { IPermissionConstants, PERMISSIONS } from "@/utils/permission";
 
 interface SelectedContextType {
   selectedItem: StateSelectedItem;
   selectItem: SelectItem;
+  selectedProcesses: IProcess[];
   servers: IServer[];
 }
 
@@ -15,6 +19,7 @@ const SelectedContext = createContext<SelectedContextType>({
     processes: [],
   },
   selectItem: () => {},
+  selectedProcesses: [],
   servers: [],
 }); // pass null as initial value
 
@@ -23,6 +28,7 @@ export function useSelected() {
 }
 
 export function SelectedProvider({ children, servers }: { children: React.ReactNode; servers: IServer[] }) {
+  const { data: session } = useSession();
   const [selectedItem, setSelectedItem] = useState<StateSelectedItem>({
     servers: [],
     processes: [],
@@ -51,5 +57,29 @@ export function SelectedProvider({ children, servers }: { children: React.ReactN
     }
   };
 
-  return <SelectedContext.Provider value={{ selectedItem, selectItem, servers }}>{children}</SelectedContext.Provider>;
+  const hasPermission = (processId: string, serverId: string, permission?: keyof IPermissionConstants) => {
+    const user = session?.user;
+    if (!user || !user.acl) return false;
+    if (!user?.acl?.owner && !user?.acl?.admin) {
+      const serverAccess = new Access(user.acl?.servers ?? []);
+      if (permission) return serverAccess.getPerms(serverId, processId).has(PERMISSIONS[permission]);
+      return !!serverAccess.getPermsValue(serverId, processId);
+    }
+    return true;
+  };
+
+  const selectedProcesses = servers
+    ?.filter((server) => selectedItem?.servers?.includes(server._id) || selectedItem?.servers?.length === 0)
+    .flatMap((s) => s.processes)
+    .filter(
+      (process) =>
+        (selectedItem?.processes?.includes(process._id) || !selectedItem?.processes?.length) &&
+        hasPermission(process._id, process.server),
+    );
+
+  return (
+    <SelectedContext.Provider value={{ selectedItem, selectedProcesses, selectItem, servers }}>
+      {children}
+    </SelectedContext.Provider>
+  );
 }

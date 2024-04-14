@@ -11,7 +11,7 @@ export const serverRouter = router({
     .input(z.object({ processIds: z.array(z.string()), limit: z.number().optional().default(100) }))
     .query(async ({ ctx, input }) => {
       const { processIds, limit } = input;
-      const query = { _id: { $in: processIds.map((x) => new ObjectId(x)) } };
+      const query = { _id: { $in: processIds.map((x) => x) } };
       const processLogs = await processModel
         .find(query as any, {
           _id: 1,

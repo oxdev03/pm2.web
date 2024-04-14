@@ -15,33 +15,9 @@ import { ISetting } from "@pm2.web/typings";
 import ProcessItem from "@/components/process/ProcessItem";
 
 function Process({ settings }: { settings: ISetting }) {
-  const { servers, selectItem, selectedItem } = useSelected();
+  const { servers, selectedProcesses, selectedItem } = useSelected();
   const { data: session } = useSession();
   const router = useRouter();
-
-  const hasPermission = (process_id: string, server_id: string, permission?: keyof IPermissionConstants) => {
-    const user = session?.user;
-    if (!user || !user.acl) return false;
-    if (!user?.acl?.owner && !user?.acl?.admin) {
-      if (permission)
-        return new Access(user.acl?.servers ?? []).getPerms(server_id, process_id).has(PERMISSIONS[permission]);
-      return !!new Access(user.acl?.servers ?? []).getPermsValue(server_id, process_id);
-    }
-    return true;
-  };
-
-  const selectedProcesses = servers
-    ?.map((server) =>
-      server.processes.filter(
-        (process) => selectedItem?.servers?.includes(server._id) || selectedItem?.servers?.length === 0,
-      ),
-    )
-    .flat()
-    .filter(
-      (process) =>
-        (selectedItem?.processes?.includes(process._id) || (selectedItem?.processes?.length || 0) === 0) &&
-        hasPermission(process._id, process.server),
-    );
 
   useEffect(() => {
     //refresh ssr props
