@@ -2,6 +2,10 @@
   background: light-dark(white, var(--mantine-color-dark-7));
 }
 
-.statsRingText {
-  color: light-dark(var(--mantine-color-gray-7), var(--mantine-color-gray-6));
+.statsRingLabel {
+  color: light-dark(var(--mantine-color-gray-7), var(--mantine-color-gray-5));
+}
+
+.statsRingValue {
+  color: light-dark(var(--mantine-color-gray-6), var(--mantine-color-gray-4));
 }

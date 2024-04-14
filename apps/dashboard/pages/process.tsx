@@ -1,34 +1,19 @@
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
-import { useSession } from "next-auth/react";
 import Head from "next/head";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
 
 import { SelectedProvider, useSelected } from "@/components/context/SelectedProvider";
 import { Dashboard } from "@/components/layouts/Dashboard";
-import Access from "@/utils/access";
 import { fetchServer, fetchSettings } from "@/utils/fetchSSRProps";
-import { IPermissionConstants, PERMISSIONS } from "@/utils/permission";
 import { Flex } from "@mantine/core";
 import { ISetting } from "@pm2.web/typings";
 
 import ProcessItem from "@/components/process/ProcessItem";
+import useRefreshSSRProps from "@/components/hooks/useSSRPropsRefresh";
 
 function Process({ settings }: { settings: ISetting }) {
-  const { servers, selectedProcesses, selectedItem } = useSelected();
-  const { data: session } = useSession();
-  const router = useRouter();
+  const { selectedProcesses } = useSelected();
 
-  useEffect(() => {
-    //refresh ssr props
-    const interval = setInterval(
-      async () => {
-        router.replace(router.asPath);
-      },
-      Math.min(settings.polling.frontend * 2, 10_000),
-    );
-    return () => clearInterval(interval);
-  }, []);
+  useRefreshSSRProps(settings.polling.frontend * 2);
 
   return (
     <Flex gap="xs" direction={"column"}>

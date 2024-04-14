@@ -1,68 +1,120 @@
-import uniqBy from "lodash/uniqBy";
 import ms from "ms";
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import Head from "next/head";
-import { useRouter } from "next/router";
-import { useEffect, useRef, useState } from "react";
 
 import { SelectedProvider, useSelected } from "@/components/context/SelectedProvider";
 import { Dashboard } from "@/components/layouts/Dashboard";
 import { StatsRing } from "@/components/stats/StatsRing";
 import { fetchServer, fetchSettings } from "@/utils/fetchSSRProps";
-import { Center, Flex, Paper, ScrollArea, SimpleGrid, Text } from "@mantine/core";
-import { useQueue } from "@mantine/hooks";
-import { IProcess, ISetting } from "@pm2.web/typings";
-import { IconList } from "@tabler/icons-react";
+import { Flex, Paper, SimpleGrid } from "@mantine/core";
+import { ISetting } from "@pm2.web/typings";
 import DashboardLog from "@/components/dashboard/DashboardLog";
+import { AreaChart, DonutChart } from "@mantine/charts";
+import classes from "@/styles/index.module.css";
+import { trpc } from "@/utils/trpc";
+import { formatBytes } from "@/utils/format";
+import useRefreshSSRProps from "@/components/hooks/useSSRPropsRefresh";
+
+const statChartProps = {
+  h: "120px",
+  withLegend: true,
+  withGradient: true,
+  withDots: false,
+  withXAxis: false,
+  yAxisProps: { width: 55 },
+  areaChartProps: { syncId: "stats" },
+};
 
 function Home({ settings }: { settings: ISetting }) {
-  const [stats, setStats] = useState<any | null>();
-  const { servers, selectItem, selectedItem, selectedProcesses } = useSelected();
-  const router = useRouter();
+  const { selectedServers, selectedProcesses } = useSelected();
+  const { data } = trpc.server.getStats.useQuery(
+    {
+      processIds: selectedProcesses.map((p) => p._id),
+      serverIds: selectedServers.map((p) => p._id),
+      polling: settings.polling.frontend / 1000,
+    },
+    {
+      refetchInterval: settings.polling.frontend,
+    },
+  );
+
+  useRefreshSSRProps(settings.polling.frontend * 2);
+
+  const chartData = data?.stats?.map((e) => ({ ...e, date: new Date(e._id).toLocaleTimeString() })) || [];
+
+  const onlineCount = selectedProcesses.filter((p) => p.status == "online").length;
+  const stoppedCount = selectedProcesses.filter((p) => p.status == "stopped").length;
+  const offlineCount = selectedProcesses.filter((p) => p.status == "offline").length;
 
   return (
     <Flex direction={"column"} rowGap={"md"} flex={1}>
-      <div>
-        <SimpleGrid cols={{ base: 1, sm: 4 }}>
-          <StatsRing
-            stat={{
-              label: "CPU",
-              stats: `Server ~0%`,
-              progress: 0,
-              color: "blue",
-              icon: "up",
-            }}
+      <SimpleGrid cols={{ base: 1, sm: 4 }}>
+        <Paper className={classes.chartBg} p={"xs"}>
+          <AreaChart
+            {...statChartProps}
+            data={chartData}
+            dataKey="date"
+            type="default"
+            valueFormatter={(value) => value.toFixed(1)}
+            unit="%"
+            series={[
+              { name: "processCpu", color: "blue", label: "Process CPU" },
+              { name: "serverCpu", color: "grape", label: "Server CPU" },
+            ]}
           />
-          <StatsRing
-            stat={{
-              label: "RAM",
-              stats: `0 GB`,
-              progress: 0,
-              color: "teal",
-              icon: "up",
-            }}
+        </Paper>
+        <Paper className={classes.chartBg} p={"xs"}>
+          <AreaChart
+            {...statChartProps}
+            data={chartData}
+            dataKey="date"
+            type="default"
+            valueFormatter={(value) => formatBytes(value)}
+            series={[
+              { name: "processRam", color: "indigo", label: "Process RAM" },
+              { name: "serverRam", color: "yellow", label: "Server RAM" },
+            ]}
           />
-          <StatsRing
-            stat={{
-              label: "Uptime",
-              stats: 0 + "",
-              progress: 80,
-              color: "#8377D1",
-              icon: "up",
-            }}
-          />
-          <StatsRing
-            stat={{
-              label: "Status",
-              stats: `$0 online`,
-              progress: 0,
-              value: 0,
-              color: "#93BEDF",
-              icon: "up",
-            }}
-          />
-        </SimpleGrid>
-      </div>
+        </Paper>
+        <StatsRing
+          stat={{
+            title: "Uptime",
+            stats: [
+              {
+                label: "Server",
+                value: ms(data?.serverUptime || 0),
+              },
+              {
+                label: "Process",
+                value: ms(data?.processUptime || 0),
+              },
+            ],
+            progress: 80,
+            color: "#8377D1",
+            icon: "up",
+          }}
+        />
+        <Paper className={classes.chartBg} p={"md"}>
+          <Flex justify={"center"}>
+            <DonutChart
+              classNames={{
+                label: classes.statusLabel,
+              }}
+              size={220}
+              thickness={30}
+              style={{ marginBottom: -120 }}
+              data={[
+                { name: "Online", value: onlineCount, color: "teal.5" },
+                { name: "Stopped", value: stoppedCount, color: "yellow.5" },
+                { name: "Offline", value: offlineCount, color: "red.6" },
+              ]}
+              chartLabel={"STATUS"}
+              startAngle={180}
+              endAngle={0}
+            />
+          </Flex>
+        </Paper>
+      </SimpleGrid>
       <DashboardLog refetchInterval={settings.polling.frontend} processIds={selectedProcesses.map((p) => p._id)} />
     </Flex>
   );

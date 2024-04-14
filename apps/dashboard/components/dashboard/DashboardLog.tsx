@@ -32,7 +32,7 @@ export default function DashboardLog({ refetchInterval, processIds }: DashboardL
           Logs
         </Text>
       </Flex>
-      <ScrollArea.Autosize viewportRef={scrollViewport} flex={1} mah={"64dvh"}>
+      <ScrollArea.Autosize viewportRef={scrollViewport} flex={1} mah={"60dvh"}>
         <Paper radius={"md"} p="md" mih={"64dvh"} w={"100%"} maw={"100%"}>
           {data?.length
             ? data?.map((log) => (

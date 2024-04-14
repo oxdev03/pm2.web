@@ -10,6 +10,7 @@ interface SelectedContextType {
   selectedItem: StateSelectedItem;
   selectItem: SelectItem;
   selectedProcesses: IProcess[];
+  selectedServers: IServer[];
   servers: IServer[];
 }
 
@@ -20,6 +21,7 @@ const SelectedContext = createContext<SelectedContextType>({
   },
   selectItem: () => {},
   selectedProcesses: [],
+  selectedServers: [],
   servers: [],
 }); // pass null as initial value
 
@@ -68,8 +70,10 @@ export function SelectedProvider({ children, servers }: { children: React.ReactN
     return true;
   };
 
-  const selectedProcesses = servers
-    ?.filter((server) => selectedItem?.servers?.includes(server._id) || selectedItem?.servers?.length === 0)
+  const selectedServers = servers?.filter(
+    (server) => selectedItem?.servers?.includes(server._id) || selectedItem?.servers?.length === 0,
+  );
+  const selectedProcesses = selectedServers
     .flatMap((s) => s.processes)
     .filter(
       (process) =>
@@ -78,7 +82,7 @@ export function SelectedProvider({ children, servers }: { children: React.ReactN
     );
 
   return (
-    <SelectedContext.Provider value={{ selectedItem, selectedProcesses, selectItem, servers }}>
+    <SelectedContext.Provider value={{ selectedItem, selectedProcesses, selectedServers, selectItem, servers }}>
       {children}
     </SelectedContext.Provider>
   );
