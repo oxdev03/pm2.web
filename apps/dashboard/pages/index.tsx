@@ -31,7 +31,7 @@ function Home({ settings }: { settings: ISetting }) {
     {
       processIds: selectedProcesses.map((p) => p._id),
       serverIds: selectedServers.map((p) => p._id),
-      polling: settings.polling.frontend / 1000,
+      polling: settings.polling.backend / 1000,
     },
     {
       refetchInterval: settings.polling.frontend,

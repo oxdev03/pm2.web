@@ -41,6 +41,16 @@ export const serverRouter = router({
           },
         },
         {
+          $densify: {
+            field: "timestamp",
+            range: {
+              step: polling,
+              unit: "second",
+              bounds: "full",
+            },
+          },
+        },
+        {
           $group: {
             _id: {
               $dateTrunc: {
@@ -70,6 +80,16 @@ export const serverRouter = router({
           },
         },
         {
+          $densify: {
+            field: "timestamp",
+            range: {
+              step: polling,
+              unit: "second",
+              bounds: "full",
+            },
+          },
+        },
+        {
           $group: {
             _id: {
               $dateTrunc: {
@@ -87,7 +107,7 @@ export const serverRouter = router({
           $sort: { _id: -1 },
         },
         {
-          $limit: 10,
+          $limit: 15,
         },
       ];
 
