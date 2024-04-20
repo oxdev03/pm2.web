@@ -52,7 +52,7 @@ export default function ProcessPage({}: InferGetServerSidePropsType<typeof getSe
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const helpers = getServerSideHelpers();
+  const helpers = await getServerSideHelpers();
 
   await helpers.server.getDashBoardData.prefetch();
 

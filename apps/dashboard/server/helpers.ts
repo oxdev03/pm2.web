@@ -4,15 +4,18 @@ import superjson from "superjson";
 import { settingModel } from "@pm2.web/mongoose-models";
 import { ISetting } from "@pm2.web/typings";
 import { defaultSettings } from "@/utils/constants";
+import connectDB from "@/middleware/mongodb";
 
-export const getServerSideHelpers = () =>
-  createServerSideHelpers({
+export const getServerSideHelpers = async () => {
+  await connectDB();
+  return createServerSideHelpers({
     router: appRouter,
     ctx: {
       session: null,
     },
     transformer: superjson,
   });
+};
 
 export const fetchSettings = async () => {
   const settings =

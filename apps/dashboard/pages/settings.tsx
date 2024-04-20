@@ -81,7 +81,7 @@ export default function Settings({}: InferGetServerSidePropsType<typeof getServe
 }
 
 export async function getServerSideProps({ req, res }: GetServerSidePropsContext) {
-  const helpers = getServerSideHelpers();
+  const helpers = await getServerSideHelpers();
 
   await helpers.setting.getSettings.prefetch();
 

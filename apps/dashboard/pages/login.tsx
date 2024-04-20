@@ -226,7 +226,7 @@ const SignInError = ({ error }: { error: String }) => {
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const csrfToken = await getCsrfToken(context);
-  const helpers = getServerSideHelpers();
+  const helpers = await getServerSideHelpers();
 
   return {
     props: {

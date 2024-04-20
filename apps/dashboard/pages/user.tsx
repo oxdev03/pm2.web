@@ -311,7 +311,7 @@ export default function User({}: InferGetServerSidePropsType<typeof getServerSid
 }
 
 export async function getServerSideProps({ req, res }: GetServerSidePropsContext) {
-  const helpers = getServerSideHelpers();
+  const helpers = await getServerSideHelpers();
 
   await helpers.server.getDashBoardData.prefetch();
   await helpers.user.getUsers.prefetch();

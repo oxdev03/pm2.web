@@ -145,7 +145,7 @@ export default function HomePage({}: InferGetServerSidePropsType<typeof getServe
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const helpers = getServerSideHelpers();
+  const helpers = await getServerSideHelpers();
 
   await helpers.server.getDashBoardData.prefetch();
 
