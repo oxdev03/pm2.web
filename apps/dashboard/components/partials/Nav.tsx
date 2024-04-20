@@ -17,6 +17,7 @@ import {
 } from "@tabler/icons-react";
 
 import classes from "./Nav.module.css";
+import { Session } from "next-auth";
 
 interface NavbarBtnProps {
   icon: React.FC<any>;
@@ -56,18 +57,32 @@ const navLinks = [
   { icon: IconGauge, label: "Overview", href: "/" },
   { icon: IconLayoutDashboard, label: "Process", href: "/process" },
   /* { icon: IconServerBolt, label: 'Server', href: '/server' }, */ // TODO: Add server page, server
-  { icon: IconUser, label: "User Administration", href: "/user" },
+  {
+    icon: IconUser,
+    label: "User Administration",
+    href: "/user",
+    filter: (session: Session | null) => {
+      if (session?.user) {
+        const acl = session?.user.acl;
+        return acl?.admin || acl?.owner;
+      }
+      return false;
+    },
+  },
   /* { icon: IconBellCog, label: 'Alerts', href: '/alert' }, */
   { icon: IconSettings, label: "Settings", href: "/settings" },
 ];
 
 export function Nav() {
   const { toggleColorScheme } = useMantineColorScheme();
+  const { data: session } = useSession();
   //active page
   const router = useRouter();
   let active = navLinks.findIndex((link) => router.pathname === link.href);
 
-  const links = navLinks.map((link, index) => <NavbarLink {...link} key={link.label} active={index === active} />);
+  const links = navLinks
+    .filter((link) => (link.filter ? link.filter(session) : true))
+    .map((link, index) => <NavbarLink {...link} key={link.label} active={index === active} />);
 
   return (
     <AppShell.Navbar p="sm">
