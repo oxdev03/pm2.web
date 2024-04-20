@@ -21,10 +21,7 @@ import {
   Transition,
 } from "@mantine/core";
 import { IAclServer } from "@pm2.web/typings";
-import {
-  IconCircleFilled,
-  IconDeviceFloppy,
-} from "@tabler/icons-react";
+import { IconCircleFilled, IconDeviceFloppy } from "@tabler/icons-react";
 
 import classes from "../styles/user.module.css";
 import { trpc } from "@/utils/trpc";
@@ -32,7 +29,6 @@ import { actionNotification } from "@/utils/notification";
 import { getServerSideHelpers } from "@/server/helpers";
 import UserManagement from "@/components/user/UserManagement";
 import { permissionData, PillComponent, SelectItemComponent } from "@/components/user/UserMultiSelectHelper";
-
 
 export default function User({}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const dashboardQuery = trpc.server.getDashBoardData.useQuery(true);

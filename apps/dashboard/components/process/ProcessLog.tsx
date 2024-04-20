@@ -29,7 +29,7 @@ export default function ProcessLog({ processId, refetchInterval }: ProcessAction
               component="pre"
               my="0px"
             >
-              {log.createdAt.split("T")[1].split(".")[0]} {log.message}
+              {log.createdAt.toISOString().split("T")[1].split(".")[0]} {log.message}
             </Text>
           ))}
           {getLogs.error && <div>Error: {getLogs.error.message}</div>}
