@@ -87,20 +87,12 @@ export function Nav() {
   return (
     <AppShell.Navbar p="sm">
       <AppShell.Section grow mt={20}>
-        <Stack
-          justify="center"
-          //spacing={0}
-          className={classes.stackLink}
-        >
+        <Stack justify="center" className={classes.stackLink}>
           {links}
         </Stack>
       </AppShell.Section>
       <AppShell.Section>
-        <Stack
-          justify="center"
-          //spacing={0}
-          className={classes.stackAction}
-        >
+        <Stack justify="center" className={classes.stackAction}>
           <Tooltip label="Toggle Theme" position="right" transitionProps={{ duration: 0 }}>
             <Link href={""} className={classes.link} onClick={() => toggleColorScheme()}>
               <IconSun stroke={1.5} className={cx(classes.icon, classes.colorSchemeLight)} />
