@@ -4,10 +4,10 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import GithubProvider, { GithubEmail } from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 
-import { fetchSettings } from "@/utils/fetchSSRProps";
 import { userModel } from "@pm2.web/mongoose-models";
 
 import connectDB from "../../../middleware/mongodb";
+import { fetchSettings } from "@/server/helpers";
 
 const providers = () => {
   const p = [];

@@ -6,6 +6,7 @@ import { protectedProcedure, router } from "../trpc";
 import Access from "@/utils/access";
 import { IServer, ISetting, IUser } from "@pm2.web/typings";
 import { defaultSettings } from "@/utils/constants";
+import { fetchSettings } from "../helpers";
 
 export const serverRouter = router({
   getLogs: protectedProcedure
@@ -129,19 +130,8 @@ export const serverRouter = router({
       };
     }),
 
-  getDashBoardData: protectedProcedure.query(async ({ ctx }) => {
-    const settings =
-      ((await settingModel
-        .findOne(
-          {},
-          {
-            _id: 0,
-            __v: 0,
-            createdAt: 0,
-            updatedAt: 0,
-          },
-        )
-        .lean()) as ISetting) || defaultSettings;
+  getDashBoardData: protectedProcedure.input(z.boolean().optional()).query(async ({ ctx, input: excludeDaemon }) => {
+    const settings = await fetchSettings();
 
     const servers = (await serverModel
       .find(
@@ -179,7 +169,7 @@ export const serverRouter = router({
       servers[i].processes = processes.filter(
         (process) =>
           process.server.toString() == servers[i]?._id?.toString() &&
-          (settings.excludeDaemon ? process.name != "pm2.web-daemon" : true),
+          (settings.excludeDaemon || excludeDaemon ? process.name != "pm2.web-daemon" : true),
       );
     }
 

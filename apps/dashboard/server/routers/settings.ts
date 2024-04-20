@@ -2,6 +2,8 @@ import { boolean, z } from "zod";
 import { adminProcedure, protectedProcedure, publicProcedure, router } from "../trpc";
 import { processModel, serverModel, settingModel, statModel } from "@pm2.web/mongoose-models";
 import { defaultSettings } from "@/utils/constants";
+import { ISetting } from "@pm2.web/typings";
+import { fetchSettings } from "../helpers";
 
 export const settingRouter = router({
   deleteAll: adminProcedure.mutation(async (opts) => {
@@ -44,6 +46,14 @@ export const settingRouter = router({
       await setting.save();
       return "Configuration updated successfully";
     }),
+  getSettings: protectedProcedure.query(async () => {
+    const settings = await fetchSettings();
+    return settings;
+  }),
+  registrationCodeRequired: publicProcedure.query(async () => {
+    const settings = await fetchSettings();
+    return !!settings?.registrationCode;
+  }),
 });
 
 export type SettingRouter = typeof settingRouter;

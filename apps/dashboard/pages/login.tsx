@@ -6,7 +6,6 @@ import { useState } from "react";
 
 import { GithubIcon } from "@/components/icons/github";
 import { GoogleIcon } from "@/components/icons/google";
-import { fetchSettings } from "@/utils/fetchSSRProps";
 import {
   Alert,
   Anchor,
@@ -27,6 +26,7 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { upperFirst, useToggle } from "@mantine/hooks";
+import { getServerSideHelpers } from "@/server/helpers";
 
 export default function AuthenticationForm({
   csrfToken,
@@ -226,10 +226,12 @@ const SignInError = ({ error }: { error: String }) => {
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const csrfToken = await getCsrfToken(context);
+  const helpers = getServerSideHelpers();
+
   return {
     props: {
       csrfToken,
-      registrationCodeRequired: !!(await fetchSettings()).registrationCode,
+      registrationCodeRequired: await helpers.setting.registrationCodeRequired.fetch(),
     },
   };
 }

@@ -147,6 +147,19 @@ export const userRouter = router({
 
     return "Updated permissions successfully";
   }),
+  getUsers: adminProcedure.query(async () => {
+    const users = await userModel
+      .find(
+        {},
+        {
+          password: 0,
+          updatedAt: 0,
+        },
+      )
+      .lean();
+
+    return users;
+  }),
 });
 
 export type userRouter = typeof userRouter;

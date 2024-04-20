@@ -5,8 +5,6 @@ import React, { useEffect, useState } from "react";
 
 import { Dashboard } from "@/components/layouts/Dashboard";
 import { CustomMultiSelect } from "@/components/misc/MultiSelect/CustomMultiSelect";
-import connectDB from "@/middleware/mongodb";
-import { fetchServer, fetchSettings } from "@/utils/fetchSSRProps";
 import { IPermissionConstants, Permission, PERMISSIONS } from "@/utils/permission";
 import {
   Accordion,
@@ -44,6 +42,7 @@ import classes from "../styles/user.module.css";
 import { trpc } from "@/utils/trpc";
 import UserItem from "@/components/user/table/UserItem";
 import { actionNotification } from "@/utils/notification";
+import { getServerSideHelpers } from "@/server/helpers";
 
 const permissionData = [
   {
@@ -93,7 +92,12 @@ const PillComponent = (item: (typeof permissionData)[0]) => (
   </Flex>
 );
 
-export default function User({ users, servers }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function User({}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const dashboardQuery = trpc.server.getDashBoardData.useQuery(true);
+  const usersQuery = trpc.user.getUsers.useQuery();
+  const servers = dashboardQuery.data?.servers || []!;
+  const users = usersQuery.data || [];
+
   const [selection, setSelection] = useState<string[]>([]);
   const [perms, setPerms] = useState<IAclServer[]>(
     servers.map((server) => ({
@@ -421,21 +425,14 @@ export default function User({ users, servers }: InferGetServerSidePropsType<typ
 }
 
 export async function getServerSideProps({ req, res }: GetServerSidePropsContext) {
-  await connectDB();
-  const users = await userModel
-    .find(
-      {},
-      {
-        password: 0,
-        updatedAt: 0,
-      },
-    )
-    .lean();
-  const settings = await fetchSettings();
+  const helpers = getServerSideHelpers();
+
+  await helpers.server.getDashBoardData.prefetch();
+  await helpers.user.getUsers.prefetch();
+
   return {
     props: {
-      users: JSON.parse(JSON.stringify(users)) as Omit<IUser, "password" | "updatedAt">[],
-      servers: await fetchServer(settings.excludeDaemon),
+      trpcState: helpers.dehydrate(),
     },
   };
 }

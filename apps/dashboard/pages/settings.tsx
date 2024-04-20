@@ -3,7 +3,6 @@ import { useSession } from "next-auth/react";
 import Head from "next/head";
 
 import { Dashboard } from "@/components/layouts/Dashboard";
-import { fetchSettings } from "@/utils/fetchSSRProps";
 import { Accordion, Badge, Grid, Overlay, Paper, ScrollArea, Title } from "@mantine/core";
 
 import UpdatePassword from "@/components/settings/UpdatePassword";
@@ -11,11 +10,19 @@ import DeleteAccount from "@/components/settings/DeleteAccount";
 import UnlinkOAuth2 from "@/components/settings/UnlinkOAuth2";
 import DatabaseAction from "@/components/settings/DatabaseAction";
 import UpdateConfiguration from "@/components/settings/UpdateConfiguration";
+import { trpc } from "@/utils/trpc";
+import { getServerSideHelpers } from "@/server/helpers";
 
-export default function Settings({ settings }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function Settings({}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { data: session } = useSession();
+  const getSettingsQuery = trpc.setting.getSettings.useQuery();
+  const settings = getSettingsQuery.data!;
   const hasPermission = session?.user?.acl?.owner || session?.user?.acl?.admin;
   const isOAuth2 = !!session?.user?.oauth2?.provider;
+
+  if (getSettingsQuery.status !== "success") {
+    return <></>;
+  }
 
   return (
     <>
@@ -74,9 +81,13 @@ export default function Settings({ settings }: InferGetServerSidePropsType<typeo
 }
 
 export async function getServerSideProps({ req, res }: GetServerSidePropsContext) {
+  const helpers = getServerSideHelpers();
+
+  await helpers.setting.getSettings.prefetch();
+
   return {
     props: {
-      settings: await fetchSettings(),
+      trpcState: helpers.dehydrate(),
     },
   };
 }
