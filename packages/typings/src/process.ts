@@ -3,7 +3,7 @@ type ILogType = "success" | "error" | "warning" | "info";
 interface ILog {
   type: ILogType;
   message: string;
-  createdAt: string;
+  createdAt: Date;
   _id: string;
 }
 

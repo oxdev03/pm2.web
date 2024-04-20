@@ -3,17 +3,15 @@ import Head from "next/head";
 
 import { SelectedProvider, useSelected } from "@/components/context/SelectedProvider";
 import { Dashboard } from "@/components/layouts/Dashboard";
-import { fetchServer, fetchSettings } from "@/utils/fetchSSRProps";
 import { Flex } from "@mantine/core";
 import { ISetting } from "@pm2.web/typings";
 
 import ProcessItem from "@/components/process/ProcessItem";
-import useRefreshSSRProps from "@/components/hooks/useSSRPropsRefresh";
+import { getServerSideHelpers } from "@/server/helpers";
+import { trpc } from "@/utils/trpc";
 
 function Process({ settings }: { settings: ISetting }) {
   const { selectedProcesses } = useSelected();
-
-  useRefreshSSRProps(settings.polling.frontend * 2);
 
   return (
     <Flex gap="xs" direction={"column"}>
@@ -22,7 +20,20 @@ function Process({ settings }: { settings: ISetting }) {
   );
 }
 
-export default function ProcessPage({ servers, settings }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function ProcessPage({}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const dashboardQuery = trpc.server.getDashBoardData.useQuery(undefined, {
+    refetchInterval: (query) => {
+      const data = query.state.data;
+      const polling = data?.settings?.polling?.frontend || 0;
+      return Math.min(Math.max(polling, 4_000), 10_000);
+    },
+  });
+  const data = dashboardQuery.data!;
+
+  if (dashboardQuery.status !== "success") {
+    return <></>;
+  }
+
   return (
     <>
       <Head>
@@ -31,23 +42,23 @@ export default function ProcessPage({ servers, settings }: InferGetServerSidePro
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" type="image/png" href="/logo.png" />
       </Head>
-      <SelectedProvider servers={servers}>
+      <SelectedProvider servers={data.servers}>
         <Dashboard>
-          <Process settings={settings} />
+          <Process settings={data.settings} />
         </Dashboard>
       </SelectedProvider>
     </>
   );
 }
 
-export async function getServerSideProps({ req, res }: GetServerSidePropsContext) {
-  res.setHeader("Cache-Control", "s-maxage=10, stale-while-revalidate");
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const helpers = getServerSideHelpers();
 
-  const settings = await fetchSettings();
+  await helpers.server.getDashBoardData.prefetch();
+
   return {
     props: {
-      servers: await fetchServer(settings.excludeDaemon),
-      settings,
+      trpcState: helpers.dehydrate(),
     },
   };
 }

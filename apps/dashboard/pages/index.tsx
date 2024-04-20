@@ -5,7 +5,6 @@ import Head from "next/head";
 import { SelectedProvider, useSelected } from "@/components/context/SelectedProvider";
 import { Dashboard } from "@/components/layouts/Dashboard";
 import { StatsRing } from "@/components/stats/StatsRing";
-import { fetchServer, fetchSettings } from "@/utils/fetchSSRProps";
 import { Flex, Paper, SimpleGrid } from "@mantine/core";
 import { ISetting } from "@pm2.web/typings";
 import DashboardLog from "@/components/dashboard/DashboardLog";
@@ -13,7 +12,7 @@ import { AreaChart, DonutChart } from "@mantine/charts";
 import classes from "@/styles/index.module.css";
 import { trpc } from "@/utils/trpc";
 import { formatBytes } from "@/utils/format";
-import useRefreshSSRProps from "@/components/hooks/useSSRPropsRefresh";
+import { getServerSideHelpers } from "@/server/helpers";
 
 const statChartProps = {
   h: "120px",
@@ -37,8 +36,6 @@ function Home({ settings }: { settings: ISetting }) {
       refetchInterval: settings.polling.frontend,
     },
   );
-
-  useRefreshSSRProps(settings.polling.frontend * 2);
 
   const chartData = data?.stats?.map((e) => ({ ...e, date: new Date(e._id).toLocaleTimeString() })) || [];
 
@@ -120,7 +117,16 @@ function Home({ settings }: { settings: ISetting }) {
   );
 }
 
-export default function HomePage({ servers, settings }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function HomePage({}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const dashboardQuery = trpc.server.getDashBoardData.useQuery(undefined, {
+    refetchInterval: 5_000,
+  });
+  const data = dashboardQuery.data!;
+
+  if (dashboardQuery.status !== "success") {
+    return <></>;
+  }
+
   return (
     <>
       <Head>
@@ -129,22 +135,23 @@ export default function HomePage({ servers, settings }: InferGetServerSidePropsT
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" type="image/png" href="/logo.png" />
       </Head>
-      <SelectedProvider servers={servers}>
+      <SelectedProvider servers={data.servers}>
         <Dashboard>
-          <Home settings={settings} />
+          <Home settings={data.settings} />
         </Dashboard>
       </SelectedProvider>
     </>
   );
 }
 
-export async function getServerSideProps({ req, res }: GetServerSidePropsContext) {
-  res.setHeader("Cache-Control", "s-maxage=10, stale-while-revalidate");
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const helpers = getServerSideHelpers();
+
+  await helpers.server.getDashBoardData.prefetch();
 
   return {
     props: {
-      servers: await fetchServer(),
-      settings: await fetchSettings(),
+      trpcState: helpers.dehydrate(),
     },
   };
 }

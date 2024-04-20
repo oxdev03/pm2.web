@@ -1,10 +1,11 @@
 import { PERMISSIONS } from "@/utils/permission";
-import { processModel, statModel } from "@pm2.web/mongoose-models";
+import { processModel, serverModel, settingModel, statModel } from "@pm2.web/mongoose-models";
 import { z } from "zod";
 import mongoose from "mongoose";
 import { protectedProcedure, router } from "../trpc";
 import Access from "@/utils/access";
-import { IUser } from "@pm2.web/typings";
+import { IServer, ISetting, IUser } from "@pm2.web/typings";
+import { defaultSettings } from "@/utils/constants";
 
 export const serverRouter = router({
   getLogs: protectedProcedure
@@ -127,6 +128,63 @@ export const serverRouter = router({
         stats: mergedStats.reverse(),
       };
     }),
+
+  getDashBoardData: protectedProcedure.query(async ({ ctx }) => {
+    const settings =
+      ((await settingModel
+        .findOne(
+          {},
+          {
+            _id: 0,
+            __v: 0,
+            createdAt: 0,
+            updatedAt: 0,
+          },
+        )
+        .lean()) as ISetting) || defaultSettings;
+
+    const servers = (await serverModel
+      .find(
+        {},
+        {
+          createdAt: 0,
+        },
+      )
+      .lean()) as IServer[];
+
+    const processes = await processModel
+      .find(
+        {},
+        {
+          logs: 0,
+          stats: 0,
+          createdAt: 0,
+          restartCount: 0,
+          deleteCount: 0,
+          toggleCount: 0,
+        },
+      )
+      .lean();
+
+    console.log(`[DATABASE] ${servers.length} servers, ${processes.length} processes`);
+    // override online status ,m, if last updatedAt > 10 seconds ago
+    const updateInterval = settings.polling.backend + 3000;
+    for (let i = 0; i < processes.length; i++) {
+      if (processes[i].status == "online" && new Date(processes[i].updatedAt).getTime() < Date.now() - updateInterval) {
+        processes[i].status = "offline";
+      }
+    }
+
+    for (let i = 0; i < servers.length; i++) {
+      servers[i].processes = processes.filter(
+        (process) =>
+          process.server.toString() == servers[i]?._id?.toString() &&
+          (settings.excludeDaemon ? process.name != "pm2.web-daemon" : true),
+      );
+    }
+
+    return { settings: settings, servers: servers };
+  }),
 });
 
 const hasPermission = (processId: string, serverId: string, user: IUser, requiredPerms: number[]) => {

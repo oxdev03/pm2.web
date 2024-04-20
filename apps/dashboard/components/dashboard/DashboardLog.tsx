@@ -37,7 +37,7 @@ export default function DashboardLog({ refetchInterval, processIds }: DashboardL
           {data?.length
             ? data?.map((log) => (
                 <Text key={log?._id} size="md" fw={600} c={logColor[log?.type || "info"]} component="pre" my="0px">
-                  {log?.createdAt.split("T")[1].split(".")[0]} {log?.message}
+                  {log?.createdAt?.toISOString()?.split("T")[1].split(".")[0]} {log?.message}
                 </Text>
               ))
             : "No logs"}
