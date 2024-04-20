@@ -1,6 +1,5 @@
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import Head from "next/head";
-import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 
 import { Dashboard } from "@/components/layouts/Dashboard";
@@ -8,89 +7,32 @@ import { CustomMultiSelect } from "@/components/misc/MultiSelect/CustomMultiSele
 import { IPermissionConstants, Permission, PERMISSIONS } from "@/utils/permission";
 import {
   Accordion,
-  Avatar,
   Badge,
   Box,
   Button,
-  Checkbox,
   Divider,
   Flex,
   Grid,
-  Group,
   Overlay,
   Paper,
   rem,
   ScrollArea,
-  Table,
-  Text,
   Title,
   Transition,
 } from "@mantine/core";
-import { userModel } from "@pm2.web/mongoose-models";
-import { IUser, IAclServer } from "@pm2.web/typings";
+import { IAclServer } from "@pm2.web/typings";
 import {
-  IconChartBar,
   IconCircleFilled,
   IconDeviceFloppy,
-  IconHistory,
-  IconPower,
-  IconReload,
-  IconTrash,
 } from "@tabler/icons-react";
 
 import classes from "../styles/user.module.css";
 import { trpc } from "@/utils/trpc";
-import UserItem from "@/components/user/table/UserItem";
 import { actionNotification } from "@/utils/notification";
 import { getServerSideHelpers } from "@/server/helpers";
+import UserManagement from "@/components/user/UserManagement";
+import { permissionData, PillComponent, SelectItemComponent } from "@/components/user/UserMultiSelectHelper";
 
-const permissionData = [
-  {
-    icon: <IconHistory />,
-    value: "LOGS",
-    label: "Logs",
-    description: "View logs",
-  },
-  {
-    icon: <IconChartBar />,
-    value: "MONITORING",
-    label: "Monitoring",
-    description: "View monitoring/stats",
-  },
-  {
-    icon: <IconReload />,
-    value: "RESTART",
-    label: "Restart",
-    description: "Restart process",
-  },
-  {
-    icon: <IconPower />,
-    value: "STOP",
-    label: "Stop",
-    description: "Stop process",
-  },
-  {
-    icon: <IconTrash />,
-    value: "DELETE",
-    label: "Delete",
-    description: "Delete process",
-  },
-];
-
-const SelectItemComponent = (item: (typeof permissionData)[0]) => (
-  <Group wrap="nowrap">
-    <Avatar size={"xs"}>{item.icon}</Avatar>
-    <div>
-      <Text size="sm">{item.description}</Text>
-    </div>
-  </Group>
-);
-
-const PillComponent = (item: (typeof permissionData)[0]) => (
-  <Flex align={"center"} justify={"center"} h={"100%"}>
-    <Avatar size={"xs"}>{item.icon}</Avatar>
-  </Flex>
-);
 
 export default function User({}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const dashboardQuery = trpc.server.getDashBoardData.useQuery(true);
@@ -119,20 +61,9 @@ export default function User({}: InferGetServerSidePropsType<typeof getServerSid
     },
     onSuccess(data) {
       actionNotification(`update-perms`, "Permissions updated", data, "success");
-      refreshSSRProps();
+      usersQuery.refetch();
     },
   });
-
-  const toggleRow = (id: string) =>
-    setSelection((current) => (current.includes(id) ? current.filter((item) => item !== id) : [...current, id]));
-  const toggleAll = () =>
-    setSelection((current) =>
-      current.length === users.filter((x) => !x.acl.owner && !x.acl.admin).length
-        ? []
-        : users.filter((x) => !x.acl.owner && !x.acl.admin).map((item) => item._id),
-    );
-
-  const router = useRouter();
 
   const updatePermsState = (server_id: string, process_id: string, new_perms: string[]) => {
     const newPerms = [...perms];
@@ -172,14 +103,6 @@ export default function User({}: InferGetServerSidePropsType<typeof getServerSid
       }
     }
     return [];
-  };
-
-  const getUserRole = (item: Omit<IUser, "password" | "updatedAt">) => {
-    return item.acl?.owner ? "owner" : item.acl?.admin ? "admin" : item.acl?.servers?.length ? "custom" : "none";
-  };
-
-  const refreshSSRProps = () => {
-    router.replace(router.asPath);
   };
 
   useEffect(() => {
@@ -227,45 +150,12 @@ export default function User({}: InferGetServerSidePropsType<typeof getServerSid
             },
           }}
         >
-          <Grid.Col span={{ lg: 6, md: 12 }}>
-            {/* 3/5 2/5 */}
-            <Paper shadow="sm" radius="md" p={"sm"} style={{ height: "100%" }}>
-              <ScrollArea>
-                <Table miw={600} verticalSpacing="sm">
-                  <Table.Thead>
-                    <Table.Tr>
-                      <Table.Th style={{ width: rem(40) }}>
-                        <Checkbox
-                          onChange={toggleAll}
-                          checked={selection.length === users.length}
-                          indeterminate={selection.length > 0 && selection.length !== users.length}
-                        />
-                      </Table.Th>
-                      <Table.Th style={{ fontSize: rem(17) }}>User</Table.Th>
-                      <Table.Th style={{ fontSize: rem(17) }}>Email</Table.Th>
-                      <Table.Th style={{ fontSize: rem(17) }}>Permission</Table.Th>
-                      <Table.Th style={{ width: rem(50) }}></Table.Th>
-                    </Table.Tr>
-                  </Table.Thead>
-                  <Table.Tbody>
-                    {users.map((item) => (
-                      <UserItem
-                        key={item._id}
-                        selected={selection.includes(item._id)}
-                        selectUser={toggleRow}
-                        authProvider={item?.oauth2?.provider}
-                        userId={item._id}
-                        email={item.email}
-                        name={item.name}
-                        refresh={refreshSSRProps}
-                        role={getUserRole(item)}
-                      />
-                    ))}
-                  </Table.Tbody>
-                </Table>
-              </ScrollArea>
-            </Paper>
-          </Grid.Col>
+          <UserManagement
+            refreshUsers={usersQuery.refetch}
+            users={users}
+            selection={selection}
+            setSelection={setSelection}
+          />
           <Grid.Col span={{ lg: 6, md: 12 }}>
             <Paper shadow="sm" radius="md" style={{ height: "100%" }} p={"lg"} px={"md"} pb={"sm"}>
               <Flex direction={"column"} h="100%">
