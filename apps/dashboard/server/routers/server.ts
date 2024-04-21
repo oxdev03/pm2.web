@@ -28,7 +28,7 @@ export const serverRouter = router({
 
       filteredLogs.sort((a, b) => new Date(a?.createdAt || 0).getTime() - new Date(b?.createdAt || 0).getTime());
 
-      return filteredLogs.slice(0, limit);
+      return filteredLogs.slice(-limit);
     }),
 
   getStats: protectedProcedure

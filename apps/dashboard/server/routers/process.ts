@@ -13,7 +13,7 @@ export const processRouter = router({
       const process = await processModel.findById(input.processId);
       checkPermission(process, ctx.user, [PERMISSIONS.LOGS]);
       const limit = input.limit || 100;
-      return process?.logs?.slice(process.logs.length - limit, process.logs.length);
+      return process?.logs?.slice(-limit);
     }),
   getStat: protectedProcedure.input(z.object({ processId: z.string() })).query(async ({ ctx, input }) => {
     const process = await processModel.findById(input.processId);
