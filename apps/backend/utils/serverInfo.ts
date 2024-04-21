@@ -1,8 +1,8 @@
 import si from "systeminformation";
 
-import { ServerInfo } from "@pm2.web/typings";
+import { IServerInfo } from "../types/info";
 
-export default async function getServerInfo(): Promise<ServerInfo> {
+export default async function getServerInfo(): Promise<IServerInfo> {
   const mem = await si.mem();
   return {
     name: (await si.osInfo())?.hostname ?? "",

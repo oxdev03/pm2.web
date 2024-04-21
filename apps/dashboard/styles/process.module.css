@@ -4,9 +4,9 @@
 }
 
 .processItem.opened {
-  max-height: 200px;
+  max-height: 400px;
   @media (max-width: $mantine-breakpoint-xs) {
-    max-height: 240px;
+    max-height: 440px;
   }
 }
 
@@ -23,6 +23,10 @@
 }
 
 .processLog {
+  background: light-dark(var(--mantine-color-gray-1), var(--mantine-color-dark-8));
+}
+
+.processMetric {
   background: light-dark(var(--mantine-color-gray-1), var(--mantine-color-dark-8));
 }
 

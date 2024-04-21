@@ -1,10 +1,13 @@
-import { Center, Group, Paper, RingProgress, Text } from "@mantine/core";
+import { Box, Center, Flex, Group, Paper, RingProgress, Text } from "@mantine/core";
 
 import classes from "./StatsRing.module.css";
 
 interface StatsRingProps {
-  label: string;
-  stats: string;
+  title: string;
+  stats: {
+    label: string;
+    value: string;
+  }[];
   progress: number;
   color: string;
   icon: "up" | "down";
@@ -13,28 +16,32 @@ interface StatsRingProps {
 
 export function StatsRing({ stat }: { stat: StatsRingProps }) {
   return (
-    <Paper radius="md" p="xs" key={stat.label} shadow="sm" className={classes.statsRing}>
-      <Group>
+    <Paper radius="md" p="xs" key={stat.title} shadow="sm" className={classes.statsRing}>
+      <Group align="top">
         <RingProgress
-          size={80}
           roundCaps
-          thickness={8}
           sections={[{ value: stat.progress, color: stat.color }]}
           label={
-            <Text c={stat.color} fw={700} ta="center" size="sm">
+            <Text c={stat.color} fw={700} ta="center" size="lg">
               {stat.value != undefined ? `${stat.value}` : `${stat.progress}%`}
             </Text>
           }
         />
-
-        <div>
-          <Text size="xl" tt="uppercase" fw={700}>
-            {stat.label}
+        <Box pt={"sm"}>
+          <Text size="1.5em" tt="uppercase" fw={700}>
+            {stat.title}
           </Text>
-          <Text fw={700} size="md" className={classes.statsRingText}>
-            {stat.stats}
-          </Text>
-        </div>
+          {stat.stats.map((s) => (
+            <Flex gap={"xs"} key={s.label} align={"end"}>
+              <Text fw={700} size="xl" className={classes.statsRingLabel}>
+                {s.label}:
+              </Text>
+              <Text fw={600} size="lg" className={classes.statsRingValue}>
+                {s.value}
+              </Text>
+            </Flex>
+          ))}
+        </Box>
       </Group>
     </Paper>
   );

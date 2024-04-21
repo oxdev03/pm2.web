@@ -3,10 +3,10 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { forwardRef, useEffect } from "react";
 
-import Access from "@/utils/acess";
+import Access from "@/utils/access";
 import { ActionIcon, AppShell, Box, Center, Divider, Flex, Group, Modal, MultiSelect, rem, Stack } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { Acl, IProcess } from "@pm2.web/typings";
+import { IProcess } from "@pm2.web/typings";
 import {
   IconCircle,
   IconCircleFilled,
@@ -27,10 +27,7 @@ export function Head() {
   const [opened, { open, close }] = useDisclosure(false);
 
   const hasAccess = (server_id: string, process_id: string) => {
-    type DefaultSessionUser = DefaultSession & {
-      acl: Acl;
-    };
-    const user = session?.user as DefaultSessionUser;
+    const user = session?.user;
     if (!user || !user.acl) return false;
     if (!user?.acl?.owner && !user?.acl?.admin) {
       return !!new Access(user.acl?.servers ?? []).getPermsValue(server_id, process_id);

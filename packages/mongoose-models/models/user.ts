@@ -1,62 +1,57 @@
 import bcrypt from "bcrypt";
 import mongoose, { Model } from "mongoose";
 
-import { MUser, MUserMethods } from "@pm2.web/typings";
+import { IUserModel, IUserModelMethods } from "@pm2.web/typings";
 
-type UserModel = Model<MUser, object, MUserMethods>;
+type UserModel = Model<IUserModel, object, IUserModelMethods>;
 
-const userSchema = new mongoose.Schema<MUser, UserModel, MUserMethods>({
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  name: String,
-  password: {
-    type: String,
-    required: true,
-  },
-  acl: {
-    owner: Boolean,
-    admin: Boolean,
-    servers: [
-      {
-        server: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "Server",
-        },
-        perms: Number,
-        processes: [
-          {
-            process: {
-              type: mongoose.Schema.Types.ObjectId,
-              ref: "Process",
-            },
-            perms: Number,
+const userSchema = new mongoose.Schema(
+  {
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    name: String,
+    password: {
+      type: String,
+      required: true,
+    },
+    acl: {
+      owner: Boolean,
+      admin: Boolean,
+      servers: [
+        {
+          server: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Server",
           },
-        ],
+          perms: Number,
+          processes: [
+            {
+              process: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Process",
+              },
+              perms: Number,
+            },
+          ],
+        },
+      ],
+    },
+    oauth2: {
+      provider: {
+        type: String,
       },
-    ],
-  },
-  oauth2: {
-    provider: {
-      type: String,
-    },
-    providerUserId: {
-      type: String,
+      providerUserId: {
+        type: String,
+      },
     },
   },
-  updatedAt: Date,
-  createdAt: Date,
-});
+  { timestamps: true },
+);
 // Hash the password before saving the user
 userSchema.pre("save", async function (next) {
-  const now = new Date();
-  this.updatedAt = now;
-  if (!this.createdAt) {
-    this.createdAt = now;
-  }
-
   if (!this.isModified("password")) {
     return next();
   }
@@ -82,5 +77,5 @@ userSchema.methods.toJSON = function () {
 };
 
 export const userModel =
-  (mongoose.models.User as UserModel & mongoose.Document) ||
-  mongoose.model<MUser, UserModel>("User", userSchema);
+  (mongoose.models.User as UserModel) ??
+  mongoose.model<IUserModel, UserModel>("User", userSchema);

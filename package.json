@@ -6,6 +6,9 @@
     "type": "git",
     "url": "https://github.com/oxdev03/pm2.web"
   },
+  "engines": {
+    "node": ">= 18.0.0"
+  },
   "author": {
     "name": "oxdev03"
   },
@@ -39,6 +42,6 @@
     "@pm2.web/eslint-config": "*",
     "@pm2.web/typescript-config": "*",
     "prettier": "^3.2.5",
-    "turbo": "^1.12.5"
+    "turbo": "^1.13.2"
   }
 }

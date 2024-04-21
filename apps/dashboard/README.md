@@ -1,38 +1,88 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# pm2.web - Dashboard
 
-## Getting Started
+The Dashboard is a Next.js application built on the t3 stack, utilizing trpc for API calls and next-auth for authentication. It offers a range of actions, including real-time monitoring, process control, log viewing, and user access management. Additionally, it uses multiple charts for better data visualization.
 
-First, run the development server:
+## On Premise
+
+### Prerequisites
+
+- Node v18
+- MongoDB Cluster (required for Restart/Shutdown/Delete functionality) / MongoDB Atlas
+- Open Port 3000 or 80,443 (if you use a reverse proxy)
+
+### Configuration
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
+NEXTAUTH_SECRET=Generate using openssl rand -base64 32 or https://generate-secret.vercel.app/32
+DB_URI=mongodb+srv://connecturi
+NEXTAUTH_URL=http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Installation
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+1. Install the dependencies
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+   ```bash
+   # from project root
+   npm install
+   ```
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+2. Create a `.env` file in the dashboard directory and add the following env variables
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+   ```bash
+    DB_URI=mongodb+srv://connecturi
+    NEXTAUTH_SECRET=Generate using openssl rand -base64 32 or https://generate-secret.vercel.app/32
+    NEXTAUTH_URL=<Index URL of the dashboard eg. http://ip:3000>
+   ```
 
-## Learn More
+3. Build the frontend
 
-To learn more about Next.js, take a look at the following resources:
+   ```bash
+    npm run build:apps:dashboard
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Setup
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+You can start it using the following npm command:
 
-## Deploy on Vercel
+```bash
+# run from the project root
+npm run start:apps:dashboard
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+To run the process in the background, you can use several tools such as PM2.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+#### Run using PM2
+
+This will start it using pm2. Furthermore, you can hide it from the process list through the dashboard.
+
+```bash
+# run from the project root
+pm2 start npm --name "pm2.web-dashboard" -- run "start:apps:dashboard"
+```
+
+## Vercel & MongoDB Atlas
+
+- MongoDB Atlas
+- Vercel Account (free tier is sufficient)
+
+### Configuration
+
+```bash
+NEXTAUTH_SECRET=Generate using openssl rand -base64 32 or https://generate-secret.vercel.app/32
+DB_URI=mongodb+srv://connecturi
+NEXTAUTH_URL=http://localhost:3000
+```
+
+#### MongoDB Atlas
+
+1. Create a MongoDB Atlas account and create a new project.
+2. Create a new cluster and select the free tier.
+3. Create a new database user and save the username and password.
+4. Add your IP address to the IP Access List or through a CIDR block.
+
+### Setup
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Foxdev03%2Fpm2.web%2Ftree%2Fmaster%2Fapps%2Fdashboard&env=DB_URI,NEXTAUTH_SECRET&demo-title=pm2.web&demo-description=pm2.web%20-%20Easily%20monitor%20your%20processes%2C%20control%20them%20with%20various%20actions%2C%20view%20logs%20and%20set%20up%20access%20controls%20for%20users%20using%20the%20dashboard&demo-url=https%3A%2F%2Fgithub.com%2Foxdev03%2Fpm2.web&demo-image=https%3A%2F%2Fraw.githubusercontent.com%2Foxdev03%2Fpm2.web%2Fmaster%2Fassets%2Findex.jpeg)
+
+1. Click the deploy button above and follow the instructions.

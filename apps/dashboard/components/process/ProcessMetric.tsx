@@ -1,7 +1,7 @@
 import { Flex, Paper, Text } from "@mantine/core";
-import { TablerIconsProps } from "@tabler/icons-react";
-
-import classes from "./ProcessItemMetric.module.css";
+import { Icon, IconProps } from "@tabler/icons-react";
+import classes from "@/styles/process.module.css";
+import { ForwardRefExoticComponent, RefAttributes } from "react";
 
 export default function ProcessItemMetric({
   w,
@@ -9,8 +9,8 @@ export default function ProcessItemMetric({
   value,
 }: {
   w?: string;
-  Icon: React.ElementType<TablerIconsProps>;
-  value: string | undefined;
+  Icon: ForwardRefExoticComponent<Omit<IconProps, "ref"> & RefAttributes<Icon>>;
+  value?: string | undefined | boolean;
 }) {
   return (
     <Paper className={classes.processMetric} radius="md" p={"4px"} px={"10px"}>

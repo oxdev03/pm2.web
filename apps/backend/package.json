@@ -1,6 +1,6 @@
 {
   "name": "backend",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "main": "dist/index.js",
   "description": "Dashboard for PM2",
   "author": {
@@ -27,18 +27,19 @@
   },
   "license": "LGPL-3.0-or-later",
   "dependencies": {
+    "@pm2.web/mongoose-models": "*",
+    "@pm2.web/typings": "*",
     "bcrypt": "^5.1.1",
+    "bytes-iec": "^3.1.1",
     "dotenv": "^16.4.5",
     "pm2": "^5.3.1",
-    "systeminformation": "^5.22.6",
-    "@pm2.web/typings": "*",
-    "@pm2.web/mongoose-models": "*"
+    "systeminformation": "^5.22.7"
   },
   "devDependencies": {
     "@pm2.web/eslint-config": "*",
     "@pm2.web/typescript-config": "*",
     "@types/bcrypt": "^5.0.2",
     "eslint": "^8.57.0",
-    "typescript": "^5.4.3"
+    "typescript": "^5.4.5"
   }
 }

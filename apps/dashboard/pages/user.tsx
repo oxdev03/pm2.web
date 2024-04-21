@@ -1,115 +1,43 @@
-import { GetServerSideProps, GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
+import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import Head from "next/head";
-import { useRouter } from "next/router";
-import React, { forwardRef, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
-import { GithubIcon } from "@/components/icons/github";
-import { GoogleIcon } from "@/components/icons/google";
 import { Dashboard } from "@/components/layouts/Dashboard";
-import { CustomMultiSelect, IItem } from "@/components/misc/MultiSelect/CustomMultiSelect";
-import connectDB from "@/middleware/mongodb";
-import { fetchServer, fetchSettings } from "@/utils/fetchSSRProps";
+import { CustomMultiSelect } from "@/components/misc/MultiSelect/CustomMultiSelect";
 import { IPermissionConstants, Permission, PERMISSIONS } from "@/utils/permission";
 import {
   Accordion,
-  ActionIcon,
-  Avatar,
   Badge,
   Box,
   Button,
-  Checkbox,
   Divider,
   Flex,
   Grid,
-  Group,
-  MultiSelect,
-  NativeSelect,
   Overlay,
   Paper,
   rem,
   ScrollArea,
-  Table,
-  Text,
   Title,
   Transition,
 } from "@mantine/core";
-import { notifications } from "@mantine/notifications";
-import { userModel } from "@pm2.web/mongoose-models";
-import { IServer, IUser, Server } from "@pm2.web/typings";
-import {
-  IconChartBar,
-  IconCheck,
-  IconCircleFilled,
-  IconDeviceFloppy,
-  IconHistory,
-  IconMail,
-  IconPower,
-  IconReload,
-  IconTrash,
-  IconX,
-} from "@tabler/icons-react";
+import { IAclServer } from "@pm2.web/typings";
+import { IconCircleFilled, IconDeviceFloppy } from "@tabler/icons-react";
 
 import classes from "../styles/user.module.css";
+import { trpc } from "@/utils/trpc";
+import { actionNotification } from "@/utils/notification";
+import { getServerSideHelpers } from "@/server/helpers";
+import UserManagement from "@/components/user/UserManagement";
+import { permissionData, PillComponent, SelectItemComponent } from "@/components/user/UserMultiSelectHelper";
 
-const permissionData = [
-  {
-    icon: <IconHistory />,
-    value: "LOGS",
-    label: "Logs",
-    description: "View logs",
-  },
-  {
-    icon: <IconChartBar />,
-    value: "MONITORING",
-    label: "Monitoring",
-    description: "View monitoring/stats",
-  },
-  {
-    icon: <IconReload />,
-    value: "RESTART",
-    label: "Restart",
-    description: "Restart process",
-  },
-  {
-    icon: <IconPower />,
-    value: "STOP",
-    label: "Stop",
-    description: "Stop process",
-  },
-  {
-    icon: <IconTrash />,
-    value: "DELETE",
-    label: "Delete",
-    description: "Delete process",
-  },
-];
+export default function User({}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const dashboardQuery = trpc.server.getDashBoardData.useQuery(true);
+  const usersQuery = trpc.user.getUsers.useQuery();
+  const servers = dashboardQuery.data?.servers || []!;
+  const users = usersQuery.data || [];
 
-const SelectItemComponent = (item: (typeof permissionData)[0]) => (
-  <Group wrap="nowrap">
-    <Avatar size={"xs"}>{item.icon}</Avatar>
-    <div>
-      <Text size="sm">{item.description}</Text>
-    </div>
-  </Group>
-);
-
-const PillComponent = (item: (typeof permissionData)[0]) => (
-  <Flex align={"center"} justify={"center"} h={"100%"}>
-    <Avatar size={"xs"}>{item.icon}</Avatar>
-  </Flex>
-);
-
-export default function User({ users, servers }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const aclPerms = {
-    logs: false,
-    monitoring: false,
-    settings: false,
-    restart: false,
-    stop: false,
-    delete: false,
-  };
   const [selection, setSelection] = useState<string[]>([]);
-  const [perms, setPerms] = useState<Server[]>(
+  const [perms, setPerms] = useState<IAclServer[]>(
     servers.map((server) => ({
       server: server._id,
       processes: server.processes.map((process) => ({
@@ -120,77 +48,18 @@ export default function User({ users, servers }: InferGetServerSidePropsType<typ
     })),
   );
 
-  const toggleRow = (id: string) =>
-    setSelection((current) => (current.includes(id) ? current.filter((item) => item !== id) : [...current, id]));
-  const toggleAll = () =>
-    setSelection((current) =>
-      current.length === users.filter((x) => !x.acl.owner && !x.acl.admin).length
-        ? []
-        : users.filter((x) => !x.acl.owner && !x.acl.admin).map((item) => item._id),
-    );
-
-  const router = useRouter();
-
-  const notification = (id: string, title: string, message: string, status: "pending" | "success" | "error") => {
-    if (status == "pending") {
-      notifications.show({
-        id,
-        title,
-        message,
-        color: "blue",
-        autoClose: false,
-        withCloseButton: false,
-      });
-    } else {
-      notifications.update({
-        id,
-        title,
-        message,
-        color: status == "success" ? "green" : "red",
-        icon: status == "success" ? <IconCheck /> : <IconX />,
-        autoClose: 5000,
-        withCloseButton: true,
-      });
-    }
-  };
-
-  const deleteUser = async (id: string) => {
-    const rnd = Math.random().toString(36).substring(7);
-    notification(`delete-user-${id}-${rnd}`, "Deleting user", "Please wait...", "pending");
-    const res = await fetch(`/api/user?id=${id}`, {
-      method: "DELETE",
-    });
-    const statusCode = res.status;
-    const data = await res.json();
-
-    router.replace(router.asPath); // hacky way to refresh page
-
-    if (statusCode !== 200) notification(`delete-user-${id}-${rnd}`, "Failed to delete user", data.message, "error");
-    else if (statusCode === 200) notification(`delete-user-${id}-${rnd}`, "User deleted", data.message, "success");
-  };
-
-  const updateRole = async (id: string, permission: string) => {
-    const rnd = Math.random().toString(36).substring(7);
-    notification(`update-user-${id}-${rnd}`, "Updating user", "Please wait...", "pending");
-    const res = await fetch(`/api/user`, {
-      method: "PATCH",
-      body: JSON.stringify({
-        id,
-        permission,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const statusCode = res.status;
-    const data = await res.json();
-
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    router.replace(router.asPath); // hacky way to refresh page
-
-    if (statusCode !== 200) notification(`update-user-${id}-${rnd}`, "Failed to update user", data.message, "error");
-    else if (statusCode === 200) notification(`update-user-${id}-${rnd}`, "User updated", data.message, "success");
-  };
+  const updatePerms = trpc.user.setCustomPermission.useMutation({
+    onMutate() {
+      actionNotification(`update-perms`, "Updating permissions", "Please wait...", "pending");
+    },
+    onError(error) {
+      actionNotification(`update-perms`, "Failed to update permissions", error.message, "error");
+    },
+    onSuccess(data) {
+      actionNotification(`update-perms`, "Permissions updated", data, "success");
+      usersQuery.refetch();
+    },
+  });
 
   const updatePermsState = (server_id: string, process_id: string, new_perms: string[]) => {
     const newPerms = [...perms];
@@ -230,29 +99,6 @@ export default function User({ users, servers }: InferGetServerSidePropsType<typ
       }
     }
     return [];
-  };
-
-  const updatePerms = async () => {
-    const rnd = Math.random().toString(36).substring(7);
-    notification(`update-perms-${rnd}`, "Updating permissions", "Please wait...", "pending");
-    const res = await fetch(`/api/user`, {
-      method: "POST",
-      body: JSON.stringify({
-        perms,
-        users: selection,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const statusCode = res.status;
-    const data = await res.json();
-
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    router.replace(router.asPath); // hacky way to refresh page
-
-    if (statusCode !== 200) notification(`update-perms-${rnd}`, "Failed to update permissions", data.message, "error");
-    else if (statusCode === 200) notification(`update-perms-${rnd}`, "Permissions updated", data.message, "success");
   };
 
   useEffect(() => {
@@ -300,92 +146,12 @@ export default function User({ users, servers }: InferGetServerSidePropsType<typ
             },
           }}
         >
-          <Grid.Col span={{ lg: 6, md: 12 }}>
-            {/* 3/5 2/5 */}
-            <Paper shadow="sm" radius="md" p={"sm"} style={{ height: "100%" }}>
-              <ScrollArea>
-                <Table miw={600} verticalSpacing="sm">
-                  <Table.Thead>
-                    <Table.Tr>
-                      <Table.Th style={{ width: rem(40) }}>
-                        <Checkbox
-                          onChange={toggleAll}
-                          checked={selection.length === users.length}
-                          indeterminate={selection.length > 0 && selection.length !== users.length}
-                        />
-                      </Table.Th>
-                      <Table.Th style={{ fontSize: rem(17) }}>User</Table.Th>
-                      <Table.Th style={{ fontSize: rem(17) }}>Email</Table.Th>
-                      <Table.Th style={{ fontSize: rem(17) }}>Permission</Table.Th>
-                      <Table.Th style={{ width: rem(50) }}></Table.Th>
-                    </Table.Tr>
-                  </Table.Thead>
-                  <Table.Tbody>
-                    {users.map((item) => {
-                      const selected = selection.includes(item._id);
-                      return (
-                        <Table.Tr key={item._id} className={`${selected ? classes.rowSelected : ""}`}>
-                          <Table.Td>
-                            <Checkbox
-                              checked={selection.includes(item._id)}
-                              onChange={() => toggleRow(item._id)}
-                              disabled={item.acl.admin || item.acl.owner}
-                            />
-                          </Table.Td>
-                          <Table.Td>
-                            <Group gap="sm">
-                              <>
-                                {!item.oauth2 && <IconMail />}
-                                {item?.oauth2?.provider == "github" && <GithubIcon />}
-                                {item.oauth2?.provider == "google" && <GoogleIcon />}
-                              </>
-                              <Text size="sm" fw={500}>
-                                {item.name}
-                              </Text>
-                            </Group>
-                          </Table.Td>
-                          <Table.Td>{item.email}</Table.Td>
-                          <Table.Td>
-                            <NativeSelect
-                              data={["Owner", "Admin", "Custom", "None"].map((x) => {
-                                return {
-                                  label: x,
-                                  value: x.toLowerCase(),
-                                  disabled: x == "Custom",
-                                };
-                              })}
-                              variant="filled"
-                              value={
-                                item.acl?.owner
-                                  ? "owner"
-                                  : item.acl?.admin
-                                    ? "admin"
-                                    : item.acl?.servers?.length
-                                      ? "custom"
-                                      : "none"
-                              }
-                              onChange={(e) => updateRole(item._id, e.currentTarget.value)}
-                            />
-                          </Table.Td>
-                          <Table.Td>
-                            <ActionIcon
-                              variant="light"
-                              color="red.4"
-                              radius="sm"
-                              size={"lg"}
-                              onClick={() => deleteUser(item._id)}
-                            >
-                              <IconTrash size="1.4rem" />
-                            </ActionIcon>
-                          </Table.Td>
-                        </Table.Tr>
-                      );
-                    })}
-                  </Table.Tbody>
-                </Table>
-              </ScrollArea>
-            </Paper>{" "}
-          </Grid.Col>
+          <UserManagement
+            refreshUsers={usersQuery.refetch}
+            users={users}
+            selection={selection}
+            setSelection={setSelection}
+          />
           <Grid.Col span={{ lg: 6, md: 12 }}>
             <Paper shadow="sm" radius="md" style={{ height: "100%" }} p={"lg"} px={"md"} pb={"sm"}>
               <Flex direction={"column"} h="100%">
@@ -522,8 +288,14 @@ export default function User({ users, servers }: InferGetServerSidePropsType<typ
                       radius="sm"
                       size={"sm"}
                       leftSection={<IconDeviceFloppy />}
+                      loading={updatePerms.isPending}
                       disabled={!selection.length}
-                      onClick={updatePerms}
+                      onClick={() =>
+                        updatePerms.mutate({
+                          userIds: selection,
+                          perms: perms,
+                        })
+                      }
                     >
                       Save
                     </Button>
@@ -539,21 +311,14 @@ export default function User({ users, servers }: InferGetServerSidePropsType<typ
 }
 
 export async function getServerSideProps({ req, res }: GetServerSidePropsContext) {
-  await connectDB();
-  const users = await userModel
-    .find(
-      {},
-      {
-        password: 0,
-        updatedAt: 0,
-      },
-    )
-    .lean();
-  const settings = await fetchSettings();
+  const helpers = await getServerSideHelpers();
+
+  await helpers.server.getDashBoardData.prefetch();
+  await helpers.user.getUsers.prefetch();
+
   return {
     props: {
-      users: JSON.parse(JSON.stringify(users)) as Omit<IUser, "password" | "updatedAt">[],
-      servers: await fetchServer(settings.excludeDaemon),
+      trpcState: helpers.dehydrate(),
     },
   };
 }

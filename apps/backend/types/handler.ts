@@ -1,5 +1,5 @@
-import { MServer } from './server.js';
-import { ProcessInfo } from './utils.js';
+import { IServerModel } from "@pm2.web/typings";
+import { IProcessInfo } from "./info";
 
 interface QueuedLog {
   id: number;
@@ -15,8 +15,8 @@ interface Packet {
 }
 
 interface UpdateDataResponse {
-  server: MServer;
-  processes: ProcessInfo[];
+  server: IServerModel;
+  processes: IProcessInfo[];
 }
 
 export type { QueuedLog, UpdateDataResponse, Packet };

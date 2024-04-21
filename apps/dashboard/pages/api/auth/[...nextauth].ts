@@ -4,10 +4,10 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import GithubProvider, { GithubEmail } from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 
-import { fetchSettings } from "@/utils/fetchSSRProps";
 import { userModel } from "@pm2.web/mongoose-models";
 
 import connectDB from "../../../middleware/mongodb";
+import { fetchSettings } from "@/server/helpers";
 
 const providers = () => {
   const p = [];
@@ -193,7 +193,10 @@ export const authOptions = {
         token.accessToken = account.access_token;
         token.id = user.id;
       }
-      if (user) token.acl = user.acl;
+      if (user) {
+        token.acl = user.acl;
+        token.oauth2 = user.oauth2;
+      }
       return token;
     },
     async session({ session, token, user }: { session: any; token: JWT; user: any }) {
@@ -201,6 +204,7 @@ export const authOptions = {
       session.accessToken = token.accessToken;
       session.user.id = token.id;
       session.user.acl = token.acl;
+      session.user.oauth2 = token.oauth2;
 
       return session;
     },
