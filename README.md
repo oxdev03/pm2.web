@@ -19,112 +19,10 @@ pm2.web is a web-based application designed to monitor and manage processes runn
 
 To get started with pm2.web, follow these steps:
 
-### Vercel & MongoDB Atlas
-
-<details>
-  <summary>Expand</summary>
-
-#### MongoDB Atlas
-
-1. Create a MongoDB Atlas account and create a new project.
-2. Create a new cluster and select the free tier.
-3. Create a new database user and save the username and password.
-4. Add your IP address to the IP Access List or through a CIDR block.
-
-#### Vercel
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Foxdev03%2Fpm2.web%2Ftree%2Fmaster%2Fapps%2Fdashboard&env=DB_URI,NEXTAUTH_SECRET&demo-title=pm2.web&demo-description=pm2.web%20-%20Easily%20monitor%20your%20processes%2C%20control%20them%20with%20various%20actions%2C%20view%20logs%20and%20set%20up%20access%20controls%20for%20users%20using%20the%20dashboard&demo-url=https%3A%2F%2Fgithub.com%2Foxdev03%2Fpm2.web&demo-image=https%3A%2F%2Fraw.githubusercontent.com%2Foxdev03%2Fpm2.web%2Fmaster%2Fassets%2Findex.jpeg)
-
-1. Click the deploy button above and follow the instructions.
-
-#### Backend
-
-[Follow the instructions here , On-Premise->Backend](#backend1)
-
-</details>
-
-### On-Premise
-
-<details>
-  <summary>Expand</summary>
-
-1. Clone the repository to your server.
-
-   ```bash
-   git clone https://github.com/oxdev03/pm2.web.git
-   ```
-
-#### Backend
-
-<a name="backend1"></a>
-
-The Backend is a simple nodejs application that uses the pm2 BUS API to communicate and monitor pm2 process.
-It doesn't require any open ports, since it only saves data to the database and events like restart, stop, delete are relayed through the change stream of mongodb.
-
-##### Requirements
-
-- Nodejs v16
-- MongoDB Cluster
-- PM2
-
-##### Installation
-
-1. Install the dependencies
-
-   ```bash
-   cd backend
-   npm install
-   ```
-
-2. Create a `.env` file in the backend directory and add the following variables
-
-   ```bash
-    MONGO_URI=<MongoDB URI>
-   ```
-
-3. Start the backend
-
-   ```bash
-   npm start:apps:backend
-   ```
-
-#### Frontend
-
-##### Requirements
-
-- Open Port 3000 or 80,443 (if you use a reverse proxy)
-- Nodejs v16
-- MongoDB
-
-##### Installation
-
-1. Install the dependencies
-
-   ```bash
-   cd dashboard
-   npm install
-   ```
-
-2. Create a `.env` file in the dashboard directory and add the following env variables
-
-   ```bash
-    MONGO_URI=<MongoDB URI>
-    NEXTAUTH_URL=<Index URL of the dashboard eg. http://ip:3000>
-   ```
-
-3. Build the frontend
-
-   ```bash
-    npm run build:apps:dashboard
-   ```
-
-4. Start the frontend
-
-   ```bash
-   npm start:apps:dashboard
-   ```
-
-   </details>
+1. [Setup Backend](./apps/backend/README.md)
+2. Setup Dashboard
+   - **A:** [Setup Dashboard On Premise](./apps/dashboard/README.md#on-premise)
+   - **B:** [Setup Dashboard Vercel](./apps/dashboard/README.md#vercel--mongodb-atlas)
 
 ## Usage
 
@@ -178,6 +76,11 @@ Once pm2.web is installed and running, you can perform the following actions:
       - Go to the settings page and add/generate the registration code
     - **Setup Google OAuth**
       - TBD
+
+## Up Next
+
+- E2E Tests for current functionality
+- Performance Improvements for Charts & Logs
 
 ## Contributing
 
