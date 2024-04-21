@@ -18,10 +18,10 @@ MONGO_URI=<MongoDB URI>
 
 1. Install the dependencies
 
-    ```bash
-    # run from the project root
-    npm install
-    ```
+   ```bash
+   # run from the project root
+   npm install
+   ```
 
 2. Create a `.env` file in the `apps/backend` directory and add the following variables
 
