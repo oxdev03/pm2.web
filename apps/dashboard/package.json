@@ -52,7 +52,7 @@
     "next-auth": "^4.24.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "recharts": "^2.12.5",
+    "recharts": "^2.12.6",
     "superjson": "^2.2.1",
     "zod": "^3.22.5"
   },
@@ -68,7 +68,7 @@
     "eslint-config-next": "^14.2.2",
     "eslint-config-prettier": "^9.1.0",
     "postcss": "^8.4.38",
-    "postcss-preset-mantine": "^1.13.0",
+    "postcss-preset-mantine": "^1.14.4",
     "postcss-simple-vars": "^7.0.1",
     "start-server-and-test": "^2.0.3",
     "typescript": "5.4.5"

@@ -16,11 +16,11 @@
     "@pm2.web/eslint-config": "*",
     "@pm2.web/typescript-config": "*",
     "bcrypt": "^5.1.1",
-    "mongoose": "^8.2.3"
+    "mongoose": "^8.3.2"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
-    "typescript": "^5.4.3"
+    "typescript": "^5.4.5"
   },
   "author": "oxdev03",
   "license": "GPL-3.0-only"

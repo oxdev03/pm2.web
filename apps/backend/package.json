@@ -33,13 +33,13 @@
     "bytes-iec": "^3.1.1",
     "dotenv": "^16.4.5",
     "pm2": "^5.3.1",
-    "systeminformation": "^5.22.6"
+    "systeminformation": "^5.22.7"
   },
   "devDependencies": {
     "@pm2.web/eslint-config": "*",
     "@pm2.web/typescript-config": "*",
     "@types/bcrypt": "^5.0.2",
     "eslint": "^8.57.0",
-    "typescript": "^5.4.3"
+    "typescript": "^5.4.5"
   }
 }
