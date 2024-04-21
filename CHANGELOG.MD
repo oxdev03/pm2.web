@@ -1,9 +1,10 @@
-# 1.4.0 - TBD
+# 1.4.0
 - refactor typings and mongoose models
 - use time series for statistics
 - migrate api endpoints to trpc
 - refactor react components
 - live charts (ram, used heap, cpu) for process page
+- update readme and setup guide
 
 # 1.3.0
 
