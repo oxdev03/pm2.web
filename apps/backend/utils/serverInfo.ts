@@ -5,7 +5,7 @@ import { IServerInfo } from "../types/info";
 export default async function getServerInfo(): Promise<IServerInfo> {
   const mem = await si.mem();
   return {
-    name: (await si.osInfo())?.hostname ?? "",
+    name: process.env.SERVER_NAME || (await si.osInfo())?.hostname ?? "",
     uuid: (await si.system())?.uuid || (await si.uuid())?.os || "",
     stats: {
       cpu: (await si.currentLoad())?.currentLoad ?? 0,
