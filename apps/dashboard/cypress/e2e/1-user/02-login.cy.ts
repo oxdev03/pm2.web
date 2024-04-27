@@ -8,7 +8,7 @@ describe("pm2.web login", () => {
       email: "mail@example.com",
       password: "mail@example.com",
     });
-    cy.visit("http://localhost:3000");
+    cy.visit("/");
   });
 
   it("Email / Password Input should be visible", () => {

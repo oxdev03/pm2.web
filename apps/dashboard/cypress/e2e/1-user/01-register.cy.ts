@@ -3,7 +3,7 @@
 describe("pm2.web register", () => {
   beforeEach(() => {
     cy.task("clearDB");
-    cy.visit("http://localhost:3000");
+    cy.visit("/");
   });
 
   const user = "example";

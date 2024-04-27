@@ -64,9 +64,14 @@ export default function UserItem({
   }
 
   return (
-    <Table.Tr className={cx({ [classes.rowSelected]: selected })}>
+    <Table.Tr className={cx({ [classes.rowSelected]: selected })} data-cy="user-item" data-cy-id={email}>
       <Table.Td>
-        <Checkbox checked={selected} onChange={() => selectUser(userId)} disabled={selectDisabled} />
+        <Checkbox
+          checked={selected}
+          onChange={() => selectUser(userId)}
+          disabled={selectDisabled}
+          data-cy="user-item-select"
+        />
       </Table.Td>
       <Table.Td>
         <Group gap="sm">
@@ -75,12 +80,12 @@ export default function UserItem({
             {authProvider == "github" && <GithubIcon />}
             {authProvider == "google" && <GoogleIcon />}
           </>
-          <Text size="sm" fw={500}>
+          <Text size="sm" fw={500} data-cy="user-item-name">
             {name}
           </Text>
         </Group>
       </Table.Td>
-      <Table.Td>{email}</Table.Td>
+      <Table.Td data-cy="user-item-email">{email}</Table.Td>
       <Table.Td>
         <NativeSelect
           data={userRoles.map((x) => {
@@ -93,6 +98,7 @@ export default function UserItem({
           variant="filled"
           value={role.toUpperCase()}
           disabled={updateUser.isPending}
+          data-cy="user-item-role"
           onChange={(e) => {
             const role = e.target.value as UserRole;
             updateUser.mutate({ userId, role: role });
@@ -107,6 +113,7 @@ export default function UserItem({
           size={"lg"}
           loading={deleteUser.isPending}
           onClick={() => deleteUser.mutate({ userId: userId })}
+          data-cy="user-item-delete"
         >
           <IconTrash size="1.4rem" />
         </ActionIcon>

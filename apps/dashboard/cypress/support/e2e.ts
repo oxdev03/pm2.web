@@ -18,3 +18,11 @@ import "./commands";
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
+
+Cypress.Commands.add("login", (email: string, password: string) => {
+  cy.visit("/login");
+  cy.get(`input[name="email"]`).type(email);
+  cy.get(`input[name="password"]`).type(password);
+  cy.get("form").submit();
+  cy.url().should("eq", "http://localhost:3000/");
+});
