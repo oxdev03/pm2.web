@@ -16,7 +16,7 @@ describe("pm2.web user administration", () => {
     },
   ];
 
-  function getUser(idx) {
+  function getUser(idx: number) {
     return {
       name: `example${idx}`,
       email: `mail${idx}@example.com`,
