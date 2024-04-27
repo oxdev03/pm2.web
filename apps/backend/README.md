@@ -11,7 +11,8 @@ The Backend is a simple Node.js application that uses the pm2 BUS API to communi
 ## Configuration
 
 ```bash
-MONGO_URI=<MongoDB URI>
+DB_URI=<MongoDB URI>
+SERVER_NAME=used instead of the host name (optional)
 ```
 
 ## Installation
@@ -26,7 +27,7 @@ MONGO_URI=<MongoDB URI>
 2. Create a `.env` file in the `apps/backend` directory and add the following variables
 
    ```bash
-   MONGO_URI=<MongoDB URI>
+   DB_URI=<MongoDB URI>
    ```
 
 ## Setup

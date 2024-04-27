@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
 
-const connectDb = (MONGO_URI: string | undefined) => {
-  if (!MONGO_URI) {
-    throw new Error("MONGO_URI is not defined");
+const connectDb = (DB_URI: string | undefined) => {
+  if (!DB_URI) {
+    throw new Error("DB_URI is not defined");
   }
   mongoose
-    .connect(MONGO_URI)
+    .connect(DB_URI)
     .then(() => {
       console.log("[DATABASE] Connected");
     })
