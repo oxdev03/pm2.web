@@ -88,7 +88,7 @@ Contributions to pm2.web are welcome! If you would like to contribute to the pro
 
 1. Fork the repository on GitHub.
 
-2. Create a new branch from the `develop` branch to work on your changes.
+2. Create a new branch from the `master` branch to work on your changes.
 
 3. Make your modifications and ensure they adhere to the project's coding standards.
 
@@ -96,7 +96,7 @@ Contributions to pm2.web are welcome! If you would like to contribute to the pro
 
 5. Push your branch to your forked repository.
 
-6. Submit a pull request to the `develop` branch of the main pm2.web repository.
+6. Submit a pull request to the `master` branch of the main pm2.web repository.
 
 ## License
 
