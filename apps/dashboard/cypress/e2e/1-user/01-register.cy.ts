@@ -10,11 +10,12 @@ describe("pm2.web register", () => {
   const email = "mail@example.com";
   const password = "P@ssw0rd";
 
-  it("Email / Password Input should be visible", () => {
+  it.only("Email / Password Input should be visible", () => {
     cy.get(`button:contains("Don't have an account? Register")`).click();
     cy.get(`input[name="name"]`).should("have.attr", "placeholder", "Your name");
     cy.get(`input[name="email"]`).should("have.attr", "placeholder", email);
     cy.get(`input[name="password"]`).should("have.attr", "placeholder", "Your password");
+    cy.get('form').matchImageSnapshot('Registration Form');
   });
 
   it("Valid Registration without accepting TOC", () => {

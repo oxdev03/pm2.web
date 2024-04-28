@@ -15,6 +15,7 @@
 
 // Import commands.js using ES2015 syntax:
 import "./commands";
+import {addMatchImageSnapshotCommand} from '@simonsmith/cypress-image-snapshot/command'
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
@@ -26,3 +27,5 @@ Cypress.Commands.add("login", (email: string, password: string) => {
   cy.get("form").submit();
   cy.url().should("eq", "http://localhost:3000/");
 });
+
+addMatchImageSnapshotCommand()

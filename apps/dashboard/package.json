@@ -21,7 +21,7 @@
     "test:db": "node cypress/utils/mongodb.mjs",
     "test:e2e": "cypress run",
     "test": "start-test test:db http://example.com test:server http://localhost:3000/login test:e2e",
-    "test:watch": "cypress open",
+    "test:watch": "cypress open --env updateSnapshots=true",
     "start": "next start",
     "lint": "next lint",
     "format": "prettier --write .",
@@ -57,6 +57,7 @@
     "zod": "^3.22.5"
   },
   "devDependencies": {
+    "@simonsmith/cypress-image-snapshot": "^9.0.2",
     "@types/bcrypt": "^5.0.2",
     "@types/lodash": "^4.17.0",
     "@types/ms": "^0.7.34",

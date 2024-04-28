@@ -14,6 +14,7 @@ describe("pm2.web login", () => {
   it("Email / Password Input should be visible", () => {
     cy.get(`input[name="email"]`).should("have.attr", "placeholder", "mail@example.com");
     cy.get(`input[name="password"]`).should("have.attr", "placeholder", "Your password");
+    cy.get("form").matchImageSnapshot("Login Form");
   });
 
   it("Valid Credentials", () => {
