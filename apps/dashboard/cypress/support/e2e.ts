@@ -21,8 +21,8 @@ import "./commands";
 
 Cypress.Commands.add("login", (email: string, password: string) => {
   cy.visit("/login");
-  cy.get(`input[name="email"]`).type(email);
-  cy.get(`input[name="password"]`).type(password);
+  cy.get(`input[name="email"]`).type(email, { delay: 0 });
+  cy.get(`input[name="password"]`).type(password, { delay: 0 });
   cy.get("form").submit();
   cy.url().should("eq", "http://localhost:3000/");
 });

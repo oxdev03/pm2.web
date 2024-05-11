@@ -32,11 +32,14 @@ describe("pm2.web user administration", () => {
     }
   }
 
+  beforeEach(() => {
+    insertUsers();
+  });
+
   context("User List", () => {
     const user = getUser(0);
 
-    before(() => {
-      insertUsers();
+    beforeEach(() => {
       cy.login(user.email, user.password);
       cy.visit("/user");
     });
@@ -56,20 +59,12 @@ describe("pm2.web user administration", () => {
     });
   });
 
-  context("Delete User with OWNER Permission", () => {
+  context("Actions with OWNER Permission", () => {
     const user = getUser(0);
 
     beforeEach(() => {
-      cy.session("Session", () => {
-        insertUsers();
-        cy.login(user.email, user.password);
-      });
-
+      cy.login(user.email, user.password);
       cy.visit("/user");
-    });
-
-    after(() => {
-      Cypress.session.clearAllSavedSessions();
     });
 
     it("it should delete user", () => {
@@ -102,6 +97,49 @@ describe("pm2.web user administration", () => {
       // should show notification
       cy.get(`.mantine-Notifications-root`).children().contains(`Updated role to Owner`);
       cy.get(`.mantine-Notifications-root`).children().contains(`Updated role successfully`);
+    });
+  });
+
+  context("Actions with ADMIN Permission", () => {
+    const user = getUser(1);
+
+    beforeEach(() => {
+      cy.login(user.email, user.password);
+      cy.visit("/user");
+    });
+
+    it("it should delete user", () => {
+      const u = getUser(2);
+      cy.get(`[data-cy-id="${u.email}"] * > [data-cy="user-item-delete"]`).click();
+      cy.get(`[data-cy-id="${u.email}"]`).should("not.exist");
+      // should show notification
+      cy.get(`.mantine-Notifications-root`).children().contains(`Deleted User: ${u.name}`);
+      cy.get(`.mantine-Notifications-root`).children().contains(`User deleted successfully`);
+    });
+
+    it("should not be able to delete owner", () => {
+      const u = getUser(0);
+      cy.get(`[data-cy-id="${u.email}"] * > [data-cy="user-item-delete"]`).click();
+      cy.get(`[data-cy-id="${u.email}"]`).should("exist");
+      // should show notification
+      cy.get(`.mantine-Notifications-root`).children().contains(`Failed to delete user: ${u.name}`);
+      cy.get(`.mantine-Notifications-root`).children().contains(`Owner cannot be deleted`);
+    });
+
+    it("should not be possible to update role to OWNER", () => {
+      const u = getUser(1);
+      cy.get(`[data-cy-id="${u.email}"] * > [data-cy="user-item-role"]`).select("OWNER");
+      // should show notification
+      cy.get(`.mantine-Notifications-root`).children().contains(`Failed to update role to Owner`);
+      cy.get(`.mantine-Notifications-root`).children().contains(`Insufficient permission to change role to OWNER`);
+    });
+
+    it("should not be possible to update role of a OWNER", () => {
+      const u = getUser(0);
+      cy.get(`[data-cy-id="${u.email}"] * > [data-cy="user-item-role"]`).select("ADMIN");
+      // should show notification
+      cy.get(`.mantine-Notifications-root`).children().contains(`Failed to update role to Admin`);
+      cy.get(`.mantine-Notifications-root`).children().contains(`Insufficient permission to change role of owner`);
     });
   });
 });
