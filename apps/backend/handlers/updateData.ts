@@ -25,6 +25,7 @@ export default async function updateData(
     });
     currentServer = newServer;
   } else {
+    currentServer.name = server.name;
     currentServer.heartbeat = Date.now();
     currentServer.save();
   }
