@@ -29,6 +29,7 @@ const statSchema = new mongoose.Schema(
       metaField: "source",
       granularity: "seconds",
     },
+    expireAfterSeconds: 86400, // 1 Day
   },
 );
 
