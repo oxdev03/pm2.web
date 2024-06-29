@@ -21,12 +21,15 @@ export default function ProcessItem({ process, setting }: ProcessItemProps) {
 
   function getStatusColor() {
     switch (process.status) {
-      case "online":
+      case "online": {
         return "#12B886";
-      case "stopped":
+      }
+      case "stopped": {
         return "#FCC419";
-      default:
+      }
+      default: {
         return "#FA5252";
+      }
     }
   }
 

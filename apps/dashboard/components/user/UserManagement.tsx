@@ -20,10 +20,6 @@ export default function UserManagement({ selection, setSelection, users, refresh
         : users.filter((x) => !x.acl.owner && !x.acl.admin).map((item) => item._id),
     );
 
-  const getUserRole = (item: Omit<IUser, "password" | "updatedAt">) => {
-    return item.acl?.owner ? "owner" : item.acl?.admin ? "admin" : item.acl?.servers?.length ? "custom" : "none";
-  };
-
   return (
     <>
       <Grid.Col span={{ lg: 6, md: 12 }}>
@@ -68,3 +64,8 @@ export default function UserManagement({ selection, setSelection, users, refresh
     </>
   );
 }
+
+
+const getUserRole = (item: Omit<IUser, "password" | "updatedAt">) => {
+  return item.acl?.owner ? "owner" : item.acl?.admin ? "admin" : item.acl?.servers?.length ? "custom" : "none";
+};

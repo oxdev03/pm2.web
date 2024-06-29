@@ -58,11 +58,9 @@ const providers = () => {
             // spread userObj to use in profile function
             return {
               ...profile,
-              ...{
-                id: user._id,
-                name: user.name,
-                email: user.email,
-              },
+              id: user._id,
+              name: user.name,
+              email: user.email,
               userObj: u,
             };
           },

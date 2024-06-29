@@ -102,7 +102,7 @@ export default function User({}: InferGetServerSidePropsType<typeof getServerSid
   };
 
   useEffect(() => {
-    if (!perms.length) return;
+    if (perms.length === 0) return;
     const selectedUsers = users.filter((x) => selection.includes(x._id));
     const newPerms = [...perms];
 
@@ -289,7 +289,7 @@ export default function User({}: InferGetServerSidePropsType<typeof getServerSid
                       size={"sm"}
                       leftSection={<IconDeviceFloppy />}
                       loading={updatePerms.isPending}
-                      disabled={!selection.length}
+                      disabled={selection.length === 0}
                       onClick={() =>
                         updatePerms.mutate({
                           userIds: selection,

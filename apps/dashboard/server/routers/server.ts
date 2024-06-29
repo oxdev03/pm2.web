@@ -14,13 +14,15 @@ export const serverRouter = router({
     .input(z.object({ processIds: z.array(z.string()), limit: z.number().optional().default(100) }))
     .query(async ({ ctx, input }) => {
       const { processIds, limit } = input;
-      const query = { _id: { $in: processIds.map((p) => new mongoose.Types.ObjectId(p)) } };
       const processLogs = await processModel
-        .find(query, {
-          _id: 1,
-          server: 1,
-          logs: 1,
-        })
+        .find(
+          { _id: { $in: processIds.map((p) => new mongoose.Types.ObjectId(p)) } },
+          {
+            _id: 1,
+            server: 1,
+            logs: 1,
+          },
+        )
         .lean();
 
       const filteredLogs = processLogs
@@ -160,16 +162,16 @@ export const serverRouter = router({
     console.log(`[DATABASE] ${servers.length} servers, ${processes.length} processes`);
     // override online status ,m, if last updatedAt > 10 seconds ago
     const updateInterval = settings.polling.backend + 3000;
-    for (let i = 0; i < processes.length; i++) {
-      if (processes[i].status == "online" && new Date(processes[i].updatedAt).getTime() < Date.now() - updateInterval) {
-        processes[i].status = "offline";
+    for (const process of processes) {
+      if (process.status == "online" && new Date(process.updatedAt).getTime() < Date.now() - updateInterval) {
+        process.status = "offline";
       }
     }
 
-    for (let i = 0; i < servers.length; i++) {
-      servers[i].processes = processes.filter(
+    for (const server of servers) {
+      server.processes = processes.filter(
         (process) =>
-          process.server.toString() == servers[i]?._id?.toString() &&
+          process.server.toString() == server?._id?.toString() &&
           (settings.excludeDaemon || excludeDaemon ? process.name != "pm2.web-daemon" : true),
       );
     }

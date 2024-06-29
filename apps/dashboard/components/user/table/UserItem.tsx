@@ -59,11 +59,6 @@ export default function UserItem({
     },
   });
 
-  function capitalizeFirst(str: string): string {
-    const lw = str.toLowerCase();
-    return lw.charAt(0).toUpperCase() + lw.slice(1);
-  }
-
   return (
     <Table.Tr className={cx({ [classes.rowSelected]: selected })} data-cy="user-item" data-cy-id={email}>
       <Table.Td>
@@ -121,4 +116,9 @@ export default function UserItem({
       </Table.Td>
     </Table.Tr>
   );
+}
+
+function capitalizeFirst(str: string): string {
+  const lw = str.toLowerCase();
+  return lw.charAt(0).toUpperCase() + lw.slice(1);
 }

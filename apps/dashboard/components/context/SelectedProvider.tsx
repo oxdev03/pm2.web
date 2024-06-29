@@ -37,11 +37,11 @@ export function SelectedProvider({ children, servers }: { children: React.ReactN
   });
 
   const selectItem: SelectItem = (items, type) => {
-    const allProcesses = servers.map((server) => server.processes.map((process) => process)).flat();
+    const allProcesses = servers.flatMap((server) => server.processes.map((process) => process));
     if (type == "servers") {
       setSelectedItem({
         servers: items,
-        processes: items.length
+        processes: items.length > 0
           ? selectedItem.processes.filter((process) =>
               items.includes(allProcesses.find((item) => item._id == process)?.server || ""),
             )
@@ -50,7 +50,7 @@ export function SelectedProvider({ children, servers }: { children: React.ReactN
     } else if (type == "processes") {
       setSelectedItem({
         servers: selectedItem.servers || [],
-        processes: selectedItem.servers.length
+        processes: selectedItem.servers.length > 0
           ? items.filter((process) =>
               selectedItem.servers.includes(allProcesses.find((item) => item._id == process)?.server || ""),
             )

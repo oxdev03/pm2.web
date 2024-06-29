@@ -119,7 +119,7 @@ function Home({ settings }: { settings: ISetting }) {
 
 export default function HomePage({}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const dashboardQuery = trpc.server.getDashBoardData.useQuery(undefined, {
-    refetchInterval: 5_000,
+    refetchInterval: 5000,
   });
   const data = dashboardQuery.data!;
 

@@ -59,7 +59,7 @@ const navLinks = [
     icon: IconUser,
     label: "User Administration",
     href: "/user",
-    filter: (session: Session | null) => {
+    onlyIf: (session: Session | null) => {
       if (session?.user) {
         const acl = session?.user.acl;
         return acl?.admin || acl?.owner;
@@ -79,7 +79,7 @@ export function Nav() {
   const active = navLinks.findIndex((link) => router.pathname === link.href);
 
   const links = navLinks
-    .filter((link) => (link.filter ? link.filter(session) : true))
+    .filter((link) => (link.onlyIf ? link.onlyIf(session) : true))
     .map((link, index) => <NavbarLink {...link} key={link.label} active={index === active} />);
 
   return (

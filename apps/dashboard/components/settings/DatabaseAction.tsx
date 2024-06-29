@@ -43,10 +43,12 @@ export default function DatabaseAction() {
             const action = databaseAction.values.action;
             switch (action) {
               case "":
-              case "deleteAll":
+              case "deleteAll": {
                 return deleteAll.mutate();
-              case "deleteLogs":
+              }
+              case "deleteLogs": {
                 return deleteLogs.mutate();
+              }
             }
           })}
         >

@@ -24,7 +24,7 @@ export default function ProcessPage({}: InferGetServerSidePropsType<typeof getSe
     refetchInterval: (query) => {
       const data = query.state.data;
       const polling = data?.settings?.polling?.frontend || 0;
-      return Math.min(Math.max(polling, 4_000), 10_000);
+      return Math.min(Math.max(polling, 4000), 10_000);
     },
   });
   const data = dashboardQuery.data!;

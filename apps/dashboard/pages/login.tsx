@@ -112,7 +112,7 @@ export default function AuthenticationForm({
                   type: type,
                   redirect: false,
                 });
-                router.replace(!res?.ok ? `/login?error=${res?.error}` : (callbackUrl as string) || "/");
+                router.replace(res?.ok ? (callbackUrl as string) || "/" : `/login?error=${res?.error}`);
                 setAuthLoading(false);
               })}
             >

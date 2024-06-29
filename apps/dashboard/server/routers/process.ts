@@ -60,17 +60,20 @@ export const processRouter = router({
 
       try {
         switch (action) {
-          case "RESTART":
+          case "RESTART": {
             await processModel.updateOne({ _id: process._id }, { $inc: { restartCount: 1 } }, { timestamps: false });
             break;
-          case "STOP":
+          }
+          case "STOP": {
             await processModel.updateOne({ _id: process._id }, { $inc: { toggleCount: 1 } }, { timestamps: false });
             break;
-          case "DELETE":
+          }
+          case "DELETE": {
             await processModel.updateOne({ _id: process._id }, { $inc: { deleteCount: 1 } }, { timestamps: false });
             break;
+          }
         }
-      } catch (error) {
+      } catch {
         throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Failed updating process document" });
       }
 
@@ -100,7 +103,7 @@ export const processRouter = router({
       while ((doc = await Promise.race([changeStream.next(), timeoutPromise]))) {
         if (doc?.updateDescription?.updatedFields) {
           const updatedField = Object.keys(doc?.updateDescription?.updatedFields);
-          if (["restartCount", "toggleCount", "deleteCount"].find((s) => updatedField.includes(s))) {
+          if (["restartCount", "toggleCount", "deleteCount"].some((s) => updatedField.includes(s))) {
             success = true;
             break;
           }
