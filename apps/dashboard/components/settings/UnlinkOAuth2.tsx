@@ -1,4 +1,4 @@
-import { actionNotification, sendNotification } from "@/utils/notification";
+import { sendNotification } from "@/utils/notification";
 import { trpc } from "@/utils/trpc";
 import { Accordion, Button, Stack, Title } from "@mantine/core";
 import { IconUnlink } from "@tabler/icons-react";

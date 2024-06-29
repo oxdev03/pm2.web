@@ -1,4 +1,4 @@
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
+import { InferGetServerSidePropsType } from "next";
 import Head from "next/head";
 import React, { useEffect, useState } from "react";
 
@@ -310,7 +310,7 @@ export default function User({}: InferGetServerSidePropsType<typeof getServerSid
   );
 }
 
-export async function getServerSideProps({ req, res }: GetServerSidePropsContext) {
+export async function getServerSideProps() {
   const helpers = await getServerSideHelpers();
 
   await helpers.server.getDashBoardData.prefetch();

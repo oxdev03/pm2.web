@@ -3,7 +3,7 @@
  */
 module.exports = {
   root: true,
-  extends: ["next/core-web-vitals", "prettier"],
+  extends: ["next/core-web-vitals", "plugin:@typescript-eslint/recommended", "prettier"],
   ignorePatterns: ["node_modules", "dist"],
   parserOptions: {
     babelOptions: {

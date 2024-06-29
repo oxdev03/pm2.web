@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useState } from "react";
 
 import { IProcess, IServer } from "@pm2.web/typings";
 import { SelectItem, StateSelectedItem } from "@/types/context";

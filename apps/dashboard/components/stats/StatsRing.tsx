@@ -1,4 +1,4 @@
-import { Box, Center, Flex, Group, Paper, RingProgress, Text } from "@mantine/core";
+import { Box, Flex, Group, Paper, RingProgress, Text } from "@mantine/core";
 
 import classes from "./StatsRing.module.css";
 

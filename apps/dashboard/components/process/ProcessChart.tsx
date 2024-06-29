@@ -1,9 +1,7 @@
 import { formatBytes } from "@/utils/format";
 import { trpc } from "@/utils/trpc";
 import { AreaChart } from "@mantine/charts";
-import { Flex, Paper } from "@mantine/core";
-import { IStat } from "@pm2.web/typings";
-import { useEffect, useState } from "react";
+import { Flex } from "@mantine/core";
 
 interface ProcessChartProps {
   processId: string;

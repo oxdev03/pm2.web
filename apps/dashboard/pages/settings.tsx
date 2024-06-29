@@ -1,4 +1,4 @@
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
+import { InferGetServerSidePropsType } from "next";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
 
@@ -80,7 +80,7 @@ export default function Settings({}: InferGetServerSidePropsType<typeof getServe
   );
 }
 
-export async function getServerSideProps({ req, res }: GetServerSidePropsContext) {
+export async function getServerSideProps() {
   const helpers = await getServerSideHelpers();
 
   await helpers.setting.getSettings.prefetch();

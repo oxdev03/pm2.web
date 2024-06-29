@@ -111,7 +111,7 @@ const providers = () => {
           placeholder: "Enter registration code",
         },
       },
-      async authorize(credentials, req) {
+      async authorize(credentials) {
         await connectDB();
         if (!credentials) throw new Error("InvalidForm");
         const registration = credentials.type === "register";
@@ -187,6 +187,7 @@ export const authOptions = {
     error: "/login",
   },
   callbacks: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     async jwt({ token, account, user }: { token: JWT; account: any; user: any }) {
       // Persist the OAuth access_token and or the user id to the token right after signin
       if (account) {
@@ -199,7 +200,8 @@ export const authOptions = {
       }
       return token;
     },
-    async session({ session, token, user }: { session: any; token: JWT; user: any }) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    async session({ session, token }: { session: any; token: JWT; user: any }) {
       // Send properties to the client, like an access_token and user id from a provider.
       session.accessToken = token.accessToken;
       session.user.id = token.id;

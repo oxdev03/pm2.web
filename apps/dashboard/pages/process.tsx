@@ -1,4 +1,4 @@
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
+import { InferGetServerSidePropsType } from "next";
 import Head from "next/head";
 
 import { SelectedProvider, useSelected } from "@/components/context/SelectedProvider";
@@ -51,7 +51,7 @@ export default function ProcessPage({}: InferGetServerSidePropsType<typeof getSe
   );
 }
 
-export async function getServerSideProps(context: GetServerSidePropsContext) {
+export async function getServerSideProps() {
   const helpers = await getServerSideHelpers();
 
   await helpers.server.getDashBoardData.prefetch();

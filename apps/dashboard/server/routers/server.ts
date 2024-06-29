@@ -1,11 +1,10 @@
 import { PERMISSIONS } from "@/utils/permission";
-import { processModel, serverModel, settingModel, statModel } from "@pm2.web/mongoose-models";
+import { processModel, serverModel, statModel } from "@pm2.web/mongoose-models";
 import { z } from "zod";
 import mongoose from "mongoose";
 import { protectedProcedure, router } from "../trpc";
 import Access from "@/utils/access";
-import { IServer, ISetting, IUser } from "@pm2.web/typings";
-import { defaultSettings } from "@/utils/constants";
+import { IServer, IUser } from "@pm2.web/typings";
 import { fetchSettings } from "../helpers";
 
 export const serverRouter = router({
@@ -15,7 +14,7 @@ export const serverRouter = router({
       const { processIds, limit } = input;
       const query = { _id: { $in: processIds.map((p) => new mongoose.Types.ObjectId(p)) } };
       const processLogs = await processModel
-        .find(query as any, {
+        .find(query, {
           _id: 1,
           server: 1,
           logs: 1,
@@ -33,7 +32,7 @@ export const serverRouter = router({
 
   getStats: protectedProcedure
     .input(z.object({ processIds: z.array(z.string()), serverIds: z.array(z.string()), polling: z.number() }))
-    .query(async ({ ctx, input }) => {
+    .query(async ({ input }) => {
       const { processIds, serverIds, polling } = input;
 
       const processPipeline: Parameters<typeof statModel.aggregate>[0] = [
@@ -130,7 +129,7 @@ export const serverRouter = router({
       };
     }),
 
-  getDashBoardData: protectedProcedure.input(z.boolean().optional()).query(async ({ ctx, input: excludeDaemon }) => {
+  getDashBoardData: protectedProcedure.input(z.boolean().optional()).query(async ({ input: excludeDaemon }) => {
     const settings = await fetchSettings();
 
     const servers = (await serverModel

@@ -215,7 +215,7 @@ const errors = {
   InvalidRegistrationCode: "Invalid registration code.",
 };
 
-const SignInError = ({ error }: { error: String }) => {
+const SignInError = ({ error }: { error: string }) => {
   const errorMessage = error && (errors[error as keyof typeof errors] ?? errors.default);
   return (
     <Alert color="red" maw={"300px"}>

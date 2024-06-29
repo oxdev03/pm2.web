@@ -1,11 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* Source: https://github.com/mantinedev/mantine/blob/master/packages/%40mantine/core/src/components/MultiSelect/MultiSelect.tsx */
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 
 import {
-  __BaseInputProps,
-  __CloseButtonProps,
-  __InputStylesNames,
   Combobox,
   extractStyleProps,
   factory,

@@ -1,11 +1,10 @@
 import { ActionIcon, Checkbox, Group, NativeSelect, Table, Text } from "@mantine/core";
-import { IconCheck, IconMail, IconTrash, IconX } from "@tabler/icons-react";
+import { IconMail, IconTrash } from "@tabler/icons-react";
 import cx from "clsx";
 import classes from "./UserItem.module.css";
 import { GithubIcon } from "@/components/icons/github";
 import { GoogleIcon } from "@/components/icons/google";
 import { trpc } from "@/utils/trpc";
-import { notifications } from "@mantine/notifications";
 import { actionNotification } from "@/utils/notification";
 
 interface UserItemProps {
