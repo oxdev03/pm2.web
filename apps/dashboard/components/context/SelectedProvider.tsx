@@ -41,20 +41,22 @@ export function SelectedProvider({ children, servers }: { children: React.ReactN
     if (type == "servers") {
       setSelectedItem({
         servers: items,
-        processes: items.length > 0
-          ? selectedItem.processes.filter((process) =>
-              items.includes(allProcesses.find((item) => item._id == process)?.server || ""),
-            )
-          : [],
+        processes:
+          items.length > 0
+            ? selectedItem.processes.filter((process) =>
+                items.includes(allProcesses.find((item) => item._id == process)?.server || ""),
+              )
+            : [],
       });
     } else if (type == "processes") {
       setSelectedItem({
         servers: selectedItem.servers || [],
-        processes: selectedItem.servers.length > 0
-          ? items.filter((process) =>
-              selectedItem.servers.includes(allProcesses.find((item) => item._id == process)?.server || ""),
-            )
-          : items,
+        processes:
+          selectedItem.servers.length > 0
+            ? items.filter((process) =>
+                selectedItem.servers.includes(allProcesses.find((item) => item._id == process)?.server || ""),
+              )
+            : items,
       });
     }
   };

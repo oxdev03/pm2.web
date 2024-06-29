@@ -19,12 +19,12 @@ module.exports = {
     "unicorn/filename-case": [
       "error",
       {
-        "cases": {
-          "kebabCase": true,
-          "pascalCase": true
-        }
-      }
-    ]
+        cases: {
+          kebabCase: true,
+          pascalCase: true,
+        },
+      },
+    ],
   },
   parserOptions: {
     babelOptions: {

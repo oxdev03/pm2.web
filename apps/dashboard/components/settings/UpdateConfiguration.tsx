@@ -16,7 +16,7 @@ import {
 import { useForm } from "@mantine/form";
 import { randomId } from "@mantine/hooks";
 import { ISetting } from "@pm2.web/typings";
-import { IconCheck, IconCopy, IconDeviceFloppy,IconRefresh } from "@tabler/icons-react";
+import { IconCheck, IconCopy, IconDeviceFloppy, IconRefresh } from "@tabler/icons-react";
 
 import { sendNotification } from "@/utils/notification";
 import { trpc } from "@/utils/trpc";

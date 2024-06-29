@@ -1,6 +1,6 @@
 import { IAcl, IOauth2 } from "@pm2.web/typings";
 import { GetServerSidePropsContext } from "next";
-import { DefaultSession,getServerSession } from "next-auth";
+import { DefaultSession, getServerSession } from "next-auth";
 
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 

@@ -1,4 +1,4 @@
-import { Checkbox,Grid, Paper, rem, ScrollArea, Table } from "@mantine/core";
+import { Checkbox, Grid, Paper, rem, ScrollArea, Table } from "@mantine/core";
 import { IUser } from "@pm2.web/typings";
 
 import UserItem from "./table/UserItem";
@@ -64,7 +64,6 @@ export default function UserManagement({ selection, setSelection, users, refresh
     </>
   );
 }
-
 
 const getUserRole = (item: Omit<IUser, "password" | "updatedAt">) => {
   return item.acl?.owner ? "owner" : item.acl?.admin ? "admin" : item.acl?.servers?.length ? "custom" : "none";

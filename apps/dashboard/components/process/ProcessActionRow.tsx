@@ -1,5 +1,5 @@
-import { ActionIcon,Flex } from "@mantine/core";
-import { IconPower, IconReload, IconSquareRoundedMinus,IconTrash } from "@tabler/icons-react";
+import { ActionIcon, Flex } from "@mantine/core";
+import { IconPower, IconReload, IconSquareRoundedMinus, IconTrash } from "@tabler/icons-react";
 
 import classes from "@/styles/process.module.css";
 import { sendNotification } from "@/utils/notification";

@@ -1,5 +1,5 @@
 import { userModel } from "@pm2.web/mongoose-models";
-import { initTRPC,TRPCError } from "@trpc/server";
+import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
 
 import { createTRPCContext } from "./context";
