@@ -1,5 +1,3 @@
-import { useCallback } from "react";
-
 import { Flex, Indicator, Text } from "@mantine/core";
 import { IProcess } from "@pm2.web/typings";
 import {
@@ -12,6 +10,7 @@ import {
   IconCode,
   IconCoffee,
 } from "@tabler/icons-react";
+import { useCallback } from "react";
 
 export default function ProcessHeader({
   statusColor,

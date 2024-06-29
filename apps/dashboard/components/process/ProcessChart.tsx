@@ -1,7 +1,8 @@
-import { formatBytes } from "@/utils/format";
-import { trpc } from "@/utils/trpc";
 import { AreaChart } from "@mantine/charts";
 import { Flex } from "@mantine/core";
+
+import { formatBytes } from "@/utils/format";
+import { trpc } from "@/utils/trpc";
 
 interface ProcessChartProps {
   processId: string;

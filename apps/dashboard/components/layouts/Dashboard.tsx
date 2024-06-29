@@ -1,6 +1,5 @@
-import { ReactNode } from "react";
-
 import { AppShell } from "@mantine/core";
+import { ReactNode } from "react";
 
 import { Head } from "../partials/Head";
 import { Nav } from "../partials/Nav";

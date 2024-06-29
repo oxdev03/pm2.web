@@ -1,11 +1,11 @@
-import { useSession } from "next-auth/react";
-import Image from "next/image";
-
-import Access from "@/utils/access";
 import { ActionIcon, AppShell, Box, Center, Flex, Group, Modal, rem, Stack } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IProcess } from "@pm2.web/typings";
 import { IconCircleFilled, IconDatabaseCog, IconFilterCog, IconLock, IconServerCog } from "@tabler/icons-react";
+import Image from "next/image";
+import { useSession } from "next-auth/react";
+
+import Access from "@/utils/access";
 
 import { useSelected } from "../context/SelectedProvider";
 import { CustomMultiSelect, IItem } from "../misc/MultiSelect/CustomMultiSelect";

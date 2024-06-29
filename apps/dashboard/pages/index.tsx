@@ -1,18 +1,18 @@
+import { AreaChart, DonutChart } from "@mantine/charts";
+import { Flex, Paper, SimpleGrid } from "@mantine/core";
+import { ISetting } from "@pm2.web/typings";
 import ms from "ms";
 import { InferGetServerSidePropsType } from "next";
 import Head from "next/head";
 
 import { SelectedProvider, useSelected } from "@/components/context/SelectedProvider";
+import DashboardLog from "@/components/dashboard/DashboardLog";
 import { Dashboard } from "@/components/layouts/Dashboard";
 import { StatsRing } from "@/components/stats/StatsRing";
-import { Flex, Paper, SimpleGrid } from "@mantine/core";
-import { ISetting } from "@pm2.web/typings";
-import DashboardLog from "@/components/dashboard/DashboardLog";
-import { AreaChart, DonutChart } from "@mantine/charts";
-import classes from "@/styles/index.module.css";
-import { trpc } from "@/utils/trpc";
-import { formatBytes } from "@/utils/format";
 import { getServerSideHelpers } from "@/server/helpers";
+import classes from "@/styles/index.module.css";
+import { formatBytes } from "@/utils/format";
+import { trpc } from "@/utils/trpc";
 
 const statChartProps = {
   h: "120px",

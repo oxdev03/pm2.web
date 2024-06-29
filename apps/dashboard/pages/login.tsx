@@ -1,11 +1,3 @@
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
-import { getCsrfToken, signIn } from "next-auth/react";
-import Head from "next/head";
-import { useRouter } from "next/router";
-import { useState } from "react";
-
-import { GithubIcon } from "@/components/icons/github";
-import { GoogleIcon } from "@/components/icons/google";
 import {
   Alert,
   Anchor,
@@ -26,6 +18,14 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { upperFirst, useToggle } from "@mantine/hooks";
+import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
+import Head from "next/head";
+import { useRouter } from "next/router";
+import { getCsrfToken, signIn } from "next-auth/react";
+import { useState } from "react";
+
+import { GithubIcon } from "@/components/icons/github";
+import { GoogleIcon } from "@/components/icons/google";
 import { getServerSideHelpers } from "@/server/helpers";
 
 export default function AuthenticationForm({

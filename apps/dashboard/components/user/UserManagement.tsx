@@ -1,6 +1,7 @@
-import { Grid, Paper, ScrollArea, Table, rem, Checkbox } from "@mantine/core";
-import UserItem from "./table/UserItem";
+import { Checkbox,Grid, Paper, rem, ScrollArea, Table } from "@mantine/core";
 import { IUser } from "@pm2.web/typings";
+
+import UserItem from "./table/UserItem";
 
 interface UserManagementProps {
   setSelection: React.Dispatch<React.SetStateAction<string[]>>;

@@ -1,9 +1,11 @@
 import { Flex } from "@mantine/core";
-import { IconDeviceSdCard, IconCpu, IconHistory } from "@tabler/icons-react";
-import ProcessItemMetric from "./ProcessMetric";
-import { trpc } from "@/utils/trpc";
-import { formatBytes } from "@/utils/format";
+import { IconCpu, IconDeviceSdCard, IconHistory } from "@tabler/icons-react";
 import ms from "ms";
+
+import { formatBytes } from "@/utils/format";
+import { trpc } from "@/utils/trpc";
+
+import ProcessItemMetric from "./ProcessMetric";
 
 interface ProcessActionProps {
   processId: string;

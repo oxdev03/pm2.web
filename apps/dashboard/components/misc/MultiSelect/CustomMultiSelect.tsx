@@ -2,8 +2,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* Source: https://github.com/mantinedev/mantine/blob/master/packages/%40mantine/core/src/components/MultiSelect/MultiSelect.tsx */
 
-import React, { useEffect } from "react";
-
 import {
   Combobox,
   extractStyleProps,
@@ -21,6 +19,7 @@ import {
   useStyles,
 } from "@mantine/core";
 import { useId, useUncontrolled } from "@mantine/hooks";
+import React, { useEffect } from "react";
 
 export interface IItem {
   label: string;

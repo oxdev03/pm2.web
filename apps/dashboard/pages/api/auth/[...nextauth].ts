@@ -1,13 +1,13 @@
+import { userModel } from "@pm2.web/mongoose-models";
 import NextAuth from "next-auth";
 import { JWT } from "next-auth/jwt";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GithubProvider, { GithubEmail } from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 
-import { userModel } from "@pm2.web/mongoose-models";
+import { fetchSettings } from "@/server/helpers";
 
 import connectDB from "../../../middleware/mongodb";
-import { fetchSettings } from "@/server/helpers";
 
 const providers = () => {
   const p = [];

@@ -1,5 +1,5 @@
-import { Group, Avatar, Flex, Text } from "@mantine/core";
-import { IconHistory, IconChartBar, IconReload, IconPower, IconTrash } from "@tabler/icons-react";
+import { Avatar, Flex, Group, Text } from "@mantine/core";
+import { IconChartBar, IconHistory, IconPower, IconReload, IconTrash } from "@tabler/icons-react";
 
 export const permissionData = [
   {

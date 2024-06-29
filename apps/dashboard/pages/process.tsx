@@ -1,11 +1,10 @@
+import { Flex } from "@mantine/core";
+import { ISetting } from "@pm2.web/typings";
 import { InferGetServerSidePropsType } from "next";
 import Head from "next/head";
 
 import { SelectedProvider, useSelected } from "@/components/context/SelectedProvider";
 import { Dashboard } from "@/components/layouts/Dashboard";
-import { Flex } from "@mantine/core";
-import { ISetting } from "@pm2.web/typings";
-
 import ProcessItem from "@/components/process/ProcessItem";
 import { getServerSideHelpers } from "@/server/helpers";
 import { trpc } from "@/utils/trpc";

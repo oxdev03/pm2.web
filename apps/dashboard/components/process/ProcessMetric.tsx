@@ -1,7 +1,8 @@
 import { Flex, Paper, Text } from "@mantine/core";
 import { Icon, IconProps } from "@tabler/icons-react";
-import classes from "@/styles/process.module.css";
 import { ForwardRefExoticComponent, RefAttributes } from "react";
+
+import classes from "@/styles/process.module.css";
 
 export default function ProcessItemMetric({
   w,

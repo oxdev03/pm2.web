@@ -1,9 +1,10 @@
-import { sendNotification } from "@/utils/notification";
-import { trpc } from "@/utils/trpc";
 import { Accordion, Button, Stack, TextInput, Title } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconRefresh } from "@tabler/icons-react";
 import { ZodError } from "zod";
+
+import { sendNotification } from "@/utils/notification";
+import { trpc } from "@/utils/trpc";
 
 export default function UpdatePassword() {
   const passwordForm = useForm({

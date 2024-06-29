@@ -1,8 +1,3 @@
-import cx from "clsx";
-import { signOut, useSession } from "next-auth/react";
-import Link from "next/link";
-import { useRouter } from "next/router";
-
 import { AppShell, Stack, Tooltip, UnstyledButton, useMantineColorScheme } from "@mantine/core";
 import {
   IconGauge,
@@ -14,9 +9,13 @@ import {
   IconUser,
   TablerIcon,
 } from "@tabler/icons-react";
+import cx from "clsx";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { Session } from "next-auth";
+import { signOut, useSession } from "next-auth/react";
 
 import classes from "./Nav.module.css";
-import { Session } from "next-auth";
 
 interface NavbarBtnProps {
   icon: TablerIcon;

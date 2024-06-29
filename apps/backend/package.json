@@ -19,6 +19,7 @@
     "build": "tsc --build --clean && tsc",
     "start": "node dist/index.js",
     "lint": "eslint --ext ts",
+    "lint:fix": "eslint --ext ts --fix",
     "format": "prettier --write \"**/*.{ts,json,css,scss,md}\"",
     "format:check": "prettier --check  \"**/*.{ts,json,css,scss,md}\"",
     "prestart": "tsc --build --clean && tsc",
