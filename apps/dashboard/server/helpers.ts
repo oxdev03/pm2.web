@@ -1,10 +1,12 @@
-import { createServerSideHelpers } from "@trpc/react-query/server";
-import { appRouter } from "./routers/_app";
-import superjson from "superjson";
 import { settingModel } from "@pm2.web/mongoose-models";
 import { ISetting } from "@pm2.web/typings";
-import { defaultSettings } from "@/utils/constants";
+import { createServerSideHelpers } from "@trpc/react-query/server";
+import superjson from "superjson";
+
 import connectDB from "@/middleware/mongodb";
+import { defaultSettings } from "@/utils/constants";
+
+import { appRouter } from "./routers/_app";
 
 export const getServerSideHelpers = async () => {
   await connectDB();

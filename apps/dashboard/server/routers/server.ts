@@ -1,11 +1,13 @@
-import { PERMISSIONS } from "@/utils/permission";
 import { processModel, serverModel, statModel } from "@pm2.web/mongoose-models";
-import { z } from "zod";
-import mongoose from "mongoose";
-import { protectedProcedure, router } from "../trpc";
-import Access from "@/utils/access";
 import { IServer, IUser } from "@pm2.web/typings";
+import mongoose from "mongoose";
+import { z } from "zod";
+
+import Access from "@/utils/access";
+import { PERMISSIONS } from "@/utils/permission";
+
 import { fetchSettings } from "../helpers";
+import { protectedProcedure, router } from "../trpc";
 
 export const serverRouter = router({
   getLogs: protectedProcedure

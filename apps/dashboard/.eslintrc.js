@@ -3,7 +3,7 @@
  */
 module.exports = {
   root: true,
-  extends: ["next/core-web-vitals", "plugin:@typescript-eslint/recommended", "prettier"],
+  extends: ["next", "plugin:@typescript-eslint/recommended", "prettier"],
   plugins: ["simple-import-sort", "import"],
   ignorePatterns: ["node_modules", "dist"],
   rules: {

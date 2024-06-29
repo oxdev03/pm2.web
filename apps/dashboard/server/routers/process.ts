@@ -1,10 +1,12 @@
-import { z } from "zod";
-import { protectedProcedure, router } from "../trpc";
 import { processModel, statModel } from "@pm2.web/mongoose-models";
-import { IProcess, IStat, IUser } from "@pm2.web/typings";
+import { IProcess, IUser } from "@pm2.web/typings";
 import { TRPCError } from "@trpc/server";
+import { z } from "zod";
+
 import Access from "@/utils/access";
 import { PERMISSIONS } from "@/utils/permission";
+
+import { protectedProcedure, router } from "../trpc";
 
 export const processRouter = router({
   getLogs: protectedProcedure
