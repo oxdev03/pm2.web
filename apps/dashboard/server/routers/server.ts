@@ -36,11 +36,20 @@ export const serverRouter = router({
     .query(async ({ ctx, input }) => {
       const { processIds, serverIds, polling } = input;
 
+      const processStatsCount = await statModel.countDocuments({
+        "source.process": { $in: processIds.map((p) => new mongoose.Types.ObjectId(p)) },
+      });
       const processPipeline: Parameters<typeof statModel.aggregate>[0] = [
         {
           $match: {
             "source.process": { $in: processIds.map((p) => new mongoose.Types.ObjectId(p)) },
           },
+        },
+        {
+          $skip: processStatsCount - 100,
+        },
+        {
+          $sort: { _id: -1 },
         },
         {
           $densify: {
@@ -67,19 +76,26 @@ export const serverRouter = router({
           },
         },
         {
-          $sort: { _id: -1 },
-        },
-        {
           $limit: 10,
         },
       ];
 
+      const serverStatsCount = await statModel.countDocuments({
+        "source.server": { $in: serverIds.map((p) => new mongoose.Types.ObjectId(p)) },
+        "source.process": undefined,
+      });
       const serverPipeline: Parameters<typeof statModel.aggregate>[0] = [
         {
           $match: {
             "source.server": { $in: serverIds.map((p) => new mongoose.Types.ObjectId(p)) },
             "source.process": undefined,
           },
+        },
+        {
+          $skip: serverStatsCount - 50,
+        },
+        {
+          $sort: { _id: -1 },
         },
         {
           $densify: {
@@ -106,14 +122,15 @@ export const serverRouter = router({
           },
         },
         {
-          $sort: { _id: -1 },
-        },
-        {
           $limit: 15,
         },
       ];
 
+      const start = Date.now();
       const processStats = await statModel.aggregate(processPipeline);
+      const end = Date.now();
+      console.log(`${end - start}ms`);
+ 
       const serverStats = await statModel.aggregate(serverPipeline);
 
       const mergedStats = processStats.map((processStat) => {
