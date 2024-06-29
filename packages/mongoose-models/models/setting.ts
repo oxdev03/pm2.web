@@ -1,6 +1,5 @@
-import mongoose, { Model } from "mongoose";
-
 import { ISettingModel } from "@pm2.web/typings";
+import mongoose, { Model } from "mongoose";
 
 type SettingModel = Model<ISettingModel>;
 

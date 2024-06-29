@@ -1,9 +1,9 @@
 import { processModel, serverModel, statModel } from "@pm2.web/mongoose-models";
 import { ISettingModel } from "@pm2.web/typings";
 
+import { QueuedLog, UpdateDataResponse } from "../types/handler.js";
 import processInfo from "../utils/processInfo.js";
 import serverInfo from "../utils/serverInfo.js";
-import { QueuedLog, UpdateDataResponse } from "../types/handler.js";
 
 export default async function updateData(
   queuedLogs: QueuedLog[],
@@ -14,7 +14,11 @@ export default async function updateData(
   const timestamp = new Date();
   // check if server exists
   let currentServer = await serverModel.findOne({ uuid: server.uuid });
-  if (!currentServer) {
+  if (currentServer) {
+    currentServer.name = server.name;
+    currentServer.heartbeat = Date.now();
+    currentServer.save();
+  } else {
     // create server
     const newServer = new serverModel({
       name: server.name,
@@ -24,28 +28,34 @@ export default async function updateData(
       console.log(err);
     });
     currentServer = newServer;
-  } else {
-    currentServer.name = server.name;
-    currentServer.heartbeat = Date.now();
-    currentServer.save();
   }
 
   const processStats = [];
 
-  for (let i = 0; i < processes.length; i++) {
-    const process = processes[i];
+  for (const process of processes) {
     if (!process) continue;
     const logs = queuedLogs
       .filter((log) => log.id === process.pm_id)
       .map((x) => {
-        // eslint-disable-next-line
-        //@ts-expect-error
+        //@ts-expect-error id needs to be optional
         delete x.id;
         return x;
       });
     const processQuery = { pm_id: process.pm_id, server: currentServer._id };
     let processExists = await processModel.findOne(processQuery, { _id: 1 });
-    if (!processExists) {
+    if (processExists) {
+      processExists = await processModel.findOne(processQuery, { _id: 1 });
+      await processModel.updateOne(processQuery, {
+        name: process.name,
+        status: process.status,
+        $push: {
+          logs: {
+            $each: logs,
+            $slice: -settings.logRotation,
+          },
+        },
+      });
+    } else {
       // create process
       const newProcess = new processModel({
         pm_id: process.pm_id,
@@ -60,18 +70,6 @@ export default async function updateData(
       });
       await newProcess.save().catch((err: Error) => {
         console.log(err);
-      });
-    } else {
-      processExists = await processModel.findOne(processQuery, { _id: 1 });
-      await processModel.updateOne(processQuery, {
-        name: process.name,
-        status: process.status,
-        $push: {
-          logs: {
-            $each: logs,
-            $slice: -settings.logRotation,
-          },
-        },
       });
     }
 

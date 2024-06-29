@@ -1,6 +1,5 @@
-import mongoose, { Model } from "mongoose";
-
 import { IProcessModel } from "@pm2.web/typings";
+import mongoose, { Model } from "mongoose";
 
 type ProcessModel = Model<IProcessModel>;
 

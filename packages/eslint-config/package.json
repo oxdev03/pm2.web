@@ -6,12 +6,15 @@
     "base.js"
   ],
   "dependencies": {
-    "eslint-config-turbo": "2.0.6",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-prettier": "5.1.3",
-    "eslint-plugin-only-warn": "^1.1.0",
-    "@typescript-eslint/parser": "^7.14.1",
     "@typescript-eslint/eslint-plugin": "^7.14.1",
+    "@typescript-eslint/parser": "^7.14.1",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-config-turbo": "2.0.6",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-only-warn": "^1.1.0",
+    "eslint-plugin-prettier": "5.1.3",
+    "eslint-plugin-simple-import-sort": "^12.1.0",
+    "eslint-plugin-unicorn": "^54.0.0",
     "typescript": "^5.4.5"
   }
 }

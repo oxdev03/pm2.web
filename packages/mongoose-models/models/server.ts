@@ -1,6 +1,5 @@
-import mongoose, { Model } from "mongoose";
-
 import { IServerModel } from "@pm2.web/typings";
+import mongoose, { Model } from "mongoose";
 
 type ServerModel = Model<IServerModel>;
 

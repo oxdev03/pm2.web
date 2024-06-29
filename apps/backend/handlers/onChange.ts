@@ -1,12 +1,11 @@
+// mongoose changestream
+import { processModel } from "@pm2.web/mongoose-models";
 import mongoose from "mongoose";
 import pm2 from "pm2";
 
-// mongoose changestream
-import { processModel } from "@pm2.web/mongoose-models";
-
 import processInfo from "../utils/processInfo.js";
 
-export default async (serverId: string) => {
+const onChange = async (serverId: string) => {
   console.log(`[STREAM] Listening for changes on server ${serverId}`);
   const filter = [
     {
@@ -114,3 +113,4 @@ export default async (serverId: string) => {
     }
   });
 };
+export default onChange;

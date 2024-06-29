@@ -12,16 +12,16 @@ connectDb(process.env.DB_URI);
 const logCapture = new LogCapture();
 
 async function createInterval() {
-  const currentPolling = (await getCachedSettings()).polling.backend;
+  const { polling } = await getCachedSettings();
   const interval = setInterval(async () => {
     await updateData(logCapture.clear(), await getCachedSettings());
     const settings = await getCachedSettings();
     // if polling changed clear interval and create new one
-    if (settings.polling.backend !== currentPolling) {
+    if (settings.polling.backend !== polling.backend) {
       clearInterval(interval);
       await createInterval();
     }
-  }, currentPolling);
+  }, polling.backend);
 }
 
 async function main() {
@@ -31,6 +31,7 @@ async function main() {
   await createInterval();
 }
 
+// eslint-disable-next-line unicorn/prefer-top-level-await
 (async () => {
   await main();
 })();
