@@ -22,6 +22,7 @@ const statChartProps = {
   withXAxis: false,
   yAxisProps: { width: 55 },
   areaChartProps: { syncId: "stats" },
+  connectNulls: true,
 };
 
 function Home({ settings }: { settings: ISetting }) {

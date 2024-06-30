@@ -46,6 +46,12 @@ export const serverRouter = router({
           },
         },
         {
+          $sort: { _id: -1 },
+        },
+        {
+          $limit: 10 * processIds.length,
+        },
+        {
           $densify: {
             field: "timestamp",
             range: {
@@ -70,9 +76,6 @@ export const serverRouter = router({
           },
         },
         {
-          $sort: { _id: -1 },
-        },
-        {
           $limit: 10,
         },
       ];
@@ -83,6 +86,12 @@ export const serverRouter = router({
             "source.server": { $in: serverIds.map((p) => new mongoose.Types.ObjectId(p)) },
             "source.process": undefined,
           },
+        },
+        {
+          $sort: { _id: -1 },
+        },
+        {
+          $limit: 10 * serverIds.length,
         },
         {
           $densify: {
@@ -109,10 +118,7 @@ export const serverRouter = router({
           },
         },
         {
-          $sort: { _id: -1 },
-        },
-        {
-          $limit: 15,
+          $limit: 20,
         },
       ];
 
@@ -123,7 +129,7 @@ export const serverRouter = router({
         const correspondingServerStat = serverStats.find(
           (serverStat) => serverStat._id.toString() === processStat._id.toString(),
         );
-        return { ...processStat, ...correspondingServerStat };
+        return { ...processStat, ...correspondingServerStat, _id: processStat._id || correspondingServerStat._id };
       });
 
       return {
