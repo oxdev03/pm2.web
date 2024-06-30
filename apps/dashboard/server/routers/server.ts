@@ -39,9 +39,6 @@ export const serverRouter = router({
     .query(async ({ input }) => {
       const { processIds, serverIds, polling } = input;
 
-      const processStatsCount = await statModel.countDocuments({
-        "source.process": { $in: processIds.map((p) => new mongoose.Types.ObjectId(p)) },
-      });
       const processPipeline: Parameters<typeof statModel.aggregate>[0] = [
         {
           $match: {
@@ -49,10 +46,10 @@ export const serverRouter = router({
           },
         },
         {
-          $skip: processStatsCount - 100,
+          $sort: { _id: -1 },
         },
         {
-          $sort: { _id: -1 },
+          $limit: 10 * processIds.length,
         },
         {
           $densify: {
@@ -83,10 +80,6 @@ export const serverRouter = router({
         },
       ];
 
-      const serverStatsCount = await statModel.countDocuments({
-        "source.server": { $in: serverIds.map((p) => new mongoose.Types.ObjectId(p)) },
-        "source.process": undefined,
-      });
       const serverPipeline: Parameters<typeof statModel.aggregate>[0] = [
         {
           $match: {
@@ -95,10 +88,10 @@ export const serverRouter = router({
           },
         },
         {
-          $skip: serverStatsCount - 50,
+          $sort: { _id: -1 },
         },
         {
-          $sort: { _id: -1 },
+          $limit: 10 * serverIds.length,
         },
         {
           $densify: {
@@ -125,22 +118,18 @@ export const serverRouter = router({
           },
         },
         {
-          $limit: 15,
+          $limit: 20,
         },
       ];
 
-      const start = Date.now();
       const processStats = await statModel.aggregate(processPipeline);
-      const end = Date.now();
-      console.log(`${end - start}ms`);
- 
       const serverStats = await statModel.aggregate(serverPipeline);
 
       const mergedStats = processStats.map((processStat) => {
         const correspondingServerStat = serverStats.find(
           (serverStat) => serverStat._id.toString() === processStat._id.toString(),
         );
-        return { ...processStat, ...correspondingServerStat };
+        return { ...processStat, ...correspondingServerStat, _id: processStat._id || correspondingServerStat._id };
       });
 
       return {
