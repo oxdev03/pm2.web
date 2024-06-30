@@ -1,25 +1,28 @@
-import { PERMISSIONS } from "@/utils/permission";
-import { processModel, serverModel, settingModel, statModel } from "@pm2.web/mongoose-models";
-import { z } from "zod";
+import { processModel, serverModel, statModel } from "@pm2.web/mongoose-models";
+import { IServer, IUser } from "@pm2.web/typings";
 import mongoose from "mongoose";
-import { protectedProcedure, router } from "../trpc";
+import { z } from "zod";
+
 import Access from "@/utils/access";
-import { IServer, ISetting, IUser } from "@pm2.web/typings";
-import { defaultSettings } from "@/utils/constants";
+import { PERMISSIONS } from "@/utils/permission";
+
 import { fetchSettings } from "../helpers";
+import { protectedProcedure, router } from "../trpc";
 
 export const serverRouter = router({
   getLogs: protectedProcedure
     .input(z.object({ processIds: z.array(z.string()), limit: z.number().optional().default(100) }))
     .query(async ({ ctx, input }) => {
       const { processIds, limit } = input;
-      const query = { _id: { $in: processIds.map((p) => new mongoose.Types.ObjectId(p)) } };
       const processLogs = await processModel
-        .find(query as any, {
-          _id: 1,
-          server: 1,
-          logs: 1,
-        })
+        .find(
+          { _id: { $in: processIds.map((p) => new mongoose.Types.ObjectId(p)) } },
+          {
+            _id: 1,
+            server: 1,
+            logs: 1,
+          },
+        )
         .lean();
 
       const filteredLogs = processLogs
@@ -33,7 +36,7 @@ export const serverRouter = router({
 
   getStats: protectedProcedure
     .input(z.object({ processIds: z.array(z.string()), serverIds: z.array(z.string()), polling: z.number() }))
-    .query(async ({ ctx, input }) => {
+    .query(async ({ input }) => {
       const { processIds, serverIds, polling } = input;
 
       const processStatsCount = await statModel.countDocuments({
@@ -147,7 +150,7 @@ export const serverRouter = router({
       };
     }),
 
-  getDashBoardData: protectedProcedure.input(z.boolean().optional()).query(async ({ ctx, input: excludeDaemon }) => {
+  getDashBoardData: protectedProcedure.input(z.boolean().optional()).query(async ({ input: excludeDaemon }) => {
     const settings = await fetchSettings();
 
     const servers = (await serverModel
@@ -176,16 +179,16 @@ export const serverRouter = router({
     console.log(`[DATABASE] ${servers.length} servers, ${processes.length} processes`);
     // override online status ,m, if last updatedAt > 10 seconds ago
     const updateInterval = settings.polling.backend + 3000;
-    for (let i = 0; i < processes.length; i++) {
-      if (processes[i].status == "online" && new Date(processes[i].updatedAt).getTime() < Date.now() - updateInterval) {
-        processes[i].status = "offline";
+    for (const process of processes) {
+      if (process.status == "online" && new Date(process.updatedAt).getTime() < Date.now() - updateInterval) {
+        process.status = "offline";
       }
     }
 
-    for (let i = 0; i < servers.length; i++) {
-      servers[i].processes = processes.filter(
+    for (const server of servers) {
+      server.processes = processes.filter(
         (process) =>
-          process.server.toString() == servers[i]?._id?.toString() &&
+          process.server.toString() == server?._id?.toString() &&
           (settings.excludeDaemon || excludeDaemon ? process.name != "pm2.web-daemon" : true),
       );
     }

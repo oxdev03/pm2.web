@@ -1,6 +1,6 @@
 {
   "name": "backend",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "main": "dist/index.js",
   "description": "Dashboard for PM2",
   "author": {
@@ -18,7 +18,8 @@
     "test": "echo \"Error: no test specified\" && exit 0",
     "build": "tsc --build --clean && tsc",
     "start": "node dist/index.js",
-    "lint": "eslint --ext ts",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "format": "prettier --write \"**/*.{ts,json,css,scss,md}\"",
     "format:check": "prettier --check  \"**/*.{ts,json,css,scss,md}\"",
     "prestart": "tsc --build --clean && tsc",
@@ -33,7 +34,7 @@
     "bytes-iec": "^3.1.1",
     "dotenv": "^16.4.5",
     "pm2": "^5.4.1",
-    "systeminformation": "^5.22.10"
+    "systeminformation": "^5.22.11"
   },
   "devDependencies": {
     "@pm2.web/eslint-config": "*",

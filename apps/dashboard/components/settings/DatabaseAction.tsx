@@ -1,7 +1,8 @@
-import { sendNotification } from "@/utils/notification";
-import { trpc } from "@/utils/trpc";
 import { Accordion, Button, Flex, Select, Title } from "@mantine/core";
 import { useForm } from "@mantine/form";
+
+import { sendNotification } from "@/utils/notification";
+import { trpc } from "@/utils/trpc";
 
 export default function DatabaseAction() {
   const databaseAction = useForm<{ action: "deleteAll" | "deleteLogs" | "" }>({
@@ -42,10 +43,12 @@ export default function DatabaseAction() {
             const action = databaseAction.values.action;
             switch (action) {
               case "":
-              case "deleteAll":
+              case "deleteAll": {
                 return deleteAll.mutate();
-              case "deleteLogs":
+              }
+              case "deleteLogs": {
                 return deleteLogs.mutate();
+              }
             }
           })}
         >

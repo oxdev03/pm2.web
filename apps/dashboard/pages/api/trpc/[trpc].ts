@@ -1,6 +1,7 @@
-import { appRouter } from "@/server/routers/_app";
-import { createTRPCContext } from "@/server/context";
 import * as trpcNext from "@trpc/server/adapters/next";
+
+import { createTRPCContext } from "@/server/context";
+import { appRouter } from "@/server/routers/_app";
 
 // export API handler
 // @link https://trpc.io/docs/v11/server/adapters

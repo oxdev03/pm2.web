@@ -13,11 +13,11 @@ if (!MONGODB_URI) {
  * in development. This prevents connections growing exponentially
  * during API Route usage.
  */
-//@ts-ignore
+//@ts-expect-error cache connection
 let cached = global.mongoose;
 
 if (!cached) {
-  //@ts-ignore
+  //@ts-expect-error cache connection
   cached = global.mongoose = { conn: null, promise: null };
 }
 

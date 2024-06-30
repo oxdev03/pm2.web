@@ -1,4 +1,4 @@
-import { Box, Center, Flex, Group, Paper, RingProgress, Text } from "@mantine/core";
+import { Box, Flex, Group, Paper, RingProgress, Text } from "@mantine/core";
 
 import classes from "./StatsRing.module.css";
 
@@ -23,7 +23,7 @@ export function StatsRing({ stat }: { stat: StatsRingProps }) {
           sections={[{ value: stat.progress, color: stat.color }]}
           label={
             <Text c={stat.color} fw={700} ta="center" size="lg">
-              {stat.value != undefined ? `${stat.value}` : `${stat.progress}%`}
+              {stat.value == undefined ? `${stat.progress}%` : `${stat.value}`}
             </Text>
           }
         />

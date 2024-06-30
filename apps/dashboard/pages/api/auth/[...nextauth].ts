@@ -1,13 +1,13 @@
+import { userModel } from "@pm2.web/mongoose-models";
 import NextAuth from "next-auth";
 import { JWT } from "next-auth/jwt";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GithubProvider, { GithubEmail } from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 
-import { userModel } from "@pm2.web/mongoose-models";
+import { fetchSettings } from "@/server/helpers";
 
 import connectDB from "../../../middleware/mongodb";
-import { fetchSettings } from "@/server/helpers";
 
 const providers = () => {
   const p = [];
@@ -58,11 +58,9 @@ const providers = () => {
             // spread userObj to use in profile function
             return {
               ...profile,
-              ...{
-                id: user._id,
-                name: user.name,
-                email: user.email,
-              },
+              id: user._id,
+              name: user.name,
+              email: user.email,
               userObj: u,
             };
           },
@@ -111,7 +109,7 @@ const providers = () => {
           placeholder: "Enter registration code",
         },
       },
-      async authorize(credentials, req) {
+      async authorize(credentials) {
         await connectDB();
         if (!credentials) throw new Error("InvalidForm");
         const registration = credentials.type === "register";
@@ -187,6 +185,7 @@ export const authOptions = {
     error: "/login",
   },
   callbacks: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     async jwt({ token, account, user }: { token: JWT; account: any; user: any }) {
       // Persist the OAuth access_token and or the user id to the token right after signin
       if (account) {
@@ -199,7 +198,8 @@ export const authOptions = {
       }
       return token;
     },
-    async session({ session, token, user }: { session: any; token: JWT; user: any }) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    async session({ session, token }: { session: any; token: JWT; user: any }) {
       // Send properties to the client, like an access_token and user id from a provider.
       session.accessToken = token.accessToken;
       session.user.id = token.id;

@@ -1,4 +1,3 @@
-import { sendNotification } from "@/utils/notification";
 import {
   Accordion,
   ActionIcon,
@@ -17,9 +16,12 @@ import {
 import { useForm } from "@mantine/form";
 import { randomId } from "@mantine/hooks";
 import { ISetting } from "@pm2.web/typings";
-import { IconRefresh, IconCheck, IconCopy, IconDeviceFloppy } from "@tabler/icons-react";
-import classes from "./UpdateConfiguration.module.css";
+import { IconCheck, IconCopy, IconDeviceFloppy, IconRefresh } from "@tabler/icons-react";
+
+import { sendNotification } from "@/utils/notification";
 import { trpc } from "@/utils/trpc";
+
+import classes from "./UpdateConfiguration.module.css";
 
 interface UpdateConfigurationProps {
   settings: ISetting;

@@ -2,15 +2,14 @@ import "@mantine/core/styles.css";
 import "@mantine/notifications/styles.css";
 import "@mantine/charts/styles.css";
 
-import { SessionProvider } from "next-auth/react";
-
 import { MantineProvider } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
+import type { AppProps } from "next/app";
+import { SessionProvider } from "next-auth/react";
+
+import { trpc } from "@/utils/trpc";
 
 import { theme } from "../theme";
-
-import type { AppProps } from "next/app";
-import { trpc } from "@/utils/trpc";
 
 const App = ({ Component, pageProps }: AppProps) => {
   return (

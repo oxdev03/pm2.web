@@ -1,11 +1,3 @@
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
-import { getCsrfToken, signIn } from "next-auth/react";
-import Head from "next/head";
-import { useRouter } from "next/router";
-import { useState } from "react";
-
-import { GithubIcon } from "@/components/icons/github";
-import { GoogleIcon } from "@/components/icons/google";
 import {
   Alert,
   Anchor,
@@ -26,6 +18,14 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { upperFirst, useToggle } from "@mantine/hooks";
+import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
+import Head from "next/head";
+import { useRouter } from "next/router";
+import { getCsrfToken, signIn } from "next-auth/react";
+import { useState } from "react";
+
+import { GithubIcon } from "@/components/icons/github";
+import { GoogleIcon } from "@/components/icons/google";
 import { getServerSideHelpers } from "@/server/helpers";
 
 export default function AuthenticationForm({
@@ -112,7 +112,7 @@ export default function AuthenticationForm({
                   type: type,
                   redirect: false,
                 });
-                router.replace(!res?.ok ? `/login?error=${res?.error}` : (callbackUrl as string) || "/");
+                router.replace(res?.ok ? (callbackUrl as string) || "/" : `/login?error=${res?.error}`);
                 setAuthLoading(false);
               })}
             >
@@ -215,7 +215,7 @@ const errors = {
   InvalidRegistrationCode: "Invalid registration code.",
 };
 
-const SignInError = ({ error }: { error: String }) => {
+const SignInError = ({ error }: { error: string }) => {
   const errorMessage = error && (errors[error as keyof typeof errors] ?? errors.default);
   return (
     <Alert color="red" maw={"300px"}>

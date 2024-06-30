@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/no-await-expression-member */
 import si from "systeminformation";
 
 import { IServerInfo } from "../types/info";

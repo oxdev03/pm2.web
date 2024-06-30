@@ -1,11 +1,10 @@
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
+import { Flex } from "@mantine/core";
+import { ISetting } from "@pm2.web/typings";
+import { InferGetServerSidePropsType } from "next";
 import Head from "next/head";
 
 import { SelectedProvider, useSelected } from "@/components/context/SelectedProvider";
 import { Dashboard } from "@/components/layouts/Dashboard";
-import { Flex } from "@mantine/core";
-import { ISetting } from "@pm2.web/typings";
-
 import ProcessItem from "@/components/process/ProcessItem";
 import { getServerSideHelpers } from "@/server/helpers";
 import { trpc } from "@/utils/trpc";
@@ -25,7 +24,7 @@ export default function ProcessPage({}: InferGetServerSidePropsType<typeof getSe
     refetchInterval: (query) => {
       const data = query.state.data;
       const polling = data?.settings?.polling?.frontend || 0;
-      return Math.min(Math.max(polling, 4_000), 10_000);
+      return Math.min(Math.max(polling, 4000), 10_000);
     },
   });
   const data = dashboardQuery.data!;
@@ -51,7 +50,7 @@ export default function ProcessPage({}: InferGetServerSidePropsType<typeof getSe
   );
 }
 
-export async function getServerSideProps(context: GetServerSidePropsContext) {
+export async function getServerSideProps() {
   const helpers = await getServerSideHelpers();
 
   await helpers.server.getDashBoardData.prefetch();

@@ -1,17 +1,16 @@
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
-import { useSession } from "next-auth/react";
+import { Accordion, Badge, Grid, Overlay, Paper, ScrollArea, Title } from "@mantine/core";
+import { InferGetServerSidePropsType } from "next";
 import Head from "next/head";
+import { useSession } from "next-auth/react";
 
 import { Dashboard } from "@/components/layouts/Dashboard";
-import { Accordion, Badge, Grid, Overlay, Paper, ScrollArea, Title } from "@mantine/core";
-
-import UpdatePassword from "@/components/settings/UpdatePassword";
+import DatabaseAction from "@/components/settings/DatabaseAction";
 import DeleteAccount from "@/components/settings/DeleteAccount";
 import UnlinkOAuth2 from "@/components/settings/UnlinkOAuth2";
-import DatabaseAction from "@/components/settings/DatabaseAction";
 import UpdateConfiguration from "@/components/settings/UpdateConfiguration";
-import { trpc } from "@/utils/trpc";
+import UpdatePassword from "@/components/settings/UpdatePassword";
 import { getServerSideHelpers } from "@/server/helpers";
+import { trpc } from "@/utils/trpc";
 
 export default function Settings({}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { data: session } = useSession();
@@ -80,7 +79,7 @@ export default function Settings({}: InferGetServerSidePropsType<typeof getServe
   );
 }
 
-export async function getServerSideProps({ req, res }: GetServerSidePropsContext) {
+export async function getServerSideProps() {
   const helpers = await getServerSideHelpers();
 
   await helpers.setting.getSettings.prefetch();

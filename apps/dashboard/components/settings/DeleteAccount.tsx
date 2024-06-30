@@ -1,8 +1,9 @@
-import { sendNotification } from "@/utils/notification";
 import { Accordion, Button, Stack, TextInput, Title } from "@mantine/core";
-import { IconTrash } from "@tabler/icons-react";
 import { useForm } from "@mantine/form";
+import { IconTrash } from "@tabler/icons-react";
 import { signOut } from "next-auth/react";
+
+import { sendNotification } from "@/utils/notification";
 import { trpc } from "@/utils/trpc";
 
 export default function DeleteAccount() {
