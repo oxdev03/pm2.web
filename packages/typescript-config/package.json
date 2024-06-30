@@ -1,6 +1,6 @@
 {
   "name": "@pm2.web/typescript-config",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "private": true,
   "license": "MIT"
 }
