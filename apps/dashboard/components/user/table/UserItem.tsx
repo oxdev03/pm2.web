@@ -1,12 +1,13 @@
 import { ActionIcon, Checkbox, Group, NativeSelect, Table, Text } from "@mantine/core";
-import { IconCheck, IconMail, IconTrash, IconX } from "@tabler/icons-react";
+import { IconMail, IconTrash } from "@tabler/icons-react";
 import cx from "clsx";
-import classes from "./UserItem.module.css";
+
 import { GithubIcon } from "@/components/icons/github";
 import { GoogleIcon } from "@/components/icons/google";
-import { trpc } from "@/utils/trpc";
-import { notifications } from "@mantine/notifications";
 import { actionNotification } from "@/utils/notification";
+import { trpc } from "@/utils/trpc";
+
+import classes from "./UserItem.module.css";
 
 interface UserItemProps {
   selected: boolean;
@@ -57,11 +58,6 @@ export default function UserItem({
       refresh();
     },
   });
-
-  function capitalizeFirst(str: string): string {
-    const lw = str.toLowerCase();
-    return lw.charAt(0).toUpperCase() + lw.slice(1);
-  }
 
   return (
     <Table.Tr className={cx({ [classes.rowSelected]: selected })} data-cy="user-item" data-cy-id={email}>
@@ -120,4 +116,9 @@ export default function UserItem({
       </Table.Td>
     </Table.Tr>
   );
+}
+
+function capitalizeFirst(str: string): string {
+  const lw = str.toLowerCase();
+  return lw.charAt(0).toUpperCase() + lw.slice(1);
 }

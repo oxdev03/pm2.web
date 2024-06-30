@@ -105,6 +105,6 @@ class Permission {
 
 export default Permission;
 
-export { PERMISSIONS, Permission };
+export { Permission, PERMISSIONS };
 
 export type { IPermissionConstants };

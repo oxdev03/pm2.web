@@ -1,5 +1,5 @@
-import mongoose, { Model } from "mongoose";
 import { IStatModel } from "@pm2.web/typings";
+import mongoose, { Model } from "mongoose";
 
 type StatModel = Model<IStatModel>;
 
@@ -29,7 +29,7 @@ const statSchema = new mongoose.Schema(
       metaField: "source",
       granularity: "seconds",
     },
-    expireAfterSeconds: 86400, // 1 Day
+    expireAfterSeconds: 86_400, // 1 Day
   },
 );
 

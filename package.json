@@ -22,6 +22,7 @@
     "build": "turbo run build",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
+    "lint:fix": "turbo run lint:fix",
     "format": "turbo run format",
     "format:check": "turbo run format:check",
     "start": "turbo run start",
@@ -41,8 +42,8 @@
   "devDependencies": {
     "@pm2.web/eslint-config": "*",
     "@pm2.web/typescript-config": "*",
-    "prettier": "^3.3.0",
-    "turbo": "^2.0.3"
+    "prettier": "^3.3.2",
+    "turbo": "^2.0.6"
   },
   "packageManager": "npm@10.2.4"
 }

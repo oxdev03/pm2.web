@@ -1,8 +1,8 @@
-import { createContext, useContext, useEffect, useState } from "react";
-
 import { IProcess, IServer } from "@pm2.web/typings";
-import { SelectItem, StateSelectedItem } from "@/types/context";
 import { useSession } from "next-auth/react";
+import { createContext, useContext, useState } from "react";
+
+import { SelectItem, StateSelectedItem } from "@/types/context";
 import Access from "@/utils/access";
 import { IPermissionConstants, PERMISSIONS } from "@/utils/permission";
 
@@ -37,24 +37,26 @@ export function SelectedProvider({ children, servers }: { children: React.ReactN
   });
 
   const selectItem: SelectItem = (items, type) => {
-    const allProcesses = servers.map((server) => server.processes.map((process) => process)).flat();
+    const allProcesses = servers.flatMap((server) => server.processes.map((process) => process));
     if (type == "servers") {
       setSelectedItem({
         servers: items,
-        processes: items.length
-          ? selectedItem.processes.filter((process) =>
-              items.includes(allProcesses.find((item) => item._id == process)?.server || ""),
-            )
-          : [],
+        processes:
+          items.length > 0
+            ? selectedItem.processes.filter((process) =>
+                items.includes(allProcesses.find((item) => item._id == process)?.server || ""),
+              )
+            : [],
       });
     } else if (type == "processes") {
       setSelectedItem({
         servers: selectedItem.servers || [],
-        processes: selectedItem.servers.length
-          ? items.filter((process) =>
-              selectedItem.servers.includes(allProcesses.find((item) => item._id == process)?.server || ""),
-            )
-          : items,
+        processes:
+          selectedItem.servers.length > 0
+            ? items.filter((process) =>
+                selectedItem.servers.includes(allProcesses.find((item) => item._id == process)?.server || ""),
+              )
+            : items,
       });
     }
   };

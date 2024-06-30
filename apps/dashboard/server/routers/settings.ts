@@ -1,18 +1,19 @@
-import { boolean, z } from "zod";
-import { adminProcedure, protectedProcedure, publicProcedure, router } from "../trpc";
 import { processModel, serverModel, settingModel, statModel } from "@pm2.web/mongoose-models";
+import { z } from "zod";
+
 import { defaultSettings } from "@/utils/constants";
-import { ISetting } from "@pm2.web/typings";
+
 import { fetchSettings } from "../helpers";
+import { adminProcedure, protectedProcedure, publicProcedure, router } from "../trpc";
 
 export const settingRouter = router({
-  deleteAll: adminProcedure.mutation(async (opts) => {
+  deleteAll: adminProcedure.mutation(async () => {
     const servers = await serverModel.deleteMany({});
     const processes = await processModel.deleteMany({});
     const stats = await statModel.deleteMany({});
     return `Deleted ${servers.deletedCount} Servers, ${processes.deletedCount} Processes, ${stats.deletedCount} Stats`;
   }),
-  deleteLogs: adminProcedure.mutation(async (opts) => {
+  deleteLogs: adminProcedure.mutation(async () => {
     const processes = await processModel.updateMany({}, { $set: { logs: [] } });
     await statModel.deleteMany({});
     return `Deleted logs for ${processes.modifiedCount} processes`;

@@ -1,26 +1,24 @@
-import cx from "clsx";
-import { signIn, signOut, useSession } from "next-auth/react";
-import Link from "next/link";
-import { useRouter } from "next/router";
-
 import { AppShell, Stack, Tooltip, UnstyledButton, useMantineColorScheme } from "@mantine/core";
 import {
-  IconBellCog,
   IconGauge,
   IconLayoutDashboard,
   IconLogout,
   IconMoonStars,
-  IconServerBolt,
   IconSettings,
   IconSun,
   IconUser,
+  TablerIcon,
 } from "@tabler/icons-react";
+import cx from "clsx";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { Session } from "next-auth";
+import { signOut, useSession } from "next-auth/react";
 
 import classes from "./Nav.module.css";
-import { Session } from "next-auth";
 
 interface NavbarBtnProps {
-  icon: React.FC<any>;
+  icon: TablerIcon;
   label: string;
   active?: boolean;
   onClick?(): void;
@@ -37,7 +35,7 @@ function NavbarBtn({ icon: Icon, label, active, onClick }: NavbarBtnProps) {
 }
 
 interface NavbarLinkProps {
-  icon: React.FC<any>;
+  icon: TablerIcon;
   label: string;
   active?: boolean;
   href?: string;
@@ -61,7 +59,7 @@ const navLinks = [
     icon: IconUser,
     label: "User Administration",
     href: "/user",
-    filter: (session: Session | null) => {
+    onlyIf: (session: Session | null) => {
       if (session?.user) {
         const acl = session?.user.acl;
         return acl?.admin || acl?.owner;
@@ -78,10 +76,10 @@ export function Nav() {
   const { data: session } = useSession();
   //active page
   const router = useRouter();
-  let active = navLinks.findIndex((link) => router.pathname === link.href);
+  const active = navLinks.findIndex((link) => router.pathname === link.href);
 
   const links = navLinks
-    .filter((link) => (link.filter ? link.filter(session) : true))
+    .filter((link) => (link.onlyIf ? link.onlyIf(session) : true))
     .map((link, index) => <NavbarLink {...link} key={link.label} active={index === active} />);
 
   return (

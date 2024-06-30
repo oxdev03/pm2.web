@@ -1,8 +1,9 @@
-import { actionNotification, sendNotification } from "@/utils/notification";
-import { trpc } from "@/utils/trpc";
 import { Accordion, Button, Stack, Title } from "@mantine/core";
 import { IconUnlink } from "@tabler/icons-react";
 import { signOut } from "next-auth/react";
+
+import { sendNotification } from "@/utils/notification";
+import { trpc } from "@/utils/trpc";
 
 export default function UnlinkOAuth2() {
   const unlinkOAuth2 = trpc.user.unlinkOAuth2.useMutation({

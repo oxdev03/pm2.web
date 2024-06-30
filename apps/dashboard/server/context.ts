@@ -1,7 +1,9 @@
-import connectDB from "@/middleware/mongodb";
 import { CreateNextContextOptions } from "@trpc/server/adapters/next";
-import { getServerAuthSession } from "./auth";
 import { Session } from "next-auth";
+
+import connectDB from "@/middleware/mongodb";
+
+import { getServerAuthSession } from "./auth";
 
 type CreateContextOptions = {
   session: Session | null;

@@ -1,7 +1,8 @@
-import { object, z } from "zod";
-import { adminProcedure, ownerProcedure, protectedProcedure, publicProcedure, router } from "../trpc";
-import { processModel, serverModel, statModel, userModel } from "@pm2.web/mongoose-models";
+import { userModel } from "@pm2.web/mongoose-models";
 import { TRPCError } from "@trpc/server";
+import { z } from "zod";
+
+import { adminProcedure, protectedProcedure, router } from "../trpc";
 
 const CustomPermissionSchema = z.object({
   userIds: z.array(z.string()),
@@ -87,7 +88,7 @@ export const userRouter = router({
     try {
       await userModel.findByIdAndDelete(userId);
       return "User deleted successfully";
-    } catch (error) {
+    } catch {
       throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Failed deleting user." });
     }
   }),
@@ -123,14 +124,14 @@ export const userRouter = router({
         admin: role === "ADMIN",
         servers: [],
       };
-      await user.save().catch((err) => console.error(err));
+      await user.save().catch((error) => console.error(error));
       return "Updated role successfully";
     }),
-  setCustomPermission: adminProcedure.input(CustomPermissionSchema).mutation(async ({ ctx, input }) => {
+  setCustomPermission: adminProcedure.input(CustomPermissionSchema).mutation(async ({ input }) => {
     const { userIds, perms } = input;
     const users = await userModel.find({ _id: { $in: userIds } });
     // check if users exists
-    if (!users.length) {
+    if (users.length === 0) {
       throw new TRPCError({ code: "BAD_REQUEST", message: "Users not found" });
     }
 

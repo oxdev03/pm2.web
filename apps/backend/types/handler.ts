@@ -1,4 +1,5 @@
 import { IServerModel } from "@pm2.web/typings";
+
 import { IProcessInfo } from "./info";
 
 interface QueuedLog {
@@ -19,4 +20,4 @@ interface UpdateDataResponse {
   processes: IProcessInfo[];
 }
 
-export type { QueuedLog, UpdateDataResponse, Packet };
+export type { Packet, QueuedLog, UpdateDataResponse };

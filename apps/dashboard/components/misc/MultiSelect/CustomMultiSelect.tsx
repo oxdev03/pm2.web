@@ -1,11 +1,9 @@
+/* eslint-disable unicorn/prefer-negative-index */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* Source: https://github.com/mantinedev/mantine/blob/master/packages/%40mantine/core/src/components/MultiSelect/MultiSelect.tsx */
 
-import React, { useEffect, useRef } from "react";
-
 import {
-  __BaseInputProps,
-  __CloseButtonProps,
-  __InputStylesNames,
   Combobox,
   extractStyleProps,
   factory,
@@ -22,6 +20,7 @@ import {
   useStyles,
 } from "@mantine/core";
 import { useId, useUncontrolled } from "@mantine/hooks";
+import React, { useEffect } from "react";
 
 export interface IItem {
   label: string;
@@ -300,7 +299,7 @@ export const CustomMultiSelect = factory<CustomMultiSelectFactory>((_props, ref)
               <Combobox.EventsTarget>
                 <PillsInput.Field
                   {...rest}
-                  hidden={!!_value.length}
+                  hidden={_value.length > 0}
                   ref={ref}
                   id={_id}
                   placeholder={placeholder}
@@ -335,7 +334,7 @@ export const CustomMultiSelect = factory<CustomMultiSelectFactory>((_props, ref)
         <Combobox.Dropdown
           hidden={
             (!searchable || !nothingFoundMessage || (hidePickedOptions && _searchValue.trim().length === 0)) &&
-            !options.length
+            options.length === 0
           }
         >
           {withScrollArea ? (
@@ -350,7 +349,7 @@ export const CustomMultiSelect = factory<CustomMultiSelectFactory>((_props, ref)
           ) : (
             options
           )}
-          {!options.length && nothingFoundMessage && <Combobox.Empty>{nothingFoundMessage}</Combobox.Empty>}
+          {options.length === 0 && nothingFoundMessage && <Combobox.Empty>{nothingFoundMessage}</Combobox.Empty>}
         </Combobox.Dropdown>
       </Combobox>
       <input

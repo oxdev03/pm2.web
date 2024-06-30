@@ -1,7 +1,8 @@
-import { trpc } from "@/utils/trpc";
-import { Flex, ScrollArea, Paper, Text } from "@mantine/core";
+import { Flex, Paper, ScrollArea, Text } from "@mantine/core";
 import { IconList } from "@tabler/icons-react";
 import { useRef } from "react";
+
+import { trpc } from "@/utils/trpc";
 
 interface DashboardLogProps {
   refetchInterval: number;

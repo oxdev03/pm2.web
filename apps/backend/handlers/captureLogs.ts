@@ -1,7 +1,7 @@
 import pm2 from "pm2";
 
-import censorMessage from "../utils/censorMessage.js";
 import { Packet, QueuedLog } from "../types/handler.js";
+import censorMessage from "../utils/censorMessage.js";
 
 class LogCapture {
   private queuedLogs: QueuedLog[] = [];

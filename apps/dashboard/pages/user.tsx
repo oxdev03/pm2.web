@@ -1,10 +1,3 @@
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
-import Head from "next/head";
-import React, { useEffect, useState } from "react";
-
-import { Dashboard } from "@/components/layouts/Dashboard";
-import { CustomMultiSelect } from "@/components/misc/MultiSelect/CustomMultiSelect";
-import { IPermissionConstants, Permission, PERMISSIONS } from "@/utils/permission";
 import {
   Accordion,
   Badge,
@@ -22,13 +15,20 @@ import {
 } from "@mantine/core";
 import { IAclServer } from "@pm2.web/typings";
 import { IconCircleFilled, IconDeviceFloppy } from "@tabler/icons-react";
+import { InferGetServerSidePropsType } from "next";
+import Head from "next/head";
+import React, { useEffect, useState } from "react";
 
-import classes from "../styles/user.module.css";
-import { trpc } from "@/utils/trpc";
-import { actionNotification } from "@/utils/notification";
-import { getServerSideHelpers } from "@/server/helpers";
+import { Dashboard } from "@/components/layouts/Dashboard";
+import { CustomMultiSelect } from "@/components/misc/MultiSelect/CustomMultiSelect";
 import UserManagement from "@/components/user/UserManagement";
 import { permissionData, PillComponent, SelectItemComponent } from "@/components/user/UserMultiSelectHelper";
+import { getServerSideHelpers } from "@/server/helpers";
+import { actionNotification } from "@/utils/notification";
+import { IPermissionConstants, Permission, PERMISSIONS } from "@/utils/permission";
+import { trpc } from "@/utils/trpc";
+
+import classes from "../styles/user.module.css";
 
 export default function User({}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const dashboardQuery = trpc.server.getDashBoardData.useQuery(true);
@@ -102,7 +102,7 @@ export default function User({}: InferGetServerSidePropsType<typeof getServerSid
   };
 
   useEffect(() => {
-    if (!perms.length) return;
+    if (perms.length === 0) return;
     const selectedUsers = users.filter((x) => selection.includes(x._id));
     const newPerms = [...perms];
 
@@ -289,7 +289,7 @@ export default function User({}: InferGetServerSidePropsType<typeof getServerSid
                       size={"sm"}
                       leftSection={<IconDeviceFloppy />}
                       loading={updatePerms.isPending}
-                      disabled={!selection.length}
+                      disabled={selection.length === 0}
                       onClick={() =>
                         updatePerms.mutate({
                           userIds: selection,
@@ -310,7 +310,7 @@ export default function User({}: InferGetServerSidePropsType<typeof getServerSid
   );
 }
 
-export async function getServerSideProps({ req, res }: GetServerSidePropsContext) {
+export async function getServerSideProps() {
   const helpers = await getServerSideHelpers();
 
   await helpers.server.getDashBoardData.prefetch();

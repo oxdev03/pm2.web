@@ -1,5 +1,5 @@
-import pm2 from "pm2";
 import bytes from "bytes-iec";
+import pm2 from "pm2";
 
 import { IProcessInfo } from "../types/info";
 import { Pm2ProcessDescription } from "../types/pm2";

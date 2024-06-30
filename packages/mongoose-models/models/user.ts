@@ -1,7 +1,6 @@
+import { IUserModel, IUserModelMethods } from "@pm2.web/typings";
 import bcrypt from "bcrypt";
 import mongoose, { Model } from "mongoose";
-
-import { IUserModel, IUserModelMethods } from "@pm2.web/typings";
 
 type UserModel = Model<IUserModel, object, IUserModelMethods>;
 

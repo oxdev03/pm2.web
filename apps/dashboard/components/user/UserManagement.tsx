@@ -1,6 +1,7 @@
-import { Grid, Paper, ScrollArea, Table, rem, Checkbox } from "@mantine/core";
-import UserItem from "./table/UserItem";
+import { Checkbox, Grid, Paper, rem, ScrollArea, Table } from "@mantine/core";
 import { IUser } from "@pm2.web/typings";
+
+import UserItem from "./table/UserItem";
 
 interface UserManagementProps {
   setSelection: React.Dispatch<React.SetStateAction<string[]>>;
@@ -18,10 +19,6 @@ export default function UserManagement({ selection, setSelection, users, refresh
         ? []
         : users.filter((x) => !x.acl.owner && !x.acl.admin).map((item) => item._id),
     );
-
-  const getUserRole = (item: Omit<IUser, "password" | "updatedAt">) => {
-    return item.acl?.owner ? "owner" : item.acl?.admin ? "admin" : item.acl?.servers?.length ? "custom" : "none";
-  };
 
   return (
     <>
@@ -67,3 +64,7 @@ export default function UserManagement({ selection, setSelection, users, refresh
     </>
   );
 }
+
+const getUserRole = (item: Omit<IUser, "password" | "updatedAt">) => {
+  return item.acl?.owner ? "owner" : item.acl?.admin ? "admin" : item.acl?.servers?.length ? "custom" : "none";
+};

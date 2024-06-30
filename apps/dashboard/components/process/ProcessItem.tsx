@@ -1,13 +1,15 @@
-import { Paper, Flex, Transition } from "@mantine/core";
+import { Flex, Paper, Transition } from "@mantine/core";
+import { IProcess, ISetting } from "@pm2.web/typings";
+import cx from "clsx";
+import { useState } from "react";
+
+import classes from "@/styles/process.module.css";
+
 import ProcessAction from "./ProcessActionRow";
 import ProcessChart from "./ProcessChart";
+import ProcessHeader from "./ProcessHeader";
 import ProcessLog from "./ProcessLog";
 import ProcessMetricRow from "./ProcessMetricRow";
-import classes from "@/styles/process.module.css";
-import { useState } from "react";
-import cx from "clsx";
-import { IProcess, ISetting } from "@pm2.web/typings";
-import ProcessHeader from "./ProcessHeader";
 
 interface ProcessItemProps {
   process: IProcess;
@@ -19,12 +21,15 @@ export default function ProcessItem({ process, setting }: ProcessItemProps) {
 
   function getStatusColor() {
     switch (process.status) {
-      case "online":
+      case "online": {
         return "#12B886";
-      case "stopped":
+      }
+      case "stopped": {
         return "#FCC419";
-      default:
+      }
+      default: {
         return "#FA5252";
+      }
     }
   }
 

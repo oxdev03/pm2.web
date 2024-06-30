@@ -1,9 +1,8 @@
-import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { IAcl, IOauth2 } from "@pm2.web/typings";
 import { GetServerSidePropsContext } from "next";
-import { getServerSession } from "next-auth";
+import { DefaultSession, getServerSession } from "next-auth";
 
-import { DefaultSession } from "next-auth";
+import { authOptions } from "@/pages/api/auth/[...nextauth]";
 
 declare module "next-auth" {
   interface Session {
