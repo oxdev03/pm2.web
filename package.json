@@ -42,8 +42,8 @@
   "devDependencies": {
     "@pm2.web/eslint-config": "*",
     "@pm2.web/typescript-config": "*",
-    "prettier": "^3.3.2",
-    "turbo": "^2.0.6"
+    "prettier": "^3.3.3",
+    "turbo": "^2.0.9"
   },
-  "packageManager": "npm@10.2.4"
+  "packageManager": "npm@10.8.2"
 }
