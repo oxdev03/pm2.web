@@ -36,6 +36,13 @@ const getProcessInfo = async (): Promise<IProcessInfo[]> => {
           memoryMax: 0,
           uptime: Date.now() - (item?.pm2_env?.pm_uptime || 0),
         },
+        versioning: {
+          url: item.pm2_env?.versioning?.url,
+          revision: item.pm2_env?.versioning?.revision,
+          comment: item.pm2_env?.versioning?.comment,
+          branch: item.pm2_env?.versioning?.branch,
+          unstaged: item.pm2_env?.versioning?.unstaged ?? true,
+        },
         status: item?.pm2_env?.status || "offline",
         type: item?.pm2_env?.exec_interpreter || "",
       };

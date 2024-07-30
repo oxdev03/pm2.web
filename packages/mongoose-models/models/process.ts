@@ -62,6 +62,28 @@ const processSchema = new mongoose.Schema(
         "one-launch-status",
       ],
     },
+    versioning: {
+      url: {
+        type: String,
+        required: false,
+      },
+      revision: {
+        type: String,
+        required: false,
+      },
+      comment: {
+        type: String,
+        required: false,
+      },
+      branch: {
+        type: String,
+        required: false,
+      },
+      unstaged: {
+        type: Boolean,
+        default: true,
+      },
+    },
     restartCount: Number,
     toggleCount: Number,
     deleteCount: Number,
