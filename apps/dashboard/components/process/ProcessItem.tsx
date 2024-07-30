@@ -49,7 +49,7 @@ export default function ProcessItem({ process, setting }: ProcessItemProps) {
           <ProcessHeader statusColor={getStatusColor()} interpreter={process.type} name={process.name} />
           <Flex align={"center"} rowGap={"10px"} columnGap={"40px"} wrap={"wrap"} justify={"end"}>
             <ProcessMetricRow
-              processId={process._id}
+              process={process}
               refetchInterval={setting.polling.frontend}
               showMetric={process.status == "online"}
             />

@@ -1,21 +1,23 @@
 import { Flex } from "@mantine/core";
+import { IProcess } from "@pm2.web/typings";
 import { IconCpu, IconDeviceSdCard, IconHistory } from "@tabler/icons-react";
 import ms from "ms";
 
 import { formatBytes } from "@/utils/format";
 import { trpc } from "@/utils/trpc";
 
+import ProcessGitMetric from "./ProcessGitMetric";
 import ProcessItemMetric from "./ProcessMetric";
 
 interface ProcessActionProps {
-  processId: string;
+  process: IProcess;
   refetchInterval: number;
   showMetric: boolean;
 }
 
-export default function ProcessMetricRow({ processId, refetchInterval, showMetric }: ProcessActionProps) {
+export default function ProcessMetricRow({ process, refetchInterval, showMetric }: ProcessActionProps) {
   const getStat = trpc.process.getStat.useQuery(
-    { processId },
+    { processId: process._id },
     {
       refetchInterval,
     },
@@ -23,6 +25,7 @@ export default function ProcessMetricRow({ processId, refetchInterval, showMetri
 
   return (
     <Flex align={"center"} gap={"xs"} wrap={"wrap"}>
+      {process?.versioning?.url && <ProcessGitMetric versioning={process.versioning} />}
       <ProcessItemMetric
         w="75px"
         Icon={IconDeviceSdCard}

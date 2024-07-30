@@ -36,6 +36,13 @@ interface IProcess {
   type: IProcessType;
   logs?: ILog[];
   status: IProcessStatus;
+  versioning: {
+    url?: string;
+    revision?: string;
+    comment?: string;
+    branch?: string;
+    unstaged?: boolean;
+  };
   toggleCount: number;
   restartCount: number;
   deleteCount: number;

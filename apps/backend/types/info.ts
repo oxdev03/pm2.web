@@ -10,6 +10,13 @@ interface IProcessInfo {
     memoryMax: number;
     uptime: number;
   };
+  versioning: {
+    url?: string;
+    revision?: string;
+    comment?: string;
+    branch?: string;
+    unstaged?: boolean;
+  };
   status: IProcessStatus;
   type: string;
 }
