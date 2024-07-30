@@ -21,7 +21,7 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
-    "typescript": "^5.5.3"
+    "typescript": "^5.5.4"
   },
   "author": "oxdev03",
   "license": "MIT"
