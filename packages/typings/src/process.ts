@@ -7,17 +7,20 @@ interface ILog {
   _id: string;
 }
 
-type IProcessType =
-  | "node"
-  | "python"
-  | "ruby"
-  | "php"
-  | "bash"
-  | "go"
-  | "dotnet"
-  | "shell"
-  | "java"
-  | "other";
+const PROCESS_TYPES = <const> [
+  "node",
+  "python",
+  "ruby",
+  "php",
+  "bash",
+  "go",
+  "dotnet",
+  "shell",
+  "java",
+  "other",
+]
+
+type IProcessType = typeof PROCESS_TYPES[number];
 
 type IProcessStatus =
   | "online"
@@ -58,5 +61,9 @@ export type {
   IProcessType,
   IProcessStatus,
   IProcess,
-  IProcessModel,
+  IProcessModel
 };
+
+export {
+  PROCESS_TYPES
+}

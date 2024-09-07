@@ -1,3 +1,4 @@
+import { IProcessType, PROCESS_TYPES } from "@pm2.web/typings";
 import bytes from "bytes-iec";
 import pm2 from "pm2";
 
@@ -26,6 +27,8 @@ const getProcessInfo = async (): Promise<IProcessInfo[]> => {
         unit: "",
       };
 
+      const interpreter = item?.pm2_env?.exec_interpreter;
+
       return {
         name: item.name || item.pm_id,
         pm_id: item.pm_id,
@@ -44,7 +47,9 @@ const getProcessInfo = async (): Promise<IProcessInfo[]> => {
           unstaged: item.pm2_env?.versioning?.unstaged ?? true,
         },
         status: item?.pm2_env?.status || "offline",
-        type: item?.pm2_env?.exec_interpreter || "",
+        type: PROCESS_TYPES.includes(interpreter as IProcessType)
+          ? interpreter
+          : "other",
       };
     })
     .filter((item) => !!item) as IProcessInfo[];
