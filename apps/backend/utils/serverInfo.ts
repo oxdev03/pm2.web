@@ -12,7 +12,7 @@ export default async function getServerInfo(): Promise<IServerInfo> {
       cpu: (await si.currentLoad())?.currentLoad ?? 0,
       memory: mem?.used ?? 0,
       memoryMax: mem?.total ?? 0,
-      uptime: (await si.time())?.uptime * 1000 ?? 0,
+      uptime: ((await si.time())?.uptime || 0) * 1000,
     },
     heartbeatAt: Date.now(),
   };
