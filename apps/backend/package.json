@@ -40,7 +40,7 @@
     "@pm2.web/eslint-config": "*",
     "@pm2.web/typescript-config": "*",
     "@types/bcrypt": "^5.0.2",
-    "eslint": "^8.57.1",
+    "eslint": "^9.11.1",
     "typescript": "^5.6.2"
   }
 }
