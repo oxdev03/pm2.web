@@ -4,7 +4,7 @@ The Backend is a simple Node.js application that uses the pm2 BUS API to communi
 
 ## Prerequisites
 
-- Node.js v18
+- Node.js >= v20
 - MongoDB Cluster
 - PM2 (installed globally)
 

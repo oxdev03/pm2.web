@@ -6,7 +6,7 @@ The Dashboard is a Next.js application built on the t3 stack, utilizing trpc for
 
 ### Prerequisites
 
-- Node v18
+- Node >= v20
 - MongoDB Cluster (required for Restart/Shutdown/Delete functionality) / MongoDB Atlas
 - Open Port 3000 or 80,443 (if you use a reverse proxy)
 
