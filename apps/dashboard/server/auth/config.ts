@@ -1,6 +1,6 @@
 import { userModel } from "@pm2.web/mongoose-models";
 import { IAcl, IOauth2 } from "@pm2.web/typings";
-import { CredentialsSignin,type DefaultSession, type NextAuthConfig,Session } from "next-auth";
+import { CredentialsSignin, type DefaultSession, type NextAuthConfig, Session } from "next-auth";
 import { JWT } from "next-auth/jwt";
 import Credentials from "next-auth/providers/credentials";
 
@@ -149,13 +149,12 @@ export const authConfig = {
   ],
   callbacks: {
     async jwt({ token, account, user }) {
-      if (account && account.access_token && user.id) {
-        token.accessToken = account.access_token;
-        token.id = user.id;
-      }
+      if (account && account.access_token) token.accessToken = account.access_token;
+   
       if (user) {
         token.acl = user.acl;
         token.oauth2 = user.oauth2;
+        if(user.id) token.id = user.id;
       }
       return token;
     },
@@ -167,6 +166,9 @@ export const authConfig = {
       session.user.oauth2 = token.oauth2;
 
       return session;
+    },
+    async authorized({ auth }) {
+      return !!auth?.user && !!auth.user.id;
     },
   },
 } satisfies NextAuthConfig;
