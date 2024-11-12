@@ -1,12 +1,10 @@
 import { processModel, serverModel, settingModel, statModel } from "@pm2.web/mongoose-models";
 import { z } from "zod";
 
-import { defaultSettings } from "@/utils/constants";
+import { adminProcedure, createTRPCRouter, protectedProcedure, publicProcedure } from "@/server/api/trpc";
+import { defaultSettings, fetchSettings } from "@/server/db/settings";
 
-import { fetchSettings } from "../helpers";
-import { adminProcedure, protectedProcedure, publicProcedure, router } from "../trpc";
-
-export const settingRouter = router({
+export const settingRouter = createTRPCRouter({
   deleteAll: adminProcedure.mutation(async () => {
     const servers = await serverModel.deleteMany({});
     const processes = await processModel.deleteMany({});

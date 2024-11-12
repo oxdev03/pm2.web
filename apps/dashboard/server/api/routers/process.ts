@@ -3,12 +3,11 @@ import { IProcess, IUser } from "@pm2.web/typings";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
+import { createTRPCRouter , protectedProcedure} from "@/server/api/trpc";
 import Access from "@/utils/access";
 import { PERMISSIONS } from "@/utils/permission";
 
-import { protectedProcedure, router } from "../trpc";
-
-export const processRouter = router({
+export const processRouter = createTRPCRouter({
   getLogs: protectedProcedure
     .input(z.object({ processId: z.string(), limit: z.number().optional() }))
     .query(async ({ ctx, input }) => {

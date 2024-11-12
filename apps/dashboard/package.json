@@ -6,6 +6,7 @@
   },
   "version": "1.5.0",
   "private": true,
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "https://github.com/oxdev03/pm2.web"
@@ -29,6 +30,7 @@
     "format:check": "prettier --check ."
   },
   "dependencies": {
+    "@t3-oss/env-nextjs": "^0.10.1",
     "@mantine/charts": "^7.13.0",
     "@mantine/code-highlight": "^7.13.0",
     "@mantine/core": "^7.13.0",
@@ -43,14 +45,14 @@
     "@trpc/next": "^11.0.0-rc.552",
     "@trpc/react-query": "^11.0.0-rc.552",
     "@trpc/server": "^11.0.0-rc.552",
-    "bcrypt": "^5.1.1",
+    "bcryptjs": "^2.4.3",
     "cookies-next": "^4.2.1",
     "dotenv": "^16.4.5",
     "dotenv-cli": "^7.4.2",
     "lodash": "^4.17.21",
     "mongodb-memory-server": "^10.0.1",
-    "next": "^14.2.13",
-    "next-auth": "^4.24.8",
+    "next": "^15.0.3",
+    "next-auth": "^5.0.0-beta.25",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "recharts": "^2.12.7",
@@ -58,7 +60,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@types/bcrypt": "^5.0.2",
+    "@types/bcryptjs": "^2.4.6",
     "@types/lodash": "^4.17.9",
     "@types/ms": "^0.7.34",
     "@types/node": "20.16.10",

@@ -7,7 +7,7 @@ import GoogleProvider from "next-auth/providers/google";
 
 import { fetchSettings } from "@/server/helpers";
 
-import connectDB from "../../../middleware/mongodb";
+import connectDB from "../../../server/db/mongodb";
 
 const providers = () => {
   const p = [];

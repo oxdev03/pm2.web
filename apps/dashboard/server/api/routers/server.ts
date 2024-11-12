@@ -3,13 +3,13 @@ import { IServer, IUser } from "@pm2.web/typings";
 import mongoose from "mongoose";
 import { z } from "zod";
 
+import { fetchSettings } from "@/server/db/settings";
 import Access from "@/utils/access";
 import { PERMISSIONS } from "@/utils/permission";
 
-import { fetchSettings } from "../helpers";
-import { protectedProcedure, router } from "../trpc";
+import { createTRPCRouter, protectedProcedure } from "../trpc";
 
-export const serverRouter = router({
+export const serverRouter = createTRPCRouter({
   getLogs: protectedProcedure
     .input(z.object({ processIds: z.array(z.string()), limit: z.number().optional().default(100) }))
     .query(async ({ ctx, input }) => {
@@ -147,9 +147,9 @@ export const serverRouter = router({
         {},
         {
           createdAt: 0,
-        },
+        }
       )
-      .lean()) as IServer[];
+      .lean()) as unknown as IServer[];
 
     const processes = await processModel
       .find(
