@@ -11,11 +11,11 @@ import {
 } from "@tabler/icons-react";
 import cx from "clsx";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { Session } from "next-auth";
 import { signOut, useSession } from "next-auth/react";
 
 import classes from "./Nav.module.css";
+import { usePathname } from "next/navigation";
 
 interface NavbarBtnProps {
   icon: TablerIcon;
@@ -75,8 +75,8 @@ export function Nav() {
   const { toggleColorScheme } = useMantineColorScheme();
   const { data: session } = useSession();
   //active page
-  const router = useRouter();
-  const active = navLinks.findIndex((link) => router.pathname === link.href);
+  const pathname = usePathname()
+  const active = navLinks.findIndex((link) => pathname === link.href);
 
   const links = navLinks
     .filter((link) => (link.onlyIf ? link.onlyIf(session) : true))

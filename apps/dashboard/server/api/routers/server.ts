@@ -142,14 +142,14 @@ export const serverRouter = createTRPCRouter({
   getDashBoardData: protectedProcedure.input(z.boolean().optional()).query(async ({ input: excludeDaemon }) => {
     const settings = await fetchSettings();
 
-    const servers = (await serverModel
+    const servers = await serverModel
       .find(
         {},
         {
           createdAt: 0,
-        }
+        },
       )
-      .lean()) as unknown as IServer[];
+      .lean();
 
     const processes = await processModel
       .find(
@@ -174,15 +174,18 @@ export const serverRouter = createTRPCRouter({
       }
     }
 
+    const serverWithProcesses: IServer[] = [];
+
     for (const server of servers) {
-      server.processes = processes.filter(
+      const filterProcess = processes.filter(
         (process) =>
           process.server.toString() == server?._id?.toString() &&
           (settings.excludeDaemon || excludeDaemon ? process.name != "pm2.web-daemon" : true),
       );
+      serverWithProcesses.push({ ...server, processes: filterProcess });
     }
 
-    return { settings: settings, servers: servers };
+    return { settings: settings, servers: serverWithProcesses };
   }),
 });
 

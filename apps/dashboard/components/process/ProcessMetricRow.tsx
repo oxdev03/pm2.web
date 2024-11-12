@@ -4,7 +4,7 @@ import { IconCpu, IconDeviceSdCard, IconHistory } from "@tabler/icons-react";
 import ms from "ms";
 
 import { formatBytes } from "@/utils/format";
-import { trpc } from "@/utils/trpc";
+import { api } from "@/trpc/react";
 
 import ProcessGitMetric from "./ProcessGitMetric";
 import ProcessItemMetric from "./ProcessMetric";
@@ -16,7 +16,7 @@ interface ProcessActionProps {
 }
 
 export default function ProcessMetricRow({ process, refetchInterval, showMetric }: ProcessActionProps) {
-  const getStat = trpc.process.getStat.useQuery(
+  const getStat = api.process.getStat.useQuery(
     { processId: process._id },
     {
       refetchInterval,

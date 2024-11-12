@@ -2,7 +2,7 @@ import { AreaChart } from "@mantine/charts";
 import { Flex } from "@mantine/core";
 
 import { formatBytes } from "@/utils/format";
-import { trpc } from "@/utils/trpc";
+import { api } from "@/trpc/react";
 
 interface ProcessChartProps {
   processId: string;
@@ -11,7 +11,7 @@ interface ProcessChartProps {
 }
 
 export default function ProcessChart({ processId, refetchInterval }: ProcessChartProps) {
-  const getStats = trpc.process.getStats.useQuery(
+  const getStats = api.process.getStats.useQuery(
     {
       processId,
       range: "seconds",

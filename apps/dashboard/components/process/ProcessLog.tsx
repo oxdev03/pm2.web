@@ -1,7 +1,7 @@
 import { Paper, ScrollArea, Text } from "@mantine/core";
 
 import classes from "@/styles/process.module.css";
-import { trpc } from "@/utils/trpc";
+import { api } from "@/trpc/react";
 
 interface ProcessActionProps {
   processId: string;
@@ -9,7 +9,7 @@ interface ProcessActionProps {
 }
 
 export default function ProcessLog({ processId, refetchInterval }: ProcessActionProps) {
-  const getLogs = trpc.process.getLogs.useQuery(
+  const getLogs = api.process.getLogs.useQuery(
     { processId },
     {
       refetchInterval: refetchInterval,

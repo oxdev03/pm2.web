@@ -3,10 +3,10 @@ import { IconUnlink } from "@tabler/icons-react";
 import { signOut } from "next-auth/react";
 
 import { sendNotification } from "@/utils/notification";
-import { trpc } from "@/utils/trpc";
+import { api } from "@/trpc/react";
 
 export default function UnlinkOAuth2() {
-  const unlinkOAuth2 = trpc.user.unlinkOAuth2.useMutation({
+  const unlinkOAuth2 = api.user.unlinkOAuth2.useMutation({
     onSuccess(data) {
       sendNotification("unlinkOAuth2", "Success", data, "success");
       signOut();

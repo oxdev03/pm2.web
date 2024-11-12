@@ -2,7 +2,7 @@ import { Accordion, Button, Flex, Select, Title } from "@mantine/core";
 import { useForm } from "@mantine/form";
 
 import { sendNotification } from "@/utils/notification";
-import { trpc } from "@/utils/trpc";
+import { api } from "@/trpc/react";
 
 export default function DatabaseAction() {
   const databaseAction = useForm<{ action: "deleteAll" | "deleteLogs" | "" }>({
@@ -14,7 +14,7 @@ export default function DatabaseAction() {
     },
   });
 
-  const deleteAll = trpc.setting.deleteAll.useMutation({
+  const deleteAll = api.setting.deleteAll.useMutation({
     onSuccess(data) {
       sendNotification("deleteAll", "Success", data, "success");
     },
@@ -23,7 +23,7 @@ export default function DatabaseAction() {
     },
   });
 
-  const deleteLogs = trpc.setting.deleteLogs.useMutation({
+  const deleteLogs = api.setting.deleteLogs.useMutation({
     onSuccess(data) {
       sendNotification("deleteLogs", "Success", data, "success");
     },

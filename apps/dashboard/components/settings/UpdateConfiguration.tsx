@@ -19,7 +19,7 @@ import { ISetting } from "@pm2.web/typings";
 import { IconCheck, IconCopy, IconDeviceFloppy, IconRefresh } from "@tabler/icons-react";
 
 import { sendNotification } from "@/utils/notification";
-import { trpc } from "@/utils/trpc";
+import { api } from "@/trpc/react";
 
 import classes from "./UpdateConfiguration.module.css";
 
@@ -46,7 +46,7 @@ export default function UpdateConfiguration({ settings }: UpdateConfigurationPro
     },
   });
 
-  const updateSetting = trpc.setting.updateSetting.useMutation({
+  const updateSetting = api.setting.updateSetting.useMutation({
     onSuccess(data) {
       sendNotification("updateSetting", "Success", data, "success");
     },

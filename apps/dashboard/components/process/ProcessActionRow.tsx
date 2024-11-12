@@ -3,7 +3,7 @@ import { IconPower, IconReload, IconSquareRoundedMinus, IconTrash } from "@table
 
 import classes from "@/styles/process.module.css";
 import { sendNotification } from "@/utils/notification";
-import { trpc } from "@/utils/trpc";
+import { api } from "@/trpc/react";
 
 interface ProcessActionProps {
   processId: string;
@@ -11,7 +11,7 @@ interface ProcessActionProps {
 }
 
 export default function ProcessAction({ processId, collapse }: ProcessActionProps) {
-  const processAction = trpc.process.action.useMutation({
+  const processAction = api.process.action.useMutation({
     onSuccess(data, variables) {
       if (!data) {
         sendNotification(variables.action + processId, `Failed ${variables.action}`, `Server didn't respond`, `error`);

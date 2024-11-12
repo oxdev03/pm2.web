@@ -1,8 +1,7 @@
+import { api } from "@/trpc/react";
 import { Flex, Paper, ScrollArea, Text } from "@mantine/core";
 import { IconList } from "@tabler/icons-react";
 import { useRef } from "react";
-
-import { trpc } from "@/utils/trpc";
 
 interface DashboardLogProps {
   refetchInterval: number;
@@ -11,7 +10,7 @@ interface DashboardLogProps {
 
 export default function DashboardLog({ refetchInterval, processIds }: DashboardLogProps) {
   const scrollViewport = useRef<HTMLDivElement>(null);
-  const { data } = trpc.server.getLogs.useQuery(
+  const { data } = api.server.getLogs.useQuery(
     { processIds },
     {
       refetchInterval: refetchInterval,

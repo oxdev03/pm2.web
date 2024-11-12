@@ -1,9 +1,7 @@
 import { IServerModel } from "@pm2.web/typings";
 import mongoose, { Model, models } from "mongoose";
 
-type ServerModel = Model<IServerModel>;
-
-const serverSchema = new mongoose.Schema<IServerModel, ServerModel>(
+const serverSchema = new mongoose.Schema<IServerModel>(
   {
     name: {
       type: String,
@@ -20,5 +18,5 @@ const serverSchema = new mongoose.Schema<IServerModel, ServerModel>(
 );
 
 export const serverModel =
-  (models?.Server as ServerModel) ??
+  (models?.Server as Model<IServerModel>) ??
   mongoose.model<IServerModel>("Server", serverSchema);

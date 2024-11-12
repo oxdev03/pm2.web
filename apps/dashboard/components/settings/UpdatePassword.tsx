@@ -4,7 +4,7 @@ import { IconRefresh } from "@tabler/icons-react";
 import { ZodError } from "zod";
 
 import { sendNotification } from "@/utils/notification";
-import { trpc } from "@/utils/trpc";
+import { api } from "@/trpc/react";
 
 export default function UpdatePassword() {
   const passwordForm = useForm({
@@ -20,7 +20,7 @@ export default function UpdatePassword() {
     },
   });
 
-  const changePassword = trpc.user.changePassword.useMutation({
+  const changePassword = api.user.changePassword.useMutation({
     onSuccess(data) {
       sendNotification("changePassword", "Success", data, "success");
     },

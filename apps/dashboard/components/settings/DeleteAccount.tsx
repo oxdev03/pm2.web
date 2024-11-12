@@ -4,7 +4,7 @@ import { IconTrash } from "@tabler/icons-react";
 import { signOut } from "next-auth/react";
 
 import { sendNotification } from "@/utils/notification";
-import { trpc } from "@/utils/trpc";
+import { api } from "@/trpc/react";
 
 export default function DeleteAccount() {
   const deleteForm = useForm({
@@ -16,7 +16,7 @@ export default function DeleteAccount() {
     },
   });
 
-  const deleteAccount = trpc.user.deleteAccount.useMutation({
+  const deleteAccount = api.user.deleteAccount.useMutation({
     onSuccess(data) {
       sendNotification("deleteAccount", "Success", data, "success");
       signOut();

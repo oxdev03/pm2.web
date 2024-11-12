@@ -5,7 +5,7 @@ import cx from "clsx";
 import { GithubIcon } from "@/components/icons/github";
 import { GoogleIcon } from "@/components/icons/google";
 import { actionNotification } from "@/utils/notification";
-import { trpc } from "@/utils/trpc";
+import { api } from "@/trpc/react";
 
 import classes from "./UserItem.module.css";
 
@@ -33,7 +33,7 @@ export default function UserItem({
   const selectDisabled = role == "admin" || role == "owner";
   const userRoles = ["OWNER", "ADMIN", "CUSTOM", "NONE"] as const;
   type UserRole = (typeof userRoles)[number];
-  const deleteUser = trpc.user.deleteUser.useMutation({
+  const deleteUser = api.user.deleteUser.useMutation({
     onMutate({ userId }) {
       actionNotification(userId, `Deleting user: ${name}`, `Please Wait ...`, "pending");
     },
@@ -46,7 +46,7 @@ export default function UserItem({
     },
   });
 
-  const updateUser = trpc.user.updateRole.useMutation({
+  const updateUser = api.user.updateRole.useMutation({
     onMutate({ userId, role }) {
       actionNotification(userId, `Updating role to ${capitalizeFirst(role)}`, `Please Wait ...`, "pending");
     },
