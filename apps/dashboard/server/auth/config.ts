@@ -92,7 +92,7 @@ export const authConfig = {
               { name: { $regex: new RegExp(credentials.name as string, "i") } },
             ],
           });
-          const is1stAccount = (await userModel.countDocuments()) === 0;
+          const isFirstAccount = (await userModel.countDocuments()) === 0;
           const settings = await fetchSettings();
           if (settings.registrationCode?.length && settings.registrationCode !== credentials.registrationCode)
             throw new LoginError(AuthErrors.InvalidRegistrationCode);
@@ -105,14 +105,14 @@ export const authConfig = {
               email: credentials.email,
               password: credentials.password,
               acl: {
-                owner: is1stAccount,
+                owner: isFirstAccount,
                 admin: false,
                 servers: [],
               },
             });
             await user.save().catch((err: Error) => console.log(err));
             const u = user.toJSON();
-            if (!is1stAccount) throw new LoginError(AuthErrors.UnauthorizedRegister);
+            if (!isFirstAccount) throw new LoginError(AuthErrors.UnauthorizedRegister);
             return {
               id: u._id,
               ...u,

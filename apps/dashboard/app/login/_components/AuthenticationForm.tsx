@@ -103,7 +103,8 @@ export default function AuthenticationForm({ registrationCodeRequired }: { regis
                 type: type,
                 redirect: false,
               });
-              const signInErrored = res?.error != "null";
+              console.log(res);
+              const signInErrored = res?.error != "null" && !!res?.error;
               router.replace(signInErrored ? `/login?error=${res?.code}` : callbackUrl);
               setAuthLoading(false);
             })}
