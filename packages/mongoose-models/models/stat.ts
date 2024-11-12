@@ -1,5 +1,5 @@
 import { IStatModel } from "@pm2.web/typings";
-import mongoose, { Model } from "mongoose";
+import mongoose, { Model, models } from "mongoose";
 
 type StatModel = Model<IStatModel>;
 
@@ -34,5 +34,4 @@ const statSchema = new mongoose.Schema(
 );
 
 export const statModel =
-  (mongoose.models.Stat as StatModel) ??
-  mongoose.model<IStatModel>("Stat", statSchema);
+  (models?.Stat as StatModel) ?? mongoose.model<IStatModel>("Stat", statSchema);

@@ -1,5 +1,5 @@
 import { ISettingModel } from "@pm2.web/typings";
-import mongoose, { Model } from "mongoose";
+import mongoose, { Model, models } from "mongoose";
 
 type SettingModel = Model<ISettingModel>;
 
@@ -24,5 +24,5 @@ const settingSchema = new mongoose.Schema(
 );
 
 export const settingModel =
-  (mongoose.models.Setting as SettingModel) ??
+  (models?.Setting as SettingModel) ??
   mongoose.model<ISettingModel>("Setting", settingSchema);

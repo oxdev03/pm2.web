@@ -1,6 +1,6 @@
 import { IUserModel, IUserModelMethods } from "@pm2.web/typings";
-import bcrypt from "bcrypt";
-import mongoose, { Model } from "mongoose";
+import bcrypt from "bcryptjs";
+import mongoose, { Model, models } from "mongoose";
 
 type UserModel = Model<IUserModel, object, IUserModelMethods>;
 
@@ -76,5 +76,5 @@ userSchema.methods.toJSON = function () {
 };
 
 export const userModel =
-  (mongoose.models.User as UserModel) ??
+  (models?.User as UserModel) ??
   mongoose.model<IUserModel, UserModel>("User", userSchema);

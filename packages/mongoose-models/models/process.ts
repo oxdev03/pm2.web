@@ -1,5 +1,5 @@
 import { IProcessModel } from "@pm2.web/typings";
-import mongoose, { Model } from "mongoose";
+import mongoose, { Model, models } from "mongoose";
 
 type ProcessModel = Model<IProcessModel>;
 
@@ -92,5 +92,5 @@ const processSchema = new mongoose.Schema(
 );
 
 export const processModel =
-  (mongoose.models.Process as ProcessModel) ??
+  (models?.Process as ProcessModel) ??
   mongoose.model<IProcessModel>("Process", processSchema);
