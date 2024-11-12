@@ -1,4 +1,4 @@
-import { api,HydrateClient } from "@/trpc/server";
+import { api, HydrateClient } from "@/trpc/server";
 
 import AuthenticationForm from "./_components/AuthenticationForm";
 

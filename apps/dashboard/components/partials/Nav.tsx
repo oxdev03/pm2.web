@@ -75,7 +75,7 @@ export function Nav() {
   const { toggleColorScheme } = useMantineColorScheme();
   const { data: session } = useSession();
   //active page
-  const pathname = usePathname()
+  const pathname = usePathname();
   const active = navLinks.findIndex((link) => pathname === link.href);
 
   const links = navLinks

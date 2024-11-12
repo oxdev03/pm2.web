@@ -14,15 +14,15 @@ import { AreaChart } from "recharts";
 import classes from "@/styles/index.module.css";
 
 const statChartProps = {
-    h: "120px",
-    withLegend: true,
-    withGradient: true,
-    withDots: false,
-    withXAxis: false,
-    yAxisProps: { width: 55 },
-    areaChartProps: { syncId: "stats" },
-    connectNulls: true,
-  };
+  h: "120px",
+  withLegend: true,
+  withGradient: true,
+  withDots: false,
+  withXAxis: false,
+  yAxisProps: { width: 55 },
+  areaChartProps: { syncId: "stats" },
+  connectNulls: true,
+};
 
 function Overview({ settings }: { settings: ISetting }) {
   const { selectedServers, selectedProcesses } = useSelected();

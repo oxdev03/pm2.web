@@ -2,7 +2,7 @@ import { userModel } from "@pm2.web/mongoose-models";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
-import { adminProcedure, createTRPCRouter,protectedProcedure } from "@/server/api/trpc";
+import { adminProcedure, createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 
 const CustomPermissionSchema = z.object({
   userIds: z.array(z.string()),

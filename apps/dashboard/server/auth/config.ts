@@ -150,11 +150,11 @@ export const authConfig = {
   callbacks: {
     async jwt({ token, account, user }) {
       if (account && account.access_token) token.accessToken = account.access_token;
-   
+
       if (user) {
         token.acl = user.acl;
         token.oauth2 = user.oauth2;
-        if(user.id) token.id = user.id;
+        if (user.id) token.id = user.id;
       }
       return token;
     },

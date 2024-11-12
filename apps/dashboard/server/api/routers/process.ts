@@ -3,7 +3,7 @@ import { IProcess, IUser } from "@pm2.web/typings";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
-import { createTRPCRouter , protectedProcedure} from "@/server/api/trpc";
+import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import Access from "@/utils/access";
 import { PERMISSIONS } from "@/utils/permission";
 

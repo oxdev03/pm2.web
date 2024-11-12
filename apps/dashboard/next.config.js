@@ -4,7 +4,6 @@
  */
 import "./env.js";
 
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -12,7 +11,7 @@ const nextConfig = {
     dirs: ["components", "middleware", "app", "server", "types", "utils"],
   },
   experimental: {
-    optimizePackageImports: ['@mantine/core', '@mantine/hooks'],
+    optimizePackageImports: ["@mantine/core", "@mantine/hooks"],
   },
 };
 

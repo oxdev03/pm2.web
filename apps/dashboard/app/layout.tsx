@@ -11,7 +11,8 @@ import { theme } from "../theme";
 
 export const metadata: Metadata = {
   title: "pm2.web",
-  description: "pm2.web - Easily monitor your processes, control them with various actions, view logs and set up access controls for users using the dashboard",
+  description:
+    "pm2.web - Easily monitor your processes, control them with various actions, view logs and set up access controls for users using the dashboard",
   icons: [{ rel: "icon", url: "/logo.png" }],
 };
 
