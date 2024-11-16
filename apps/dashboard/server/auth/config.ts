@@ -7,6 +7,7 @@ import Credentials from "next-auth/providers/credentials";
 import connectDB from "@/server/db/mongodb";
 import { fetchSettings } from "@/server/db/settings";
 import { AuthErrors } from "@/utils/auth-errors";
+import middlewareConfig from "./middleware-config";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -55,10 +56,8 @@ declare module "next-auth/jwt" {
  * @see https://next-auth.js.org/configuration/options
  */
 export const authConfig = {
-  pages: {
-    signIn: "/login",
-    error: "/login",
-  },
+  // Reuse pages, callbacks from middleware auth config
+  ...middlewareConfig,
   providers: [
     Credentials({
       credentials: {
@@ -147,30 +146,6 @@ export const authConfig = {
       },
     }),
   ],
-  callbacks: {
-    async jwt({ token, account, user }) {
-      if (account && account.access_token) token.accessToken = account.access_token;
-
-      if (user) {
-        token.acl = user.acl;
-        token.oauth2 = user.oauth2;
-        if (user.id) token.id = user.id;
-      }
-      return token;
-    },
-    async session({ session, token }: { session: Session; token: JWT }) {
-      // Send properties to the client, like an access_token and user id from a provider.
-      session.accessToken = token.accessToken;
-      session.user.id = token.id;
-      session.user.acl = token.acl;
-      session.user.oauth2 = token.oauth2;
-
-      return session;
-    },
-    async authorized({ auth }) {
-      return !!auth?.user && !!auth.user.id;
-    },
-  },
 } satisfies NextAuthConfig;
 
 export class LoginError extends CredentialsSignin {
