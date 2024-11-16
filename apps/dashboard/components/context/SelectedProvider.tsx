@@ -1,10 +1,13 @@
-import { IProcess, IServer } from "@pm2.web/typings";
+"use client";
+
+import { IProcess, IServer, ISetting } from "@pm2.web/typings";
 import { useSession } from "next-auth/react";
 import { createContext, useContext, useState } from "react";
 
 import { SelectItem, StateSelectedItem } from "@/types/context";
 import Access from "@/utils/access";
 import { IPermissionConstants, PERMISSIONS } from "@/utils/permission";
+import { api } from "@/trpc/react";
 
 interface SelectedContextType {
   selectedItem: StateSelectedItem;
@@ -12,6 +15,7 @@ interface SelectedContextType {
   selectedProcesses: IProcess[];
   selectedServers: IServer[];
   servers: IServer[];
+  settings: ISetting | undefined;
 }
 
 const SelectedContext = createContext<SelectedContextType>({
@@ -23,13 +27,17 @@ const SelectedContext = createContext<SelectedContextType>({
   selectedProcesses: [],
   selectedServers: [],
   servers: [],
+  settings: undefined,
 }); // pass null as initial value
 
 export function useSelected() {
   return useContext(SelectedContext);
 }
 
-export function SelectedProvider({ children, servers }: { children: React.ReactNode; servers: IServer[] }) {
+export function SelectedProvider({ children }: { children: React.ReactNode }) {
+  const [{ servers, settings }] = api.server.getDashBoardData.useSuspenseQuery(undefined, {
+    refetchInterval: 5000,
+  });
   const { data: session } = useSession();
   const [selectedItem, setSelectedItem] = useState<StateSelectedItem>({
     servers: [],
@@ -84,7 +92,9 @@ export function SelectedProvider({ children, servers }: { children: React.ReactN
     );
 
   return (
-    <SelectedContext.Provider value={{ selectedItem, selectedProcesses, selectedServers, selectItem, servers }}>
+    <SelectedContext.Provider
+      value={{ selectedItem, selectedProcesses, selectedServers, selectItem, servers, settings }}
+    >
       {children}
     </SelectedContext.Provider>
   );

@@ -1,0 +1,299 @@
+"use client";
+
+import {
+  Accordion,
+  Badge,
+  Box,
+  Button,
+  Divider,
+  Flex,
+  Grid,
+  Overlay,
+  Paper,
+  rem,
+  ScrollArea,
+  Title,
+  Transition,
+} from "@mantine/core";
+import { IAclServer } from "@pm2.web/typings";
+import { IconCircleFilled, IconDeviceFloppy } from "@tabler/icons-react";
+import React, { useEffect, useState } from "react";
+
+import { CustomMultiSelect } from "@/components/misc/MultiSelect/CustomMultiSelect";
+import UserManagement from "@/components/user/UserManagement";
+import { permissionData, PillComponent, SelectItemComponent } from "@/components/user/UserMultiSelectHelper";
+import { actionNotification } from "@/utils/notification";
+import { IPermissionConstants, Permission, PERMISSIONS } from "@/utils/permission";
+import { api } from "@/trpc/react";
+
+import classes from "@/styles/user.module.css";
+
+export default function UserAdministration() {
+  const dashboardQuery = api.server.getDashBoardData.useQuery(true);
+  const usersQuery = api.user.getUsers.useQuery();
+  const servers = dashboardQuery.data?.servers || []!;
+  const users = usersQuery.data || [];
+
+  const [selection, setSelection] = useState<string[]>([]);
+  const [perms, setPerms] = useState<IAclServer[]>(
+    servers.map((server) => ({
+      server: server._id,
+      processes: server.processes.map((process) => ({
+        process: process._id,
+        perms: 0,
+      })),
+      perms: 0,
+    })),
+  );
+
+  const updatePerms = api.user.setCustomPermission.useMutation({
+    onMutate() {
+      actionNotification(`update-perms`, "Updating permissions", "Please wait...", "pending");
+    },
+    onError(error) {
+      actionNotification(`update-perms`, "Failed to update permissions", error.message, "error");
+    },
+    onSuccess(data) {
+      actionNotification(`update-perms`, "Permissions updated", data, "success");
+      usersQuery.refetch();
+    },
+  });
+
+  const updatePermsState = (server_id: string, process_id: string, new_perms: string[]) => {
+    const newPerms = [...perms];
+    const serverIndex = newPerms.findIndex((x) => x.server == server_id);
+    if (serverIndex !== -1) {
+      if (process_id) {
+        const processIndex = newPerms[serverIndex].processes.findIndex((x) => x.process == process_id);
+        if (processIndex !== -1) {
+          newPerms[serverIndex].processes[processIndex].perms = new Permission().add(
+            ...new_perms.map((x) => PERMISSIONS[x as keyof IPermissionConstants]),
+          ).value;
+        }
+      } else {
+        newPerms[serverIndex].perms = new Permission().add(
+          ...new_perms.map((x) => PERMISSIONS[x as keyof IPermissionConstants]),
+        ).value;
+        // process should inherit server perms , if server perms is changed
+        newPerms[serverIndex].processes = newPerms[serverIndex].processes.map((process) => ({
+          ...process,
+          perms: new Permission().add(...new_perms.map((x) => PERMISSIONS[x as keyof IPermissionConstants])).value,
+        }));
+      }
+    }
+    setPerms(newPerms);
+  };
+
+  const getSelectedPerms = (server_id: string, process_id?: string) => {
+    const server = perms.find((x) => x.server == server_id);
+    if (server) {
+      if (process_id) {
+        const process = server.processes.find((x) => x.process == process_id);
+        if (process) {
+          return new Permission(process.perms).toArray();
+        }
+      } else {
+        return new Permission(server.perms).toArray();
+      }
+    }
+    return [];
+  };
+
+  useEffect(() => {
+    if (perms.length === 0) return;
+    const selectedUsers = users.filter((x) => selection.includes(x._id));
+    const newPerms = [...perms];
+
+    for (const perm of newPerms) {
+      perm.perms = new Permission().add(
+        ...Permission.common(
+          ...selectedUsers.map((x) => x.acl.servers.find((y) => y.server == perm.server)?.perms ?? 0),
+        ),
+      ).value;
+      perm.processes = perm.processes.map((process) => ({
+        ...process,
+        perms: new Permission().add(
+          ...Permission.common(
+            ...selectedUsers.map(
+              (x) =>
+                x.acl.servers.find((y) => y.server == perm.server)?.processes.find((z) => z.process == process.process)
+                  ?.perms ?? perm.perms,
+            ),
+          ),
+        ).value,
+      }));
+    }
+
+    setPerms(newPerms);
+  }, [selection]);
+
+  return (
+    <Grid
+      flex={1}
+      styles={{
+        root: {
+          display: "flex",
+        },
+      }}
+    >
+      <UserManagement
+        refreshUsers={usersQuery.refetch}
+        users={users}
+        selection={selection}
+        setSelection={setSelection}
+      />
+      <Grid.Col span={{ lg: 6, md: 12 }}>
+        <Paper shadow="sm" radius="md" style={{ height: "100%" }} p={"lg"} px={"md"} pb={"sm"}>
+          <Flex direction={"column"} h="100%">
+            <Title order={4} style={{ marginBottom: "1rem" }}>
+              Custom Permissions
+            </Title>
+            <Flex direction={"column"} justify={"space-between"} h="100%">
+              <ScrollArea h={490}>
+                <Accordion
+                  chevronPosition="left"
+                  classNames={{
+                    content: classes.content,
+                  }}
+                >
+                  {servers.map((item) => (
+                    <Accordion.Item value={item._id} key={item._id}>
+                      <Flex
+                        align={"center"}
+                        direction={"row"}
+                        justify={{
+                          base: "start",
+                          sm: "space-between",
+                        }}
+                        wrap={{
+                          base: "wrap",
+                          sm: "nowrap",
+                        }}
+                      >
+                        <Accordion.Control>
+                          <Flex align={"center"} direction={"row"} gap={rem(4)}>
+                            <IconCircleFilled
+                              size={12}
+                              style={{
+                                color:
+                                  new Date(item.updatedAt).getTime() > Date.now() - 1000 * 60 * 4
+                                    ? "#12B886"
+                                    : "#FA5252",
+                                marginTop: "2.5px",
+                              }}
+                            />
+                            {item.name}
+                          </Flex>
+                        </Accordion.Control>
+                        <CustomMultiSelect
+                          classNames={{
+                            pill: classes.value,
+                            pillsList: classes.values,
+                          }}
+                          value={getSelectedPerms(item._id)}
+                          onChange={(values) => updatePermsState(item._id, "", values)}
+                          data={permissionData}
+                          itemComponent={SelectItemComponent}
+                          pillComponent={PillComponent}
+                          placeholder="Select Permissions"
+                          variant="filled"
+                          radius={"md"}
+                          size="sm"
+                          w={{
+                            sm: "24rem",
+                          }}
+                          pl={{
+                            base: "3rem",
+                            sm: "unset",
+                          }}
+                        />
+                      </Flex>
+                      <Accordion.Panel p={"0px"}>
+                        {item.processes?.map((process) => (
+                          <div key={process._id}>
+                            <Box py={"xs"}>
+                              <Flex
+                                align={"center"}
+                                direction={"row"}
+                                justify={"space-between"}
+                                wrap={{
+                                  base: "wrap",
+                                  sm: "nowrap",
+                                }}
+                              >
+                                <Flex align={"center"} direction={"row"} gap={rem(4)}>
+                                  <IconCircleFilled
+                                    size={10}
+                                    style={{
+                                      color:
+                                        process.status === "online"
+                                          ? "#12B886"
+                                          : process.status === "stopped"
+                                            ? "#FCC419"
+                                            : "#FA5252",
+                                      marginTop: "3px",
+                                    }}
+                                  />
+                                  {process.name}
+                                </Flex>
+                                <CustomMultiSelect
+                                  classNames={{
+                                    pill: classes.value,
+                                    pillsList: classes.values,
+                                  }}
+                                  value={getSelectedPerms(item._id, process._id)}
+                                  data={permissionData}
+                                  itemComponent={SelectItemComponent}
+                                  pillComponent={PillComponent}
+                                  placeholder="Select Permissions"
+                                  onChange={(values) => updatePermsState(item._id, process._id, values)}
+                                  variant="filled"
+                                  radius={"sm"}
+                                  size="xs"
+                                  w="14rem"
+                                />
+                              </Flex>
+                            </Box>
+                            <Divider />
+                          </div>
+                        ))}
+                      </Accordion.Panel>
+                    </Accordion.Item>
+                  ))}
+                </Accordion>
+                <Transition mounted={!selection?.length} transition="fade" duration={500}>
+                  {(styles) => (
+                    <Overlay color="#000" backgroundOpacity={0.1} radius={"md"} blur={7} center style={styles}>
+                      <Badge size="xl" variant="outline">
+                        Select a User First
+                      </Badge>
+                    </Overlay>
+                  )}
+                </Transition>
+              </ScrollArea>
+              <Flex justify={"flex-end"} direction={"row"}>
+                <Button
+                  variant="light"
+                  color="teal"
+                  radius="sm"
+                  size={"sm"}
+                  leftSection={<IconDeviceFloppy />}
+                  loading={updatePerms.isPending}
+                  disabled={selection.length === 0}
+                  onClick={() =>
+                    updatePerms.mutate({
+                      userIds: selection,
+                      perms: perms,
+                    })
+                  }
+                >
+                  Save
+                </Button>
+              </Flex>
+            </Flex>
+          </Flex>
+        </Paper>
+      </Grid.Col>
+    </Grid>
+  );
+}

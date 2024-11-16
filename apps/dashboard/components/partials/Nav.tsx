@@ -1,3 +1,5 @@
+"use client";
+
 import { AppShell, Stack, Tooltip, UnstyledButton, useMantineColorScheme } from "@mantine/core";
 import {
   IconGauge,

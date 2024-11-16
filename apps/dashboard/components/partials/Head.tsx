@@ -1,3 +1,5 @@
+"use client";
+
 import { ActionIcon, AppShell, Box, Center, Flex, Group, Modal, rem, Stack } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IProcess } from "@pm2.web/typings";

@@ -1,14 +1,12 @@
 "use client";
 
-import { SelectedProvider, useSelected } from "@/components/context/SelectedProvider";
+import { useSelected } from "@/components/context/SelectedProvider";
 import DashboardLog from "@/components/dashboard/DashboardLog";
-import { Dashboard } from "@/components/layouts/Dashboard";
 import { StatsRing } from "@/components/stats/StatsRing";
 import { api } from "@/trpc/react";
 import { formatBytes } from "@/utils/format";
 import { DonutChart } from "@mantine/charts";
 import { Flex, SimpleGrid, Paper } from "@mantine/core";
-import { ISetting } from "@pm2.web/typings";
 import ms from "ms";
 import { AreaChart } from "recharts";
 import classes from "@/styles/index.module.css";
@@ -24,16 +22,16 @@ const statChartProps = {
   connectNulls: true,
 };
 
-function Overview({ settings }: { settings: ISetting }) {
-  const { selectedServers, selectedProcesses } = useSelected();
+export default function Overview() {
+  const { selectedServers, selectedProcesses, settings } = useSelected();
   const { data } = api.server.getStats.useQuery(
     {
       processIds: selectedProcesses.map((p) => p._id),
       serverIds: selectedServers.map((p) => p._id),
-      polling: settings.polling.backend / 1000,
+      polling: settings!.polling.backend / 1000,
     },
     {
-      refetchInterval: settings.polling.frontend,
+      refetchInterval: settings!.polling.frontend,
     },
   );
 
@@ -112,21 +110,7 @@ function Overview({ settings }: { settings: ISetting }) {
           </Flex>
         </Paper>
       </SimpleGrid>
-      <DashboardLog refetchInterval={settings.polling.frontend} processIds={selectedProcesses.map((p) => p._id)} />
+      <DashboardLog refetchInterval={settings!.polling.frontend} processIds={selectedProcesses.map((p) => p._id)} />
     </Flex>
-  );
-}
-
-export default function Home() {
-  const [data] = api.server.getDashBoardData.useSuspenseQuery(undefined, {
-    refetchInterval: 5000,
-  });
-
-  return (
-    <SelectedProvider servers={data.servers}>
-      <Dashboard>
-        <Overview settings={data.settings} />
-      </Dashboard>
-    </SelectedProvider>
   );
 }

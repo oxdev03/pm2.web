@@ -47,6 +47,7 @@ export const settingRouter = createTRPCRouter({
     }),
   getSettings: protectedProcedure.query(async () => {
     const settings = await fetchSettings();
+    // TODO: extract registrationCode to separate model
     return settings;
   }),
   registrationCodeRequired: publicProcedure.query(async () => {
