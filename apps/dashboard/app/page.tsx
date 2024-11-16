@@ -7,10 +7,8 @@ export default async function HomePage() {
   void api.server.getDashBoardData.prefetch();
 
   return (
-    <DashboardLayout>
-      <SelectedProvider>
-        <Home />
-      </SelectedProvider>
+    <DashboardLayout provider={SelectedProvider}>
+      <Home />
     </DashboardLayout>
   );
 }

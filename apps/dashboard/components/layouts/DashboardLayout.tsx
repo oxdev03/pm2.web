@@ -1,7 +1,7 @@
 import "server-only";
 
 import { AppShell, AppShellMain } from "@mantine/core";
-import { ReactNode } from "react";
+import { FC, Fragment, ReactNode } from "react";
 
 import { Head } from "../partials/Head";
 import { Nav } from "../partials/Nav";
@@ -9,7 +9,14 @@ import classes from "./Dashboard.module.css";
 import AuthContext from "../context/AuthContext";
 import { HydrateClient } from "@/trpc/server";
 
-export function DashboardLayout({ children }: { children: ReactNode }) {
+interface DashboardLayoutProps {
+  children: ReactNode;
+  provider?: FC<{ children: ReactNode }>; // Optional provider component
+}
+
+export function DashboardLayout({ children, provider }: DashboardLayoutProps) {
+  const OptionalProvider = provider || Fragment;
+
   return (
     <HydrateClient>
       <main>
@@ -23,9 +30,11 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
             navbar={{ width: { base: 40, xs: 75 }, breakpoint: "" }}
             padding="md"
           >
-            <Head />
-            <Nav />
-            <AppShellMain>{children}</AppShellMain>
+            <OptionalProvider>
+              <Head />
+              <Nav />
+              <AppShellMain>{children}</AppShellMain>
+            </OptionalProvider>
           </AppShell>
         </AuthContext>
       </main>

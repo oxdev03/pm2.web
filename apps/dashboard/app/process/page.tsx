@@ -7,10 +7,8 @@ export default async function ProcessPage() {
   void api.server.getDashBoardData.prefetch();
 
   return (
-    <DashboardLayout>
-      <SelectedProvider>
-        <ProcessList />
-      </SelectedProvider>
+    <DashboardLayout provider={SelectedProvider}>
+      <ProcessList />
     </DashboardLayout>
   );
 }
