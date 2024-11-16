@@ -36,7 +36,11 @@ export function useSelected() {
 
 export function SelectedProvider({ children }: { children: React.ReactNode }) {
   const [{ servers, settings }] = api.server.getDashBoardData.useSuspenseQuery(undefined, {
-    refetchInterval: 5000,
+    refetchInterval: (query) => {
+      const data = query.state.data;
+      const polling = data?.settings?.polling?.frontend || 0;
+      return Math.min(Math.max(polling, 4000), 10_000);
+    },
   });
   const { data: session } = useSession();
   const [selectedItem, setSelectedItem] = useState<StateSelectedItem>({
