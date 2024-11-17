@@ -9,6 +9,7 @@
 import { userModel } from "@pm2.web/mongoose-models";
 import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
+import "@/utils/superjson-serializer";
 import { ZodError } from "zod";
 
 import { auth } from "@/server/auth";

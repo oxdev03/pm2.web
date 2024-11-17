@@ -19,7 +19,7 @@ export default function ProcessGitMetric({ versioning }: { versioning?: IProcess
           onMouseEnter={open}
           onMouseLeave={close}
         >
-          <Flex align={"center"} justify={"space-between"} gap={"5px"} w={"5em"}>
+          <Flex align={"center"} justify={"space-between"} gap={"5px"} miw={"5em"}>
             <IconGitMerge size="1.2rem" />
             <Anchor href={`${versioning?.url}/commit/${versioning?.revision}`} target="_blank" underline="hover">
               {versioning?.branch}
