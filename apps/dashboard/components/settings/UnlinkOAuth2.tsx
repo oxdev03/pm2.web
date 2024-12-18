@@ -9,7 +9,7 @@ export default function UnlinkOAuth2() {
   const unlinkOAuth2 = api.user.unlinkOAuth2.useMutation({
     onSuccess(data) {
       sendNotification("unlinkOAuth2", "Success", data, "success");
-      signOut();
+      void signOut();
     },
     onError(error) {
       sendNotification("unlinkOAuth2", "Failed", error.message, "error");

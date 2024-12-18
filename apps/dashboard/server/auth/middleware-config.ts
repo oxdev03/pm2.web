@@ -11,7 +11,7 @@ export default {
   },
   providers: [Credentials],
   callbacks: {
-    async jwt({ token, account, user }) {
+    jwt({ token, account, user }) {
       if (account && account.access_token) token.accessToken = account.access_token;
 
       if (user) {
@@ -21,7 +21,7 @@ export default {
       }
       return token;
     },
-    async session({ session, token }: { session: Session; token: JWT }) {
+    session({ session, token }: { session: Session; token: JWT }) {
       // Send properties to the client, like an access_token and user id from a provider.
       session.accessToken = token.accessToken;
       session.user.id = token.id;
@@ -30,7 +30,7 @@ export default {
 
       return session;
     },
-    async authorized({ auth }) {
+    authorized({ auth }) {
       return !!auth?.user && !!auth.user.id;
     },
   },

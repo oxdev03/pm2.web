@@ -54,7 +54,7 @@ export default function UserAdministration() {
     },
     onSuccess(data) {
       actionNotification(`update-perms`, "Permissions updated", data, "success");
-      usersQuery.refetch();
+      void usersQuery.refetch();
     },
   });
 

@@ -19,7 +19,7 @@ export default function DeleteAccount() {
   const deleteAccount = api.user.deleteAccount.useMutation({
     onSuccess(data) {
       sendNotification("deleteAccount", "Success", data, "success");
-      signOut();
+      void signOut();
     },
     onError(error) {
       sendNotification("deleteAccount", "Failed", error.message, "error");
