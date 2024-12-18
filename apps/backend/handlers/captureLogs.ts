@@ -1,3 +1,5 @@
+import EventEmitter from "node:events";
+
 import pm2 from "pm2";
 
 import { Packet, QueuedLog } from "../types/handler.js";
@@ -9,7 +11,7 @@ class LogCapture {
   constructor() {}
 
   capture(): void {
-    pm2.launchBus((err, bus) => {
+    pm2.launchBus((_err, bus: EventEmitter) => {
       bus.on("log:err", (packet: Packet) => {
         this.queuedLogs.push({
           id: packet.process.pm_id,

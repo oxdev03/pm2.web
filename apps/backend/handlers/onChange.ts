@@ -1,11 +1,14 @@
-// mongoose changestream
+/* eslint-disable @typescript-eslint/no-misused-promises */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { processModel } from "@pm2.web/mongoose-models";
 import mongoose from "mongoose";
 import pm2 from "pm2";
 
 import processInfo from "../utils/processInfo.js";
 
-const onChange = async (serverId: string) => {
+const onChange = (serverId: string) => {
   console.log(`[STREAM] Listening for changes on server ${serverId}`);
   const filter = [
     {

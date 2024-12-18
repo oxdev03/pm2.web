@@ -1,66 +1,65 @@
-const { resolve } = require("node:path");
+import eslint from "@eslint/js";
+import tseslint from "typescript-eslint";
+import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
+import eslintPluginUnicorn from "eslint-plugin-unicorn";
+import eslintPluginSimpleImportSort from "eslint-plugin-simple-import-sort";
+import eslintPluginTurbo from "eslint-plugin-turbo";
 
-const project = resolve(process.cwd(), "tsconfig.json");
+//plugins: ["simple-import-sort", "import", "@typescript-eslint", "prettier"],
 
-/**
- * @type {import('eslint').Linter.Config}
- */
-module.exports = {
-  extends: [
-    "plugin:@typescript-eslint/recommended",
-    "plugin:unicorn/recommended",
-    "prettier",
-    "eslint-config-turbo",
-  ],
-  parser: "@typescript-eslint/parser",
-  parserOptions: {
-    ecmaVersion: 6,
-    sourceType: "module",
+export const config = [
+  eslint.configs.recommended,
+  ...tseslint.configs.recommendedTypeChecked,
+  eslintPluginPrettierRecommended,
+  eslintPluginUnicorn.configs["flat/recommended"],
+  {
+    plugins: {
+      turbo: eslintPluginTurbo,
+    },
+    rules: {
+      "turbo/no-undeclared-env-vars": "warn",
+    },
   },
-  plugins: ["simple-import-sort", "import", "@typescript-eslint", "prettier"],
-  rules: {
-    "@typescript-eslint/naming-convention": [
-      "warn",
-      {
-        selector: "import",
-        format: ["camelCase", "PascalCase"],
-      },
-    ],
-    "@typescript-eslint/semi": "off",
-    curly: "off",
-    eqeqeq: "warn",
-    "no-throw-literal": "warn",
-    semi: "off",
-    "prettier/prettier": "error",
-    "@typescript-eslint/no-var-requires": "off",
-    "simple-import-sort/imports": "error",
-    "simple-import-sort/exports": "error",
-    "import/first": "error",
-    "import/newline-after-import": "error",
-    "import/no-duplicates": "error",
-    "unicorn/prevent-abbreviations": "off",
-    "unicorn/catch-error-name": "off",
-    "unicorn/no-null": "off",
-    "unicorn/prefer-module": "off",
-    "unicorn/filename-case": [
-      "error",
-      {
-        "cases": {
-          "kebabCase": true,
-          "camelCase": true
-        }
-      }
-    ]
+  {
+    plugins: {
+      "simple-import-sort": eslintPluginSimpleImportSort,
+    },
+    rules: {
+      "simple-import-sort/imports": "error",
+      "simple-import-sort/exports": "error",
+    },
   },
-  env: {
-    node: true,
+  {
+    ignores: ["dist/**", "node_modules/**", "**/*.d.ts"],
   },
-  settings: {
-    "import/resolver": {
-      typescript: {
-        project,
+  {
+    languageOptions: {
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
       },
     },
   },
-  ignorePatterns: ["dist", "node_modules/", "**/*.d.ts"],
-};
+  {
+    files: ["**/*.js"],
+    ...tseslint.configs.disableTypeChecked,
+  },
+  {
+    rules: {
+      "unicorn/prevent-abbreviations": "off",
+      "unicorn/catch-error-name": "off",
+      "unicorn/no-null": "off",
+      "unicorn/prefer-module": "off",
+      "unicorn/prefer-export-from": "off",
+      "unicorn/filename-case": [
+        "error",
+        {
+          cases: {
+            kebabCase: true,
+            camelCase: true,
+          },
+        },
+      ],
+    },
+  },
+];

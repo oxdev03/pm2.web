@@ -27,6 +27,12 @@ interface IUser {
   password?: string;
   acl: IAcl;
   oauth2?: IOauth2;
+  updatedAt?: Date;
+  createdAt?: Date;
+}
+
+interface SerializedUser
+  extends Omit<IUser, "password" | "createdAt" | "updatedAt"> {
   updatedAt?: string;
   createdAt?: string;
 }
@@ -34,14 +40,15 @@ interface IUser {
 interface IUserModel extends IUser {}
 
 interface IUserModelMethods {
-  checkPassword: (password: string) => Promise<boolean>;
-  toJSON: () => Omit<IUser, "password">;
+  checkPassword(password: string): Promise<boolean>;
+  toJSON(): SerializedUser;
 }
 
 export type {
   IUserModel,
   IUserModelMethods,
   IUser,
+  SerializedUser,
   IAcl,
   IOauth2,
   IAclServer,

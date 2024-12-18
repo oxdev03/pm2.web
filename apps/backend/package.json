@@ -7,6 +7,7 @@
     "name": "oxdev03"
   },
   "private": true,
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "https://github.com/oxdev03/pm2.web"
@@ -32,15 +33,14 @@
     "@pm2.web/typings": "*",
     "bcrypt": "^5.1.1",
     "bytes-iec": "^3.1.1",
-    "dotenv": "^16.4.5",
-    "pm2": "^5.4.2",
-    "systeminformation": "^5.23.5"
+    "dotenv": "^16.4.7",
+    "pm2": "^5.4.3",
+    "systeminformation": "^5.23.14"
   },
   "devDependencies": {
     "@pm2.web/eslint-config": "*",
     "@pm2.web/typescript-config": "*",
     "@types/bcrypt": "^5.0.2",
-    "eslint": "^8.57.1",
     "typescript": "^5.6.2"
   }
 }

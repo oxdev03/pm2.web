@@ -13,9 +13,10 @@ const logCapture = new LogCapture();
 
 async function createInterval() {
   const { polling } = await getCachedSettings();
+  // eslint-disable-next-line @typescript-eslint/no-misused-promises
   const interval = setInterval(async () => {
-    await updateData(logCapture.clear(), await getCachedSettings());
     const settings = await getCachedSettings();
+    await updateData(logCapture.clear(), settings);
     // if polling changed clear interval and create new one
     if (settings.polling.backend !== polling.backend) {
       clearInterval(interval);
@@ -32,6 +33,6 @@ async function main() {
 }
 
 // eslint-disable-next-line unicorn/prefer-top-level-await
-(async () => {
+void (async () => {
   await main();
 })();

@@ -2,8 +2,8 @@ import { IProcessType, PROCESS_TYPES } from "@pm2.web/typings";
 import bytes from "bytes-iec";
 import pm2 from "pm2";
 
-import { IProcessInfo } from "../types/info";
-import { Pm2ProcessDescription } from "../types/pm2";
+import type { IProcessInfo } from "../types/info.ts";
+import type { Pm2ProcessDescription } from "../types/pm2.ts";
 
 const getProcessInfo = async (): Promise<IProcessInfo[]> => {
   const pm2List = await new Promise<Pm2ProcessDescription[]>(

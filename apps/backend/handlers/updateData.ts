@@ -17,7 +17,7 @@ export default async function updateData(
   if (currentServer) {
     currentServer.name = server.name;
     currentServer.heartbeat = Date.now();
-    currentServer.save();
+    await currentServer.save();
   } else {
     // create server
     const newServer = new serverModel({
