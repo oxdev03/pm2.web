@@ -2,8 +2,8 @@ import { Accordion, Button, Stack, Title } from "@mantine/core";
 import { IconUnlink } from "@tabler/icons-react";
 import { signOut } from "next-auth/react";
 
-import { sendNotification } from "@/utils/notification";
 import { api } from "@/trpc/react";
+import { sendNotification } from "@/utils/notification";
 
 export default function UnlinkOAuth2() {
   const unlinkOAuth2 = api.user.unlinkOAuth2.useMutation({

@@ -1,8 +1,9 @@
 "use client";
 
+import { Flex } from "@mantine/core";
+
 import { useSelected } from "@/components/context/SelectedProvider";
 import ProcessItem from "@/components/process/ProcessItem";
-import { Flex } from "@mantine/core";
 
 export default function ProcessList() {
   const { selectedProcesses, settings } = useSelected();

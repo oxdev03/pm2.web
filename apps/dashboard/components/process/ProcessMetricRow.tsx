@@ -3,8 +3,8 @@ import { IProcess } from "@pm2.web/typings";
 import { IconCpu, IconDeviceSdCard, IconHistory } from "@tabler/icons-react";
 import ms from "ms";
 
-import { formatBytes } from "@/utils/format";
 import { api } from "@/trpc/react";
+import { formatBytes } from "@/utils/format";
 
 import ProcessGitMetric from "./ProcessGitMetric";
 import ProcessItemMetric from "./ProcessMetric";

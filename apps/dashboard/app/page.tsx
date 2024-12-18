@@ -1,9 +1,10 @@
-import { api } from "@/trpc/server";
-import Home from "./_components/Overview";
-import { DashboardLayout } from "@/components/layouts/DashboardLayout";
 import { SelectedProvider } from "@/components/context/SelectedProvider";
+import { DashboardLayout } from "@/components/layouts/DashboardLayout";
+import { api } from "@/trpc/server";
 
-export default async function HomePage() {
+import Home from "./_components/Overview";
+
+export default function HomePage() {
   void api.server.getDashBoardData.prefetch();
 
   return (

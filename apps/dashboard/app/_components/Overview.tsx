@@ -1,15 +1,16 @@
 "use client";
 
+import { DonutChart } from "@mantine/charts";
+import { Flex, Paper, SimpleGrid } from "@mantine/core";
+import ms from "ms";
+import { AreaChart } from "recharts";
+
 import { useSelected } from "@/components/context/SelectedProvider";
 import DashboardLog from "@/components/dashboard/DashboardLog";
 import { StatsRing } from "@/components/stats/StatsRing";
+import classes from "@/styles/index.module.css";
 import { api } from "@/trpc/react";
 import { formatBytes } from "@/utils/format";
-import { DonutChart } from "@mantine/charts";
-import { Flex, SimpleGrid, Paper } from "@mantine/core";
-import ms from "ms";
-import { AreaChart } from "recharts";
-import classes from "@/styles/index.module.css";
 
 const statChartProps = {
   h: "120px",

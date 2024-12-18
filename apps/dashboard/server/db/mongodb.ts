@@ -11,7 +11,7 @@ const connectionOptions = {
  * in development. This prevents connections growing exponentially
  * during API Route usage.
  */
-const globalWithMongo = global as typeof globalThis & {
+const globalWithMongo = globalThis as typeof globalThis & {
   _mongooseConn?: typeof mongoose;
 };
 

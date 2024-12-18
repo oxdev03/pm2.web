@@ -18,8 +18,8 @@ import { randomId } from "@mantine/hooks";
 import { ISetting } from "@pm2.web/typings";
 import { IconCheck, IconCopy, IconDeviceFloppy, IconRefresh } from "@tabler/icons-react";
 
-import { sendNotification } from "@/utils/notification";
 import { api } from "@/trpc/react";
+import { sendNotification } from "@/utils/notification";
 
 import classes from "./UpdateConfiguration.module.css";
 

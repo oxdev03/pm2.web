@@ -1,8 +1,8 @@
 import { Accordion, Button, Flex, Select, Title } from "@mantine/core";
 import { useForm } from "@mantine/form";
 
-import { sendNotification } from "@/utils/notification";
 import { api } from "@/trpc/react";
+import { sendNotification } from "@/utils/notification";
 
 export default function DatabaseAction() {
   const databaseAction = useForm<{ action: "deleteAll" | "deleteLogs" | "" }>({

@@ -13,11 +13,11 @@ import {
 } from "@tabler/icons-react";
 import cx from "clsx";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Session } from "next-auth";
 import { signOut, useSession } from "next-auth/react";
 
 import classes from "./Nav.module.css";
-import { usePathname } from "next/navigation";
 
 interface NavbarBtnProps {
   icon: TablerIcon;

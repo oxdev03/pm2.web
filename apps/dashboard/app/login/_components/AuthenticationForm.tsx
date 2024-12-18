@@ -76,7 +76,7 @@ export default function AuthenticationForm({ registrationCodeRequired }: { regis
                       radius="xl"
                       onClick={() =>
                         signIn("github", {
-                          callbackUrl: (callbackUrl as string) || "/",
+                          callbackUrl: callbackUrl || "/",
                         })
                       }
                     >

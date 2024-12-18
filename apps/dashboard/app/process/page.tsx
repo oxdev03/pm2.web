@@ -1,9 +1,10 @@
-import { api } from "@/trpc/server";
-import { DashboardLayout } from "@/components/layouts/DashboardLayout";
 import { SelectedProvider } from "@/components/context/SelectedProvider";
+import { DashboardLayout } from "@/components/layouts/DashboardLayout";
+import { api } from "@/trpc/server";
+
 import ProcessList from "./_components/ProcessList";
 
-export default async function ProcessPage() {
+export default function ProcessPage() {
   void api.server.getDashBoardData.prefetch();
 
   return (

@@ -56,7 +56,7 @@ export const config = [
         {
           cases: {
             kebabCase: true,
-            camelCase: true,
+            pascalCase: true,
           },
         },
       ],

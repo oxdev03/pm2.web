@@ -3,8 +3,8 @@ import { useForm } from "@mantine/form";
 import { IconTrash } from "@tabler/icons-react";
 import { signOut } from "next-auth/react";
 
-import { sendNotification } from "@/utils/notification";
 import { api } from "@/trpc/react";
+import { sendNotification } from "@/utils/notification";
 
 export default function DeleteAccount() {
   const deleteForm = useForm({

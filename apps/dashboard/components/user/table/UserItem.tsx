@@ -4,8 +4,8 @@ import cx from "clsx";
 
 import { GithubIcon } from "@/components/icons/github";
 import { GoogleIcon } from "@/components/icons/google";
-import { actionNotification } from "@/utils/notification";
 import { api } from "@/trpc/react";
+import { actionNotification } from "@/utils/notification";
 
 import classes from "./UserItem.module.css";
 

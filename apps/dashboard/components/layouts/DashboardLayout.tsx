@@ -3,11 +3,12 @@ import "server-only";
 import { AppShell, AppShellMain } from "@mantine/core";
 import { FC, Fragment, ReactNode } from "react";
 
+import { HydrateClient } from "@/trpc/server";
+
+import AuthContext from "../context/AuthContext";
 import { Head } from "../partials/Head";
 import { Nav } from "../partials/Nav";
 import classes from "./Dashboard.module.css";
-import AuthContext from "../context/AuthContext";
-import { HydrateClient } from "@/trpc/server";
 
 interface DashboardLayoutProps {
   children: ReactNode;

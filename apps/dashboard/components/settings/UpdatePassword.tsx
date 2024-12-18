@@ -3,8 +3,8 @@ import { useForm } from "@mantine/form";
 import { IconRefresh } from "@tabler/icons-react";
 import { ZodError } from "zod";
 
-import { sendNotification } from "@/utils/notification";
 import { api } from "@/trpc/react";
+import { sendNotification } from "@/utils/notification";
 
 export default function UpdatePassword() {
   const passwordForm = useForm({

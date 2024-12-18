@@ -1,8 +1,8 @@
 import { AreaChart } from "@mantine/charts";
 import { Flex } from "@mantine/core";
 
-import { formatBytes } from "@/utils/format";
 import { api } from "@/trpc/react";
+import { formatBytes } from "@/utils/format";
 
 interface ProcessChartProps {
   processId: string;
@@ -17,7 +17,7 @@ export default function ProcessChart({ processId, refetchInterval }: ProcessChar
       range: "seconds",
     },
     {
-      refetchInterval,
+      refetchInterval: 5000,
     },
   );
 
@@ -31,6 +31,39 @@ export default function ProcessChart({ processId, refetchInterval }: ProcessChar
       }))
       ?.reverse() || [];
 
+  const data1 = [
+    {
+      RAM: 50_683_904,
+      HEAP_USED: 0,
+      date: "16:43:56",
+    },
+    {
+      RAM: 52_506_624,
+      HEAP_USED: 9_300_869,
+      date: "16:44:11",
+    },
+    {
+      RAM: 52_506_624,
+      HEAP_USED: 9_300_869,
+      date: "16:44:11",
+    },
+    {
+      RAM: 57_565_184,
+      HEAP_USED: 6_689_914,
+      date: "16:44:21",
+    },
+    {
+      RAM: 57_540_608,
+      HEAP_USED: 13_107_200,
+      date: "16:44:29",
+    },
+    {
+      RAM: 57_257_984,
+      HEAP_USED: 8_661_237,
+      date: "16:45:28",
+    },
+  ];
+
   return (
     <Flex align={"center"} justify={"space-between"}>
       <AreaChart
@@ -38,17 +71,16 @@ export default function ProcessChart({ processId, refetchInterval }: ProcessChar
         h={"150px"}
         pt={"0.5em"}
         pr="xs"
-        data={chartData}
+        data={data1}
         valueFormatter={(value) => formatBytes(value)}
         dataKey="date"
-        type="default"
         series={[
-          { name: "RAM", color: "yellow" },
+          { name: "RAM", color: "yellow", label: "RAM" },
           { name: "HEAP_USED", color: "grape", label: "HEAP USED" },
         ]}
         withLegend
         withGradient
-        withDots={false}
+        // withDots={false}
         withXAxis={false}
         areaChartProps={{ syncId: "stats" }}
       />

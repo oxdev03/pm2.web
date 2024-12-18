@@ -22,16 +22,15 @@ import React, { useEffect, useState } from "react";
 import { CustomMultiSelect } from "@/components/misc/MultiSelect/CustomMultiSelect";
 import UserManagement from "@/components/user/UserManagement";
 import { permissionData, PillComponent, SelectItemComponent } from "@/components/user/UserMultiSelectHelper";
+import classes from "@/styles/user.module.css";
+import { api } from "@/trpc/react";
 import { actionNotification } from "@/utils/notification";
 import { IPermissionConstants, Permission, PERMISSIONS } from "@/utils/permission";
-import { api } from "@/trpc/react";
-
-import classes from "@/styles/user.module.css";
 
 export default function UserAdministration() {
   const dashboardQuery = api.server.getDashBoardData.useQuery(true);
   const usersQuery = api.user.getUsers.useQuery();
-  const servers = dashboardQuery.data?.servers || []!;
+  const servers = dashboardQuery.data?.servers || [];
   const users = usersQuery.data || [];
 
   const [selection, setSelection] = useState<string[]>([]);

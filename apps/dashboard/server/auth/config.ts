@@ -1,12 +1,12 @@
 import { userModel } from "@pm2.web/mongoose-models";
 import { IAcl, IOauth2 } from "@pm2.web/typings";
-import { CredentialsSignin, type DefaultSession, type NextAuthConfig, Session } from "next-auth";
-import { JWT } from "next-auth/jwt";
+import { CredentialsSignin, type DefaultSession, type NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 
 import connectDB from "@/server/db/mongodb";
 import { fetchSettings } from "@/server/db/settings";
 import { AuthErrors } from "@/utils/auth-errors";
+
 import middlewareConfig from "./middleware-config";
 
 /**

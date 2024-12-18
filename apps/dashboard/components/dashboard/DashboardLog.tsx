@@ -1,7 +1,8 @@
-import { api } from "@/trpc/react";
 import { Flex, Paper, ScrollArea, Text } from "@mantine/core";
 import { IconList } from "@tabler/icons-react";
 import { useRef } from "react";
+
+import { api } from "@/trpc/react";
 
 interface DashboardLogProps {
   refetchInterval: number;

@@ -1,6 +1,7 @@
-import { auth } from "@/server/auth";
 import { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
+
+import { auth } from "@/server/auth";
 
 export interface AuthContextProps {
   session?: Session | null;

@@ -2,8 +2,8 @@ import { ActionIcon, Flex } from "@mantine/core";
 import { IconPower, IconReload, IconSquareRoundedMinus, IconTrash } from "@tabler/icons-react";
 
 import classes from "@/styles/process.module.css";
-import { sendNotification } from "@/utils/notification";
 import { api } from "@/trpc/react";
+import { sendNotification } from "@/utils/notification";
 
 interface ProcessActionProps {
   processId: string;
