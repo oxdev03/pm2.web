@@ -3,7 +3,7 @@ import EventEmitter from "node:events";
 import pm2 from "pm2";
 
 import { Packet, QueuedLog } from "../types/handler.js";
-import censorMessage from "../utils/censorMessage.js";
+import censorMessage from "../utils/censor-message.js";
 
 class LogCapture {
   private queuedLogs: QueuedLog[] = [];

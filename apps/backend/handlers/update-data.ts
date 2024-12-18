@@ -2,8 +2,8 @@ import { processModel, serverModel, statModel } from "@pm2.web/mongoose-models";
 import { ISettingModel } from "@pm2.web/typings";
 
 import { QueuedLog, UpdateDataResponse } from "../types/handler.js";
-import processInfo from "../utils/processInfo.js";
-import serverInfo from "../utils/serverInfo.js";
+import processInfo from "../utils/process-info.js";
+import serverInfo from "../utils/server-info.js";
 
 export default async function updateData(
   queuedLogs: QueuedLog[],

@@ -1,7 +1,7 @@
 /* eslint-disable unicorn/no-await-expression-member */
 import si from "systeminformation";
 
-import type { IServerInfo } from "../types/info.ts";
+import type { IServerInfo } from "../types/info.js";
 
 export default async function getServerInfo(): Promise<IServerInfo> {
   const mem = await si.mem();

@@ -6,7 +6,7 @@ import { processModel } from "@pm2.web/mongoose-models";
 import mongoose from "mongoose";
 import pm2 from "pm2";
 
-import processInfo from "../utils/processInfo.js";
+import processInfo from "../utils/process-info.js";
 
 const onChange = (serverId: string) => {
   console.log(`[STREAM] Listening for changes on server ${serverId}`);
