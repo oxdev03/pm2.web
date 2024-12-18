@@ -4,7 +4,11 @@ import mongoose, { Model, models } from "mongoose";
 
 type UserModel = Model<IUserModel, object, IUserModelMethods>;
 
-const userSchema = new mongoose.Schema(
+const userSchema = new mongoose.Schema<
+  IUserModel,
+  UserModel,
+  IUserModelMethods
+>(
   {
     email: {
       type: String,
@@ -60,9 +64,14 @@ userSchema.pre("save", async function (next) {
 });
 
 // Check if the provided password matches the user's password
+
 userSchema.methods.checkPassword = async function (password: string) {
-  return await bcrypt.compare(password, this.password!);
+  if (!this.password) throw new Error("User has no password set");
+  return await bcrypt.compare(password, this.password);
 };
+
+const stringifyDate = (date?: Date) =>
+  date ? new Date(date).toISOString() : undefined;
 
 // Remove sensitive fields from the user object before sending it to the client
 userSchema.methods.toJSON = function () {
@@ -70,8 +79,8 @@ userSchema.methods.toJSON = function () {
   delete user.password;
   return {
     ...user,
-    updatedAt: user.updatedAt.toISOString(),
-    createdAt: user.createdAt.toISOString(),
+    updatedAt: stringifyDate(user.updatedAt),
+    createdAt: stringifyDate(user.createdAt),
   };
 };
 

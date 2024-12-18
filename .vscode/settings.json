@@ -1,4 +1,14 @@
 {
-  "cssvar.files": ["apps/dashboard/node_modules/@mantine/core/styles.css"],
-  "cssvar.extensions": ["css", "scss", "tsx", "jsx"]
+  "[typescript]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }

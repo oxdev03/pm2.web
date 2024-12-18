@@ -7,7 +7,7 @@
     "url": "https://github.com/oxdev03/pm2.web"
   },
   "engines": {
-    "node": ">= 20.0.0"
+    "node": ">= 22.0.0"
   },
   "author": {
     "name": "oxdev03"
@@ -40,10 +40,9 @@
     "test:apps:dashboard": "turbo run test --filter=dashboard"
   },
   "devDependencies": {
-    "@pm2.web/eslint-config": "*",
     "@pm2.web/typescript-config": "*",
-    "prettier": "^3.3.3",
-    "turbo": "^2.2.3"
+    "prettier": "^3.4.2",
+    "turbo": "^2.3.3"
   },
-  "packageManager": "npm@10.9.0"
+  "packageManager": "npm@11.0.0"
 }

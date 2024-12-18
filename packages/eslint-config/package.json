@@ -1,20 +1,26 @@
 {
   "name": "@pm2.web/eslint-config",
   "version": "1.5.0",
+  "type": "module",
   "private": true,
-  "files": [
-    "base.js"
-  ],
+  "exports": {
+    "./base": "./base.js",
+    "./next-js": "./next.js"
+  },
   "dependencies": {
-    "@typescript-eslint/eslint-plugin": "^7.18.0",
-    "@typescript-eslint/parser": "^7.18.0",
+    "@next/eslint-plugin-next": "^15.1.1",
+    "@typescript-eslint/eslint-plugin": "^8.18.1",
+    "@typescript-eslint/parser": "^8.18.1",
+    "eslint": "^9.17.0",
+    "globals": "^15.14.0",
     "eslint-config-prettier": "^9.1.0",
-    "eslint-config-turbo": "2.2.3",
-    "eslint-plugin-import": "^2.31.0",
-    "eslint-plugin-only-warn": "^1.1.0",
-    "eslint-plugin-prettier": "5.2.1",
+    "eslint-plugin-prettier": "^5.2.1",
+    "eslint-plugin-turbo": "^2.3.3",
+    "eslint-plugin-unicorn": "^56.0.1",
     "eslint-plugin-simple-import-sort": "^12.1.1",
-    "eslint-plugin-unicorn": "^56.0.0",
-    "typescript": "^5.6.3"
+    "eslint-plugin-react": "^7.37.2",
+    "eslint-plugin-react-hooks": "^5.1.0",
+    "typescript": "^5.6.3",
+    "typescript-eslint": "^8.18.1"
   }
 }
