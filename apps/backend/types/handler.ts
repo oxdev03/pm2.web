@@ -1,6 +1,6 @@
 import { IServerModel } from "@pm2.web/typings";
 
-import { IProcessInfo } from "./info";
+import type { IProcessInfo } from "./info.ts";
 
 interface QueuedLog {
   id: number;

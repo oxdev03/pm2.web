@@ -60,7 +60,7 @@ export default function UserItem({
   });
 
   return (
-    <Table.Tr className={cx({ [classes.rowSelected]: selected })} data-cy="user-item" data-cy-id={email}>
+    <Table.Tr className={cx({ [classes.rowSelected!]: selected })} data-cy="user-item" data-cy-id={email}>
       <Table.Td>
         <Checkbox
           checked={selected}

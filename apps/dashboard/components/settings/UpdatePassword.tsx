@@ -28,7 +28,7 @@ export default function UpdatePassword() {
       let errorMessage = error.message;
       try {
         const zodErrors = JSON.parse(error.message) as ZodError["errors"];
-        errorMessage = zodErrors?.[0]?.message;
+        errorMessage = zodErrors?.[0]?.message || errorMessage;
         passwordForm.setFieldError(zodErrors?.[0]?.path?.[0] as string, errorMessage);
       } catch {
         passwordForm.setFieldError("oldPassword", errorMessage);

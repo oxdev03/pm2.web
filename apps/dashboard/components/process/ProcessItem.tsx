@@ -40,8 +40,8 @@ export default function ProcessItem({ process, setting }: ProcessItemProps) {
       p="xs"
       shadow="sm"
       className={cx(classes.processItem, {
-        [classes.opened]: !collapsed,
-        [classes.closed]: collapsed,
+        [classes.opened!]: !collapsed,
+        [classes.closed!]: collapsed,
       })}
     >
       <Flex direction={"column"}>

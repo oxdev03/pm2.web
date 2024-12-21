@@ -1,10 +1,12 @@
-import NextAuth from "next-auth";
+import NextAuth, { NextAuthResult } from "next-auth";
 import { cache } from "react";
 
 import { authConfig } from "./config";
 
-const { auth: uncachedAuth, handlers, signIn, signOut } = NextAuth(authConfig);
+const nextAuth = NextAuth(authConfig);
+// WORKAROUND: microsoft/TypeScript#42873
+const auth: NextAuthResult["auth"] = cache(nextAuth.auth);
 
-const auth = cache(uncachedAuth);
+const { handlers, signIn, signOut } = NextAuth(authConfig);
 
 export { auth, handlers, signIn, signOut };
