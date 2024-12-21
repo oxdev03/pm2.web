@@ -61,20 +61,21 @@ export default function UserAdministration() {
   const updatePermsState = (server_id: string, process_id: string, new_perms: string[]) => {
     const newPerms = [...perms];
     const serverIndex = newPerms.findIndex((x) => x.server == server_id);
-    if (serverIndex !== -1) {
+    if (serverIndex !== -1 && newPerms[serverIndex]) {
+      const server = newPerms[serverIndex];
       if (process_id) {
-        const processIndex = newPerms[serverIndex].processes.findIndex((x) => x.process == process_id);
-        if (processIndex !== -1) {
-          newPerms[serverIndex].processes[processIndex].perms = new Permission().add(
+        const processIndex = server.processes.findIndex((x) => x.process == process_id);
+        if (processIndex !== -1 && server.processes[processIndex]) {
+          server.processes[processIndex].perms = new Permission().add(
             ...new_perms.map((x) => PERMISSIONS[x as keyof IPermissionConstants]),
           ).value;
         }
       } else {
-        newPerms[serverIndex].perms = new Permission().add(
+        server.perms = new Permission().add(
           ...new_perms.map((x) => PERMISSIONS[x as keyof IPermissionConstants]),
         ).value;
         // process should inherit server perms , if server perms is changed
-        newPerms[serverIndex].processes = newPerms[serverIndex].processes.map((process) => ({
+        server.processes = newPerms[serverIndex].processes.map((process) => ({
           ...process,
           perms: new Permission().add(...new_perms.map((x) => PERMISSIONS[x as keyof IPermissionConstants])).value,
         }));
@@ -136,7 +137,7 @@ export default function UserAdministration() {
       }}
     >
       <UserManagement
-        refreshUsers={usersQuery.refetch}
+        refreshUsers={() => void usersQuery.refetch()}
         users={users}
         selection={selection}
         setSelection={setSelection}

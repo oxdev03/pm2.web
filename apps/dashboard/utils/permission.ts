@@ -97,9 +97,9 @@ class Permission {
   }
 
   toArray(): (keyof IPermissionConstants)[] {
-    return Object.entries(this.constants)
+    return (Object.entries(this.constants) as [keyof IPermissionConstants, number][])
       .filter(([, value]) => this.has(value))
-      .map(([key]) => key as keyof IPermissionConstants);
+      .map(([key]) => key);
   }
 }
 

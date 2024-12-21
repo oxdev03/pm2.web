@@ -39,7 +39,7 @@ export default function DatabaseAction() {
       </Accordion.Control>
       <Accordion.Panel px="xs">
         <form
-          onSubmit={databaseAction.onSubmit(async () => {
+          onSubmit={databaseAction.onSubmit(() => {
             const action = databaseAction.values.action;
             switch (action) {
               case "":

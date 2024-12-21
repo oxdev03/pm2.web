@@ -9,6 +9,19 @@ import { PERMISSIONS } from "@/utils/permission";
 
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
+type AggregatedProcessStat = {
+  _id: string;
+  processRam: number;
+  processCpu: number;
+  processUptime: number;
+};
+type AggregatedServerStat = {
+  _id: string;
+  serverRam: number;
+  serverCpu: number;
+  serverUptime: number;
+};
+
 export const serverRouter = createTRPCRouter({
   getLogs: protectedProcedure
     .input(z.object({ processIds: z.array(z.string()), limit: z.number().optional().default(100) }))
@@ -122,14 +135,14 @@ export const serverRouter = createTRPCRouter({
         },
       ];
 
-      const processStats = await statModel.aggregate(processPipeline);
-      const serverStats = await statModel.aggregate(serverPipeline);
+      const processStats = await statModel.aggregate<AggregatedProcessStat>(processPipeline);
+      const serverStats = await statModel.aggregate<AggregatedServerStat>(serverPipeline);
 
       const mergedStats = processStats.map((processStat) => {
         const correspondingServerStat = serverStats.find(
           (serverStat) => serverStat._id.toString() === processStat._id.toString(),
         );
-        return { ...processStat, ...correspondingServerStat, _id: processStat._id || correspondingServerStat._id };
+        return { ...processStat, ...correspondingServerStat, _id: processStat._id || correspondingServerStat?._id };
       });
 
       return {

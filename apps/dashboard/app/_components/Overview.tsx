@@ -1,9 +1,8 @@
 "use client";
 
-import { DonutChart } from "@mantine/charts";
+import { AreaChart, DonutChart } from "@mantine/charts";
 import { Flex, Paper, SimpleGrid } from "@mantine/core";
 import ms from "ms";
-import { AreaChart } from "recharts";
 
 import { useSelected } from "@/components/context/SelectedProvider";
 import DashboardLog from "@/components/dashboard/DashboardLog";
@@ -36,7 +35,7 @@ export default function Overview() {
     },
   );
 
-  const chartData = data?.stats?.map((e) => ({ ...e, date: new Date(e._id).toLocaleTimeString() })) || [];
+  const chartData = data?.stats?.map((e) => ({ ...e, date: new Date(e._id || 0).toLocaleTimeString() })) || [];
 
   const onlineCount = selectedProcesses.filter((p) => p.status == "online").length;
   const stoppedCount = selectedProcesses.filter((p) => p.status == "stopped").length;

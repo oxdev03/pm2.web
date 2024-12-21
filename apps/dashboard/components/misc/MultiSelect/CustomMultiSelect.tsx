@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-redundant-type-constituents */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable unicorn/prefer-negative-index */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -20,7 +23,7 @@ import {
   useStyles,
 } from "@mantine/core";
 import { useId, useUncontrolled } from "@mantine/hooks";
-import React, { useEffect } from "react";
+import React, { JSX, useEffect } from "react";
 
 export interface IItem {
   label: string;
@@ -185,7 +188,7 @@ export const CustomMultiSelect = factory<CustomMultiSelectFactory>((_props, ref)
     .filter((opt) => _value.includes(opt.value))
     .map((item, index) => (
       <Pill
-        key={`${item}-${index}`}
+        key={index}
         withRemoveButton={!readOnly && !item?.disabled}
         onRemove={() => setValue(_value.filter((i) => item.value !== i))}
         unstyled={unstyled}

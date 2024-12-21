@@ -23,7 +23,7 @@ interface NavbarBtnProps {
   icon: TablerIcon;
   label: string;
   active?: boolean;
-  onClick?(): void;
+  onClick?(this: void): void;
 }
 
 function NavbarBtn({ icon: Icon, label, active, onClick }: NavbarBtnProps) {
@@ -99,7 +99,7 @@ export function Nav() {
               <IconMoonStars stroke={1.5} className={cx(classes.icon, classes.colorSchemeDark)} />
             </Link>
           </Tooltip>
-          <NavbarBtn icon={IconLogout} label="Logout" onClick={() => signOut()} />
+          <NavbarBtn icon={IconLogout} label="Logout" onClick={() => void signOut()} />
         </Stack>
       </AppShell.Section>
     </AppShell.Navbar>

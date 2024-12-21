@@ -17,6 +17,7 @@ export default function Settings() {
   const isOAuth2 = !!session?.user?.oauth2?.provider;
 
   if (settingsQuery.isError) {
+    // TODO: add proper error handling
   }
 
   return (

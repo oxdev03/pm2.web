@@ -17,7 +17,7 @@ export default function ProcessChart({ processId, refetchInterval }: ProcessChar
       range: "seconds",
     },
     {
-      refetchInterval: 5000,
+      refetchInterval,
     },
   );
 

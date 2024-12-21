@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { processModel, statModel } from "@pm2.web/mongoose-models";
 import { IProcess, IUser } from "@pm2.web/typings";
 import { TRPCError } from "@trpc/server";
@@ -100,8 +101,10 @@ export const processRouter = createTRPCRouter({
       let success = false;
 
       while ((doc = await Promise.race([changeStream.next(), timeoutPromise]))) {
-        if (doc?.updateDescription?.updatedFields) {
-          const updatedField = Object.keys(doc?.updateDescription?.updatedFields);
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        const updatedFields = doc?.updateDescription?.updatedFields as Record<string, unknown>;
+        if (updatedFields) {
+          const updatedField = Object.keys(updatedFields);
           if (["restartCount", "toggleCount", "deleteCount"].some((s) => updatedField.includes(s))) {
             success = true;
             break;
