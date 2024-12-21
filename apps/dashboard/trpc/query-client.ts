@@ -1,6 +1,7 @@
+import "@/utils/superjson-serializer";
+
 import { defaultShouldDehydrateQuery, QueryClient } from "@tanstack/react-query";
 import SuperJSON from "superjson";
-import "@/utils/superjson-serializer";
 
 export const createQueryClient = () =>
   new QueryClient({
