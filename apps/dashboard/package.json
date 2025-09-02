@@ -59,7 +59,7 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
-    "@types/lodash": "^4.17.9",
+    "@types/lodash": "^4.17.20",
     "@types/ms": "^0.7.34",
     "@types/node": "20.16.10",
     "@types/react": "^18.3.10",
