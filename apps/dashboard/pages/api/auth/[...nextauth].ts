@@ -78,13 +78,58 @@ const providers = () => {
     );
   }
 
-  if (process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
+  if (process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID && process.env.GOOGLE_SECRET) {
     p.push(
-      GoogleProvider({
-        clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      }),
-    );
+    GoogleProvider({
+        clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID as string,
+        clientSecret: process.env.GOOGLE_SECRET as string,
+
+        userinfo: {
+        async request({ client, tokens }) {
+            const profile = await client.userinfo(tokens.access_token!);
+            await connectDB();
+
+            if (!profile.email) throw new Error("NoEmail");
+
+            const user = await userModel.findOne({
+              email: { $regex: new RegExp(profile.email, "i") },
+            });
+
+            if (!user) throw new Error("NotRegistered");
+            //check if auth provider is already linked
+            if (!user.oauth2?.provider) {
+              user.oauth2 = {
+                  provider: "google",
+                  providerUserId: profile.sub as string,
+              };
+              await user.save();
+            }
+
+            const u = user.toJSON();
+
+            if (!u.acl.owner && !u.acl.admin && !u.acl?.servers?.length) throw new Error("Unauthorized");
+        
+            // spread userObj to use in profile function
+            return {
+            ...profile,
+            id: user._id,
+            name: user.name,
+            email: user.email,
+            userObj: u,
+            };
+        },
+        },
+        profile(profile) {
+        return {
+            id: profile.id.toString(),
+            name: profile.name,
+            email: profile.email,
+            image: profile.picture,
+            ...profile.userObj,
+        };
+        },
+    })
+    ); 
   }
 
   p.push(

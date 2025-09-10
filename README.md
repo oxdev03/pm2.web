@@ -74,8 +74,11 @@ Once pm2.web is installed and running, you can perform the following actions:
       - **Usage**: Only registered users (per credentials) can login with auth2, which links the oauth2 with the existing user account in the database
     - **Setup Registration Code**
       - Go to the settings page and add/generate the registration code
-    - **Setup Google OAuth (Planned/On Demand)**
-      - TBD
+    - **Setup Google OAuth**
+      - https://console.cloud.google.com/apis/credentials -> New OAuth 2.0 client
+      - Configure the callback url to `http://<domain|ip:port>/api/auth/callback/google`
+      - Add `NEXT_PUBLIC_GOOGLE_CLIENT_ID` and `GOOGLE_SECRET` to the `.env` file with the values from the OAuth App
+
 
 ## Up Next
 

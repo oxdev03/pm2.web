@@ -72,9 +72,21 @@ export default function AuthenticationForm({
               <>
                 <Group grow mb="md" mt="md">
                   {process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID && (
-                    <Button leftSection={<GoogleIcon />} variant="default" color="gray" radius="xl">
-                      Google
-                    </Button>
+                    <Tooltip label="Registered user account is required to login with Google" position="top">
+                      <Button 
+                        leftSection={<GoogleIcon />} 
+                        variant="default" 
+                        color="gray" 
+                        radius="xl"
+                          onClick={() =>
+                            signIn("google", {
+                              callbackUrl: (callbackUrl as string) || "/",
+                            })
+                          }
+                        >
+                        Google
+                      </Button>
+                    </Tooltip>
                   )}
                   {process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID && (
                     <Tooltip label="Registered user account is required to login with Github" position="top">
