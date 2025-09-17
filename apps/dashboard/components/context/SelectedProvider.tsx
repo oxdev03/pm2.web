@@ -49,15 +49,76 @@ export function SelectedProvider({ children, servers }: { children: React.ReactN
             : [],
       });
     } else if (type == "processes") {
-      setSelectedItem({
-        servers: selectedItem.servers || [],
-        processes:
-          selectedItem.servers.length > 0
-            ? items.filter((process) =>
+      // If clearing selection (empty array), just clear
+      if (items.length === 0) {
+        setSelectedItem({
+          servers: selectedItem.servers || [],
+          processes: [],
+        });
+        return;
+      }
+      
+      // Check if we're removing items (deselection scenario)
+      const currentProcesses = selectedItem.processes || [];
+      const isDeselecting = currentProcesses.length > items.length;
+      
+      if (isDeselecting) {
+        // Find which processes were removed
+        const removedProcesses = currentProcesses.filter((id: string) => !items.includes(id));
+        
+        // For each removed process, find all processes with the same name and remove them all
+        const processesToRemove: string[] = [];
+        removedProcesses.forEach((removedProcessId: string) => {
+          const removedProcess = allProcesses.find((p) => p._id === removedProcessId);
+          if (removedProcess) {
+            // Find all processes with the same name (cluster)
+            const clusterProcesses = allProcesses
+              .filter((p) => p.name === removedProcess.name)
+              .map((p) => p._id);
+            processesToRemove.push(...clusterProcesses);
+          }
+        });
+        
+        // Remove duplicates and filter out the cluster processes
+        const uniqueProcessesToRemove = new Set(processesToRemove.filter((id: string, index: number) => processesToRemove.indexOf(id) === index));
+        const filteredProcesses = currentProcesses.filter((id: string) => !uniqueProcessesToRemove.has(id));
+        
+        setSelectedItem({
+          servers: selectedItem.servers || [],
+          processes: selectedItem.servers.length > 0
+            ? filteredProcesses.filter((process: string) =>
                 selectedItem.servers.includes(allProcesses.find((item) => item._id == process)?.server || ""),
               )
-            : items,
-      });
+            : filteredProcesses,
+        });
+      } else {
+        // Selection scenario - expand clusters as before
+        const expandedProcesses: string[] = [];
+        
+        items.forEach((selectedProcessId) => {
+          const selectedProcess = allProcesses.find((p) => p._id === selectedProcessId);
+          if (selectedProcess) {
+            // Find all processes with the same name
+            const clusterProcesses = allProcesses
+              .filter((p) => p.name === selectedProcess.name)
+              .map((p) => p._id);
+            expandedProcesses.push(...clusterProcesses);
+          }
+        });
+        
+        // Remove duplicates
+        const uniqueExpandedProcesses = expandedProcesses.filter((id: string, index: number) => expandedProcesses.indexOf(id) === index);
+        
+        setSelectedItem({
+          servers: selectedItem.servers || [],
+          processes:
+            selectedItem.servers.length > 0
+              ? uniqueExpandedProcesses.filter((process) =>
+                  selectedItem.servers.includes(allProcesses.find((item) => item._id == process)?.server || ""),
+                )
+              : uniqueExpandedProcesses,
+        });
+      }
     }
   };
 

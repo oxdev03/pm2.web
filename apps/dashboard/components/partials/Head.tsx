@@ -68,9 +68,24 @@ export function Head() {
                         label: process.name,
                         status: process.status,
                         disabled: !hasAccess(server._id, process._id),
+                        processName: process.name,
                       })) || [],
                 )
-                .flat() || []
+                .flat()
+                // Group by process name to avoid duplicates in cluster
+                .reduce((acc: any[], current) => {
+                  const existing = acc.find(item => item.processName === current.processName);
+                  if (!existing) {
+                    acc.push(current);
+                  } else {
+                    // Keep the first online process, or first one if none are online
+                    if (current.status === "online" && existing.status !== "online") {
+                      const index = acc.findIndex(item => item.processName === current.processName);
+                      acc[index] = current;
+                    }
+                  }
+                  return acc;
+                }, []) || []
             }
             itemComponent={itemComponent}
             value={selectedItem?.processes || []}

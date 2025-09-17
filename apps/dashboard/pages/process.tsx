@@ -1,20 +1,106 @@
-import { Flex } from "@mantine/core";
-import { ISetting } from "@pm2.web/typings";
+import { Flex, Switch, Paper, Text, Group, Tooltip } from "@mantine/core";
+import { ISetting, IProcess } from "@pm2.web/typings";
 import { InferGetServerSidePropsType } from "next";
 import Head from "next/head";
+import { useState, useEffect } from "react";
 
 import { SelectedProvider, useSelected } from "@/components/context/SelectedProvider";
 import { Dashboard } from "@/components/layouts/Dashboard";
 import ProcessItem from "@/components/process/ProcessItem";
+import ProcessCluster from "@/components/process/ProcessCluster";
 import { getServerSideHelpers } from "@/server/helpers";
 import { trpc } from "@/utils/trpc";
 
 function Process({ settings }: { settings: ISetting }) {
   const { selectedProcesses } = useSelected();
+  const [clusterViewEnabled, setClusterViewEnabled] = useState(true);
+
+  // Load cluster view preference from localStorage on mount
+  useEffect(() => {
+    const savedPreference = localStorage.getItem('pm2-cluster-view-enabled');
+    if (savedPreference !== null) {
+      setClusterViewEnabled(JSON.parse(savedPreference));
+    }
+  }, []);
+
+  // Save cluster view preference to localStorage when it changes
+  const handleToggleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = event.currentTarget.checked;
+    setClusterViewEnabled(newValue);
+    localStorage.setItem('pm2-cluster-view-enabled', JSON.stringify(newValue));
+  };
+
+  // Group processes by name (cluster support) - only if cluster view is enabled
+  const processGroups = clusterViewEnabled 
+    ? selectedProcesses?.reduce((groups: { [key: string]: IProcess[] }, process) => {
+        const key = process.name;
+        if (!groups[key]) {
+          groups[key] = [];
+        }
+        groups[key].push(process);
+        return groups;
+      }, {}) || {}
+    : {};
 
   return (
     <Flex gap="xs" direction={"column"}>
-      {selectedProcesses?.map((process) => <ProcessItem process={process} key={process._id} setting={settings} />)}
+      {/* Cluster View Toggle */}
+      <Paper p="sm" radius="md" shadow="xs">
+        <Group justify="space-between" align="center">
+          <div>
+            <Text size="sm" fw={500}>Cluster View</Text>
+            <Text size="xs" c="dimmed">
+              {clusterViewEnabled 
+                ? "Group processes in the same cluster" 
+                : "Show each process separately"
+              }
+            </Text>
+          </div>
+          <Tooltip 
+            label={clusterViewEnabled 
+              ? "Disable to see each process separately" 
+              : "Enable to group processes in the same cluster"
+            }
+            position="left"
+          >
+            <Switch
+              checked={clusterViewEnabled}
+              onChange={handleToggleChange}
+              size="md"
+              color="teal"
+            />
+          </Tooltip>
+        </Group>
+      </Paper>
+
+      {/* Process Display */}
+      {clusterViewEnabled ? (
+        // Cluster view: group processes by name
+        Object.entries(processGroups).map(([clusterName, processes]) => {
+          // If there's only one process, show individual ProcessItem
+          if (processes.length === 1) {
+            return <ProcessItem process={processes[0]} key={processes[0]._id} setting={settings} />;
+          }
+          // If there are multiple processes with same name, show as cluster
+          return (
+            <ProcessCluster 
+              key={`cluster-${clusterName}`}
+              processes={processes}
+              clusterName={clusterName}
+              setting={settings}
+            />
+          );
+        })
+      ) : (
+        // Individual view: show each process separately
+        selectedProcesses?.map((process) => (
+          <ProcessItem 
+            key={process._id} 
+            process={process} 
+            setting={settings} 
+          />
+        ))
+      )}
     </Flex>
   );
 }
