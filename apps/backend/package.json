@@ -33,8 +33,8 @@
     "bcrypt": "^5.1.1",
     "bytes-iec": "^3.1.1",
     "dotenv": "^16.4.5",
-    "pm2": "^5.4.2",
-    "systeminformation": "^5.23.5"
+    "pm2": "^6.0.14",
+    "systeminformation": "^5.30.8"
   },
   "devDependencies": {
     "@pm2.web/eslint-config": "*",
