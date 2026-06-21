@@ -22,7 +22,7 @@ export const processRouter = router({
     checkPermission(process, ctx.user, [PERMISSIONS.MONITORING]);
 
     const stat = await statModel
-      .findOne({ source: { process: process?._id, server: process?.server } })
+      .findOne({ "source.process": process?._id, "source.server": process?.server })
       .sort({ timestamp: -1 })
       .lean();
 
@@ -36,7 +36,8 @@ export const processRouter = router({
 
       const stats = await statModel
         .find({
-          source: { process: process?._id, server: process?.server },
+          "source.process": process?._id,
+          "source.server": process?.server,
         })
         .sort({ timestamp: -1 })
         .limit(10)

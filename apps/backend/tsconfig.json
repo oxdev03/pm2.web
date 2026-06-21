@@ -2,6 +2,7 @@
   "extends": "@pm2.web/typescript-config/base.json",
   "exclude": ["node_modules", "dist"],
   "compilerOptions": {
+    "rootDir": "./",
     "outDir": "./dist"
   }
 }

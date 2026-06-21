@@ -16,7 +16,7 @@ export const serverRouter = router({
       const { processIds, limit } = input;
       const processLogs = await processModel
         .find(
-          { _id: { $in: processIds.map((p) => new mongoose.Types.ObjectId(p)) } },
+          { _id: { $in: processIds as any[] } },
           {
             _id: 1,
             server: 1,
@@ -149,7 +149,7 @@ export const serverRouter = router({
           createdAt: 0,
         },
       )
-      .lean()) as IServer[];
+      .lean()) as unknown as IServer[];
 
     const processes = await processModel
       .find(

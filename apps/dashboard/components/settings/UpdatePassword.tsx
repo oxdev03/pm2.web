@@ -1,7 +1,7 @@
 import { Accordion, Button, Stack, TextInput, Title } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconRefresh } from "@tabler/icons-react";
-import { ZodError } from "zod";
+import { ZodIssue } from "zod";
 
 import { sendNotification } from "@/utils/notification";
 import { trpc } from "@/utils/trpc";
@@ -27,7 +27,7 @@ export default function UpdatePassword() {
     onError(error) {
       let errorMessage = error.message;
       try {
-        const zodErrors = JSON.parse(error.message) as ZodError["errors"];
+        const zodErrors = JSON.parse(error.message) as ZodIssue[];
         errorMessage = zodErrors?.[0]?.message;
         passwordForm.setFieldError(zodErrors?.[0]?.path?.[0] as string, errorMessage);
       } catch {

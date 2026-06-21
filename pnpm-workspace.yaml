@@ -1,0 +1,9 @@
+packages:
+  - 'apps/*'
+  - 'packages/*'
+allowBuilds:
+  bcrypt: true
+  cypress: true
+  mongodb-memory-server: true
+  sharp: true
+  unrs-resolver: true
