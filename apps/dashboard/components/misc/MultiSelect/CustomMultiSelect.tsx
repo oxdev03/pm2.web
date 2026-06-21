@@ -1,6 +1,5 @@
 /* eslint-disable unicorn/prefer-negative-index */
- 
- 
+
 /* Source: https://github.com/mantinedev/mantine/blob/master/packages/%40mantine/core/src/components/MultiSelect/MultiSelect.tsx */
 
 import {

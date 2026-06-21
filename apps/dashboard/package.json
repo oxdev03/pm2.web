@@ -14,7 +14,8 @@
     "url": "https://github.com/oxdev03/pm2.web/issues"
   },
   "scripts": {
-    "dev": "next dev",
+    "dev": "dotenv -v DB_URI=mongodb://127.0.0.1:27018/ -- next dev",
+    "dev:db": "node scripts/start-db.mjs",
     "dev:turbo": "next dev --turbo",
     "build": "next build",
     "test:server": "dotenv -v NODE_ENV=test -- next start",

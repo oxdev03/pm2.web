@@ -28,7 +28,7 @@ test.describe("pm2.web register", () => {
     await page.fill(`input[name="name"]`, user);
     await page.fill(`input[name="email"]`, email);
     await page.fill(`input[name="password"]`, password);
-    await page.locator('form').evaluate((form: HTMLFormElement) => form.noValidate = true);
+    await page.locator("form").evaluate((form: HTMLFormElement) => (form.noValidate = true));
     await page.getByRole("button", { name: "Register", exact: true }).click();
     await expect(page.getByText("You need to accept terms and conditions")).toBeVisible();
   });
@@ -39,8 +39,8 @@ test.describe("pm2.web register", () => {
     await page.fill(`input[name="email"]`, email);
     await page.fill(`input[name="password"]`, password);
     await page.click(`input[type="checkbox"]`);
-    await page.locator('form').evaluate(form => (form as HTMLFormElement).requestSubmit());
-    
+    await page.locator("form").evaluate((form) => (form as HTMLFormElement).requestSubmit());
+
     // Playwright checks for exact URL or waitForURL
     await page.waitForURL("http://localhost:3000/");
     expect(page.url()).toBe("http://localhost:3000/");
@@ -57,10 +57,10 @@ test.describe("pm2.web register", () => {
     await page.fill(`input[name="email"]`, email);
     await page.fill(`input[name="password"]`, password);
     await page.click(`input[type="checkbox"]`);
-    await page.locator('form').evaluate(form => (form as HTMLFormElement).requestSubmit());
+    await page.locator("form").evaluate((form) => (form as HTMLFormElement).requestSubmit());
 
     await expect(page.locator(".mantine-Alert-message")).toHaveText(
-      "An account with the same email address already exists. Please sign in instead."
+      "An account with the same email address already exists. Please sign in instead.",
     );
   });
 });

@@ -15,7 +15,7 @@ export default tsEslint.config(
   {
     plugins: {
       "simple-import-sort": simpleImportSortPlugin,
-      "import": importPlugin,
+      import: importPlugin,
       "@next/next": nextPlugin,
     },
     rules: {
@@ -74,5 +74,5 @@ export default tsEslint.config(
   },
   {
     ignores: ["node_modules/", "dist/", ".next/"],
-  }
+  },
 );

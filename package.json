@@ -16,7 +16,7 @@
   "description": "pm2.web is a web-based application designed to monitor and manage processes running on your server using the PM2 process manager",
   "scripts": {
     "build": "turbo run build",
-    "dev": "turbo run dev",
+    "dev": "turbo run dev dev:db dev:pm2",
     "lint": "turbo run lint",
     "lint:fix": "turbo run lint:fix",
     "format": "turbo run format",

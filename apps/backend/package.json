@@ -24,7 +24,8 @@
     "format:check": "prettier --check  \"**/*.{ts,json,css,scss,md}\"",
     "prestart": "tsc --build --clean && tsc",
     "watch": "tsc -w",
-    "dev": "pnpm run start"
+    "dev": "dotenv -v DB_URI=mongodb://127.0.0.1:27018/ -- pnpm run start",
+    "dev:pm2": "node scripts/start-pm2.mjs"
   },
   "license": "LGPL-3.0-or-later",
   "dependencies": {
@@ -33,6 +34,7 @@
     "bcrypt": "^6.0.0",
     "bytes-iec": "^3.1.1",
     "dotenv": "^17.4.2",
+    "mongoose": "^9.7.1",
     "pm2": "^7.0.1",
     "systeminformation": "^5.31.7"
   },
@@ -40,6 +42,7 @@
     "@pm2.web/eslint-config": "workspace:*",
     "@pm2.web/typescript-config": "workspace:*",
     "@types/bcrypt": "^6.0.0",
+    "dotenv-cli": "^11.0.0",
     "eslint": "^10.5.0",
     "typescript": "^6.0.3"
   }

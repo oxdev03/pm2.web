@@ -1,4 +1,4 @@
-import { expect, type Page,test } from "@playwright/test";
+import { expect, type Page, test } from "@playwright/test";
 
 import { clearDB, connectTestDB, createUser } from "../../utils/db";
 
@@ -43,7 +43,7 @@ test.describe("pm2.web user administration", () => {
     const user = getUser(0);
     await login(page, user.email, user.password);
     await page.goto("/user");
-    
+
     await expect(page.locator('[data-cy="user-item-email"]')).toHaveCount(userConfig.length);
 
     for (let i = 0; i < userConfig.length; i++) {
@@ -52,14 +52,14 @@ test.describe("pm2.web user administration", () => {
 
       await expect(page.locator('[data-cy="user-item-email"]').filter({ hasText: u.email })).toBeVisible();
       await expect(page.locator('[data-cy="user-item-name"]').filter({ hasText: u.name })).toBeVisible();
-      
+
       const select = page.locator(`[data-cy-id="${u.email}"] * > [data-cy="user-item-select"]`);
       if (u.admin || u.owner) {
         await expect(select).toBeDisabled();
       } else {
         await expect(select).toBeEnabled();
       }
-      
+
       const roleSelect = page.locator(`[data-cy-id="${u.email}"] * > [data-cy="user-item-role"]`);
       await expect(roleSelect).toHaveValue(role);
     }
@@ -77,7 +77,7 @@ test.describe("pm2.web user administration", () => {
       const u = getUser(2);
       await page.locator(`[data-cy-id="${u.email}"] * > [data-cy="user-item-delete"]`).click();
       await expect(page.locator(`[data-cy-id="${u.email}"]`)).toHaveCount(0);
-      
+
       // should show notification
       await expect(page.getByText(`Deleted User: ${u.name}`)).toBeVisible();
       await expect(page.getByText(`User deleted successfully`)).toBeVisible();
@@ -86,7 +86,7 @@ test.describe("pm2.web user administration", () => {
     test("should not be able to delete owner", async ({ page }) => {
       await page.locator(`[data-cy-id="${user.email}"] * > [data-cy="user-item-delete"]`).click();
       await expect(page.locator(`[data-cy-id="${user.email}"]`)).toBeVisible();
-      
+
       // should show notification
       await expect(page.getByText(`Failed to delete user: ${user.name}`)).toBeVisible();
       await expect(page.getByText(`Owner cannot be deleted`)).toBeVisible();

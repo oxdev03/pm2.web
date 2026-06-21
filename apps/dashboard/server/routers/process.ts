@@ -36,7 +36,8 @@ export const processRouter = router({
 
       const stats = await statModel
         .find({
-          "source.process": process?._id, "source.server": process?.server,
+          "source.process": process?._id,
+          "source.server": process?.server,
         })
         .sort({ timestamp: -1 })
         .limit(10)

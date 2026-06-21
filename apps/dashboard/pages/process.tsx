@@ -14,7 +14,9 @@ function Process({ settings }: { settings: ISetting }) {
 
   return (
     <Flex gap="xs" direction={"column"}>
-      {selectedProcesses?.map((process) => <ProcessItem process={process} key={process._id} setting={settings} />)}
+      {selectedProcesses?.map((process) => (
+        <ProcessItem process={process} key={process._id} setting={settings} />
+      ))}
     </Flex>
   );
 }
