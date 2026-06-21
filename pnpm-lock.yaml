@@ -63,8 +63,8 @@ importers:
         specifier: ^7.0.1
         version: 7.0.1
       systeminformation:
-        specifier: ^5.31.7
-        version: 5.31.7
+        specifier: ^5.31.8
+        version: 5.31.8
     devDependencies:
       '@pm2.web/eslint-config':
         specifier: workspace:*
@@ -3077,6 +3077,12 @@ packages:
 
   systeminformation@5.31.7:
     resolution: {integrity: sha512-/8NC53e5nP9nmhn42/ncdOkyJnOoue/Vy+tJOyUGd1Yv66G069wK4rrziwhrqDETgk78CudTQupw5z19S5uoZw==}
+    engines: {node: '>=8.0.0'}
+    os: [darwin, linux, win32, freebsd, openbsd, netbsd, sunos, android]
+    hasBin: true
+
+  systeminformation@5.31.8:
+    resolution: {integrity: sha512-/HGurKdgjYGbfwCPSokoX4WAlasVxuj1SnTukLiIYHPkjbDbN1PMATj8mkHpqkVzUF34y5ZyCY1TMKP32AI9rA==}
     engines: {node: '>=8.0.0'}
     os: [darwin, linux, win32, freebsd, openbsd, netbsd, sunos, android]
     hasBin: true
@@ -6240,7 +6246,10 @@ snapshots:
     dependencies:
       '@pkgr/core': 0.3.6
 
-  systeminformation@5.31.7: {}
+  systeminformation@5.31.7:
+    optional: true
+
+  systeminformation@5.31.8: {}
 
   tabbable@6.4.0: {}
 
