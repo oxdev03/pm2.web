@@ -62,7 +62,7 @@ export default function UpdateConfiguration({ settings }: UpdateConfigurationPro
       </Accordion.Control>
       <Accordion.Panel px="xs">
         <form onSubmit={globalConfiguration.onSubmit((values) => updateSetting.mutate(values))}>
-          <Grid grow gutter={"xl"}>
+          <Grid grow>
             <Grid.Col span={2}>
               <Stack my={"xs"}>
                 <NumberInput

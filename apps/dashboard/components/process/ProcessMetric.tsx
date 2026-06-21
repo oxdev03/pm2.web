@@ -10,7 +10,7 @@ export default function ProcessItemMetric({
   value,
 }: {
   w?: string;
-  Icon: ForwardRefExoticComponent<Omit<IconProps, "ref"> & RefAttributes<Icon>>;
+  Icon: any;
   value?: string | undefined | boolean;
 }) {
   return (

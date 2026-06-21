@@ -1,6 +1,6 @@
 /* eslint-disable unicorn/prefer-negative-index */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
+ 
+ 
 /* Source: https://github.com/mantinedev/mantine/blob/master/packages/%40mantine/core/src/components/MultiSelect/MultiSelect.tsx */
 
 import {
@@ -30,8 +30,8 @@ export interface IItem {
 
 interface CustomMultiSelectProps extends MultiSelectProps {
   data: IItem[];
-  pillComponent?: (item: IItem & any) => JSX.Element;
-  itemComponent?: (item: IItem & any) => JSX.Element;
+  pillComponent?: (item: IItem & any) => React.ReactNode;
+  itemComponent?: (item: IItem & any) => React.ReactNode;
 }
 
 const defaultProps: Partial<CustomMultiSelectProps> = {
@@ -47,8 +47,9 @@ type CustomMultiSelectFactory = {
   stylesNames: MultiSelectStylesNames;
 };
 
-export const CustomMultiSelect = factory<CustomMultiSelectFactory>((_props, ref) => {
-  const props = useProps("MultiSelect", defaultProps, _props);
+export const CustomMultiSelect = factory<CustomMultiSelectFactory>((_props: any) => {
+  const ref = _props.ref;
+  const props = useProps("MultiSelect", defaultProps, _props) as CustomMultiSelectProps;
   const {
     classNames,
     className,
@@ -280,7 +281,6 @@ export const CustomMultiSelect = factory<CustomMultiSelectFactory>((_props, ref)
             description={description}
             label={label}
             error={error}
-            multiline
             withErrorStyles={withErrorStyles}
             __stylesApiProps={{
               ...props,
@@ -298,13 +298,13 @@ export const CustomMultiSelect = factory<CustomMultiSelectFactory>((_props, ref)
               {values}
               <Combobox.EventsTarget>
                 <PillsInput.Field
-                  {...rest}
+                  {...(rest as any)}
                   hidden={_value.length > 0}
                   ref={ref}
                   id={_id}
                   placeholder={placeholder}
                   type={!searchable && !placeholder ? "hidden" : "visible"}
-                  {...getStyles("inputField")}
+                  {...(getStyles("inputField") as any)}
                   unstyled={unstyled}
                   onFocus={(event) => {
                     onFocus?.(event);

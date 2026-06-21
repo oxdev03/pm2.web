@@ -13,10 +13,6 @@
     "name": "oxdev03"
   },
   "license": "GPL-3.0-only",
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
   "description": "pm2.web is a web-based application designed to monitor and manage processes running on your server using the PM2 process manager",
   "scripts": {
     "build": "turbo run build",
@@ -40,10 +36,16 @@
     "test:apps:dashboard": "turbo run test --filter=dashboard"
   },
   "devDependencies": {
-    "@pm2.web/eslint-config": "*",
-    "@pm2.web/typescript-config": "*",
-    "prettier": "^3.3.3",
-    "turbo": "^2.1.2"
+    "@eslint/compat": "^2.1.0",
+    "@eslint/eslintrc": "^3.3.5",
+    "@eslint/js": "^10.0.1",
+    "@pm2.web/eslint-config": "workspace:*",
+    "@pm2.web/typescript-config": "workspace:*",
+    "eslint": "^10.5.0",
+    "globals": "^17.6.0",
+    "prettier": "^3.8.4",
+    "turbo": "^2.9.18",
+    "typescript-eslint": "^8.61.1"
   },
-  "packageManager": "npm@10.8.2"
+  "packageManager": "pnpm@11.8.0"
 }

@@ -24,23 +24,23 @@
     "format:check": "prettier --check  \"**/*.{ts,json,css,scss,md}\"",
     "prestart": "tsc --build --clean && tsc",
     "watch": "tsc -w",
-    "dev": "npm run start"
+    "dev": "pnpm run start"
   },
   "license": "LGPL-3.0-or-later",
   "dependencies": {
-    "@pm2.web/mongoose-models": "*",
-    "@pm2.web/typings": "*",
-    "bcrypt": "^5.1.1",
+    "@pm2.web/mongoose-models": "workspace:*",
+    "@pm2.web/typings": "workspace:*",
+    "bcrypt": "^6.0.0",
     "bytes-iec": "^3.1.1",
-    "dotenv": "^16.4.5",
-    "pm2": "^5.4.2",
-    "systeminformation": "^5.23.5"
+    "dotenv": "^17.4.2",
+    "pm2": "^7.0.1",
+    "systeminformation": "^5.31.7"
   },
   "devDependencies": {
-    "@pm2.web/eslint-config": "*",
-    "@pm2.web/typescript-config": "*",
-    "@types/bcrypt": "^5.0.2",
-    "eslint": "^8.57.1",
-    "typescript": "^5.6.2"
+    "@pm2.web/eslint-config": "workspace:*",
+    "@pm2.web/typescript-config": "workspace:*",
+    "@types/bcrypt": "^6.0.0",
+    "eslint": "^10.5.0",
+    "typescript": "^6.0.3"
   }
 }
