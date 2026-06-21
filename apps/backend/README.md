@@ -4,7 +4,7 @@ The Backend is a simple Node.js application that uses the pm2 BUS API to communi
 
 ## Prerequisites
 
-- Node.js v18
+- Node.js v24 (LTS)
 - MongoDB Cluster
 - PM2 (installed globally)
 
@@ -21,7 +21,7 @@ SERVER_NAME=used instead of the host name (optional)
 
    ```bash
    # run from the project root
-   npm install
+   pnpm install
    ```
 
 2. Create a `.env` file in the `apps/backend` directory and add the following variables
@@ -36,7 +36,7 @@ You can start it using the following npm command:
 
 ```bash
 # run from the project root
-npm run start:apps:backend
+pnpm run start:apps:backend
 ```
 
 To run the process in the background, you can use several tools such as PM2.
@@ -47,5 +47,5 @@ This will start it using pm2. Furthermore, you can hide it from the process list
 
 ```bash
 # run from the project root
-pm2 start npm --name "pm2.web-daemon" -- run "start:apps:backend"
+pm2 start pnpm --name "pm2.web-daemon" -- run "start:apps:backend"
 ```

@@ -6,7 +6,7 @@ The Dashboard is a Next.js application built on the t3 stack, utilizing trpc for
 
 ### Prerequisites
 
-- Node v18
+- Node v24 (LTS)
 - MongoDB Cluster (required for Restart/Shutdown/Delete functionality) / MongoDB Atlas
 - Open Port 3000 or 80,443 (if you use a reverse proxy)
 
@@ -24,7 +24,7 @@ NEXTAUTH_URL=http://localhost:3000
 
    ```bash
    # from project root
-   npm install
+   pnpm install
    ```
 
 2. Create a `.env` file in the dashboard directory and add the following env variables
@@ -38,7 +38,7 @@ NEXTAUTH_URL=http://localhost:3000
 3. Build the frontend
 
    ```bash
-    npm run build:apps:dashboard
+    pnpm run build:apps:dashboard
    ```
 
 ### Setup
@@ -47,7 +47,7 @@ You can start it using the following npm command:
 
 ```bash
 # run from the project root
-npm run start:apps:dashboard
+pnpm run start:apps:dashboard
 ```
 
 To run the process in the background, you can use several tools such as PM2.
@@ -58,7 +58,7 @@ This will start it using pm2. Furthermore, you can hide it from the process list
 
 ```bash
 # run from the project root
-pm2 start npm --name "pm2.web-dashboard" -- run "start:apps:dashboard"
+pm2 start pnpm --name "pm2.web-dashboard" -- run "start:apps:dashboard"
 ```
 
 ## Vercel & MongoDB Atlas

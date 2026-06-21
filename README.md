@@ -79,7 +79,6 @@ Once pm2.web is installed and running, you can perform the following actions:
 
 ## Up Next
 
-- E2E Tests for current functionality
 - Performance Improvements for Charts & Logs
 
 ## Contributing
