@@ -1,4 +1,4 @@
-import { Paper, Group, Stack, Transition } from "@mantine/core";
+import { Group, Paper, Stack, Transition } from "@mantine/core";
 import { IProcess, ISetting } from "@pm2.web/typings";
 import { useState } from "react";
 
@@ -38,8 +38,8 @@ export default function ProcessItem({ process, setting }: ProcessItemProps) {
       shadow="sm"
       bg="var(--mantine-color-body)"
       style={{
-        transition: 'box-shadow 0.2s ease, transform 0.2s ease',
-        border: '1px solid var(--mantine-color-default-border)'
+        transition: "box-shadow 0.2s ease, transform 0.2s ease",
+        border: "1px solid var(--mantine-color-default-border)",
       }}
     >
       <Stack>

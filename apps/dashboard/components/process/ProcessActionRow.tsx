@@ -1,5 +1,6 @@
 import { ActionIcon, Flex } from "@mantine/core";
 import { IconPower, IconReload, IconSquareRoundedMinus, IconTrash } from "@tabler/icons-react";
+
 import { sendNotification } from "@/utils/notification";
 import { trpc } from "@/utils/trpc";
 
@@ -67,13 +68,7 @@ export default function ProcessAction({ processId, collapse }: ProcessActionProp
       >
         <IconTrash size="1.4rem" />
       </ActionIcon>
-      <ActionIcon
-        variant="subtle"
-        color="gray"
-        radius="sm"
-        size="lg"
-        onClick={collapse}
-      >
+      <ActionIcon variant="subtle" color="gray" radius="sm" size="lg" onClick={collapse}>
         <IconSquareRoundedMinus size="1.2rem" />
       </ActionIcon>
     </Flex>

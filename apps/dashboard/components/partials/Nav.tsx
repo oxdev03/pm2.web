@@ -1,4 +1,4 @@
-import { AppShell, Stack, Tooltip, ActionIcon, useMantineColorScheme, useMantineTheme } from "@mantine/core";
+import { ActionIcon, AppShell, Stack, Tooltip, useMantineColorScheme, useMantineTheme } from "@mantine/core";
 import {
   IconGauge,
   IconLayoutDashboard,
@@ -24,7 +24,7 @@ interface NavbarLinkProps {
 
 function NavbarLink({ icon: Icon, label, active, href, onClick }: NavbarLinkProps) {
   const theme = useMantineTheme();
-  
+
   const content = (
     <Tooltip label={label} position="right" transitionProps={{ duration: 0 }}>
       <ActionIcon
@@ -40,7 +40,11 @@ function NavbarLink({ icon: Icon, label, active, href, onClick }: NavbarLinkProp
   );
 
   if (href) {
-    return <Link href={href} style={{ textDecoration: 'none' }}>{content}</Link>;
+    return (
+      <Link href={href} style={{ textDecoration: "none" }}>
+        {content}
+      </Link>
+    );
   }
 
   return content;
@@ -83,7 +87,7 @@ export function Nav() {
       <AppShell.Section>
         <Stack justify="center" align="center" gap="sm">
           <NavbarLink
-            icon={colorScheme === 'dark' ? IconSun : IconMoonStars}
+            icon={colorScheme === "dark" ? IconSun : IconMoonStars}
             label="Toggle Theme"
             onClick={() => toggleColorScheme()}
           />

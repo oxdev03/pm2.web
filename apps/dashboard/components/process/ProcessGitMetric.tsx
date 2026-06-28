@@ -1,4 +1,4 @@
-import { Anchor, Group, Badge, Popover, Text } from "@mantine/core";
+import { Anchor, Badge, Group, Popover, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IProcess } from "@pm2.web/typings";
 import { IconGitMerge } from "@tabler/icons-react";
@@ -16,7 +16,7 @@ export default function ProcessGitMetric({ versioning }: { versioning?: IProcess
           h="30px"
           onMouseEnter={open}
           onMouseLeave={close}
-          style={{ cursor: 'pointer' }}
+          style={{ cursor: "pointer" }}
         >
           <Group align="center" gap="xs">
             <IconGitMerge size="1.2rem" />

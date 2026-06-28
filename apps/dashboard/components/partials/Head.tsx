@@ -89,31 +89,34 @@ export function Head({ mobileOpened, toggleMobile }: { mobileOpened?: boolean; t
   return (
     <AppShell.Header>
       <Modal opened={opened} onClose={close} title="Server/Process Filter" zIndex={200}>
-        <Stack style={{ zIndex: 203 }}>
-          {MultiSelectItems}
-        </Stack>
+        <Stack style={{ zIndex: 203 }}>{MultiSelectItems}</Stack>
       </Modal>
       <Flex h="100%" justify="space-between" align="center" pr="xl">
         <Group h="100%" gap={0}>
-          {toggleMobile && (
-            <Burger
-              opened={mobileOpened}
-              onClick={toggleMobile}
-              hiddenFrom="sm"
-              size="sm"
-              ml="md"
-            />
-          )}
+          {toggleMobile && <Burger opened={mobileOpened} onClick={toggleMobile} hiddenFrom="sm" size="sm" ml="md" />}
           <Center w={80} h="100%">
-            <Image alt="logo" src="/logo.png" width={30} height={30} style={{ filter: 'drop-shadow(0px 0px 8px rgba(0,0,0,0.5))' }} />
+            <Image
+              alt="logo"
+              src="/logo.png"
+              width={30}
+              height={30}
+              style={{ filter: "drop-shadow(0px 0px 8px rgba(0,0,0,0.5))" }}
+            />
           </Center>
         </Group>
-        
+
         <Group h="100%" justify="right" gap="md">
-          <Group display={{ base: 'none', lg: 'flex' }} gap="md">
+          <Group display={{ base: "none", lg: "flex" }} gap="md">
             {MultiSelectItems}
           </Group>
-          <ActionIcon variant="light" color="cyan" onClick={open} size="lg" radius="md" display={{ base: 'flex', lg: 'none' }}>
+          <ActionIcon
+            variant="light"
+            color="cyan"
+            onClick={open}
+            size="lg"
+            radius="md"
+            display={{ base: "flex", lg: "none" }}
+          >
             <IconFilterCog size="1.2rem" />
           </ActionIcon>
         </Group>

@@ -3,11 +3,11 @@ import {
   Badge,
   Box,
   Button,
+  Card,
   Divider,
   Flex,
   Grid,
   Overlay,
-  Card,
   rem,
   ScrollArea,
   Title,
@@ -154,12 +154,7 @@ export default function User({}: InferGetServerSidePropsType<typeof getServerSid
                     <Accordion chevronPosition="left">
                       {servers.map((item) => (
                         <Accordion.Item value={item._id} key={item._id}>
-                          <Flex
-                            align="center"
-                            justify="space-between"
-                            wrap="wrap"
-                            gap="sm"
-                          >
+                          <Flex align="center" justify="space-between" wrap="wrap" gap="sm">
                             <Accordion.Control>
                               <Flex align={"center"} direction={"row"} gap={rem(4)}>
                                 <IconCircleFilled
@@ -198,12 +193,7 @@ export default function User({}: InferGetServerSidePropsType<typeof getServerSid
                             {item.processes?.map((process) => (
                               <div key={process._id}>
                                 <Box py={"xs"}>
-                                  <Flex
-                                    align="center"
-                                    justify="space-between"
-                                    wrap="wrap"
-                                    gap="sm"
-                                  >
+                                  <Flex align="center" justify="space-between" wrap="wrap" gap="sm">
                                     <Flex align={"center"} direction={"row"} gap={rem(4)}>
                                       <IconCircleFilled
                                         size={10}

@@ -1,7 +1,7 @@
 import { AreaChart, DonutChart } from "@mantine/charts";
-import { Flex, Card, SimpleGrid, Stack, Center, Group, Text, Paper, ThemeIcon, Title } from "@mantine/core";
-import { IconServer, IconActivity, IconClockHour4, IconCpu, IconDeviceSdCard } from "@tabler/icons-react";
+import { Card, Center, Flex, Group, Paper, SimpleGrid, Stack, Text, ThemeIcon, Title } from "@mantine/core";
 import { ISetting } from "@pm2.web/typings";
+import { IconActivity, IconClockHour4, IconCpu, IconDeviceSdCard, IconServer } from "@tabler/icons-react";
 import ms from "ms";
 import { InferGetServerSidePropsType } from "next";
 import Head from "next/head";
@@ -56,8 +56,12 @@ function Home({ settings }: { settings: ISetting }) {
         <Paper p="xl" radius="md" shadow="sm">
           <Group justify="space-between" align="flex-start" wrap="nowrap">
             <div>
-              <Text c="dimmed" tt="uppercase" fw={700} size="xs">Total Servers</Text>
-              <Text fw={900} size="2.5rem">{selectedServers.length}</Text>
+              <Text c="dimmed" tt="uppercase" fw={700} size="xs">
+                Total Servers
+              </Text>
+              <Text fw={900} size="2.5rem">
+                {selectedServers.length}
+              </Text>
             </div>
             <ThemeIcon color="cyan" variant="light" size={48} radius="md">
               <IconServer size="1.8rem" />
@@ -68,13 +72,24 @@ function Home({ settings }: { settings: ISetting }) {
         <Paper p="xl" radius="md" shadow="sm">
           <Group justify="space-between" align="flex-start" wrap="nowrap">
             <div>
-              <Text c="dimmed" tt="uppercase" fw={700} size="xs">Online Processes</Text>
+              <Text c="dimmed" tt="uppercase" fw={700} size="xs">
+                Online Processes
+              </Text>
               <Group align="flex-end" gap="xs" wrap="nowrap">
-                <Text fw={900} size="2.5rem">{onlineCount}</Text>
-                <Text c="dimmed" pb="sm">/ {selectedProcesses.length}</Text>
+                <Text fw={900} size="2.5rem">
+                  {onlineCount}
+                </Text>
+                <Text c="dimmed" pb="sm">
+                  / {selectedProcesses.length}
+                </Text>
               </Group>
             </div>
-            <ThemeIcon color={onlineCount === selectedProcesses.length && onlineCount > 0 ? "teal" : "cyan"} variant="light" size={48} radius="md">
+            <ThemeIcon
+              color={onlineCount === selectedProcesses.length && onlineCount > 0 ? "teal" : "cyan"}
+              variant="light"
+              size={48}
+              radius="md"
+            >
               <IconActivity size="1.8rem" />
             </ThemeIcon>
           </Group>
@@ -83,8 +98,12 @@ function Home({ settings }: { settings: ISetting }) {
         <Paper p="xl" radius="md" shadow="sm">
           <Group justify="space-between" align="flex-start" wrap="nowrap">
             <div>
-              <Text c="dimmed" tt="uppercase" fw={700} size="xs">Server Uptime</Text>
-              <Text fw={900} size="2.5rem" style={{ whiteSpace: 'nowrap' }}>{ms(data?.serverUptime || 0)}</Text>
+              <Text c="dimmed" tt="uppercase" fw={700} size="xs">
+                Server Uptime
+              </Text>
+              <Text fw={900} size="2.5rem" style={{ whiteSpace: "nowrap" }}>
+                {ms(data?.serverUptime || 0)}
+              </Text>
             </div>
             <ThemeIcon color="violet" variant="light" size={48} radius="md">
               <IconClockHour4 size="1.8rem" />
@@ -95,8 +114,12 @@ function Home({ settings }: { settings: ISetting }) {
         <Paper p="xl" radius="md" shadow="sm">
           <Group justify="space-between" align="flex-start" wrap="nowrap">
             <div>
-              <Text c="dimmed" tt="uppercase" fw={700} size="xs">Process Uptime</Text>
-              <Text fw={900} size="2.5rem" style={{ whiteSpace: 'nowrap' }}>{ms(data?.processUptime || 0)}</Text>
+              <Text c="dimmed" tt="uppercase" fw={700} size="xs">
+                Process Uptime
+              </Text>
+              <Text fw={900} size="2.5rem" style={{ whiteSpace: "nowrap" }}>
+                {ms(data?.processUptime || 0)}
+              </Text>
             </div>
             <ThemeIcon color="grape" variant="light" size={48} radius="md">
               <IconActivity size="1.8rem" />
@@ -108,8 +131,12 @@ function Home({ settings }: { settings: ISetting }) {
       <SimpleGrid cols={{ base: 1, xl: 2 }} spacing="lg">
         <Paper p="xl" shadow="sm" radius="md">
           <Group justify="space-between" mb="lg">
-            <Text fw={700} size="lg">CPU Usage</Text>
-            <ThemeIcon color="blue" variant="light" size="lg" radius="xl"><IconCpu size="1.2rem" /></ThemeIcon>
+            <Text fw={700} size="lg">
+              CPU Usage
+            </Text>
+            <ThemeIcon color="blue" variant="light" size="lg" radius="xl">
+              <IconCpu size="1.2rem" />
+            </ThemeIcon>
           </Group>
           <AreaChart
             {...statChartProps}
@@ -126,8 +153,12 @@ function Home({ settings }: { settings: ISetting }) {
 
         <Paper p="xl" shadow="sm" radius="md">
           <Group justify="space-between" mb="lg">
-            <Text fw={700} size="lg">Memory Allocation</Text>
-            <ThemeIcon color="indigo" variant="light" size="lg" radius="xl"><IconDeviceSdCard size="1.2rem" /></ThemeIcon>
+            <Text fw={700} size="lg">
+              Memory Allocation
+            </Text>
+            <ThemeIcon color="indigo" variant="light" size="lg" radius="xl">
+              <IconDeviceSdCard size="1.2rem" />
+            </ThemeIcon>
           </Group>
           <AreaChart
             {...statChartProps}
@@ -144,7 +175,9 @@ function Home({ settings }: { settings: ISetting }) {
       </SimpleGrid>
 
       <Paper p="xl" shadow="sm" radius="md">
-        <Text fw={700} size="lg" mb="md">Process Activity Logs</Text>
+        <Text fw={700} size="lg" mb="md">
+          Process Activity Logs
+        </Text>
         <DashboardLog refetchInterval={settings.polling.frontend} processIds={selectedProcesses.map((p) => p._id)} />
       </Paper>
     </Stack>

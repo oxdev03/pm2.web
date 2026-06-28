@@ -1,4 +1,4 @@
-import { Accordion, Badge, Grid, Overlay, Card, ScrollArea, Title } from "@mantine/core";
+import { Accordion, Badge, Card, Grid, Overlay, ScrollArea, Title } from "@mantine/core";
 import { InferGetServerSidePropsType } from "next";
 import Head from "next/head";
 import { useSession } from "next-auth/react";

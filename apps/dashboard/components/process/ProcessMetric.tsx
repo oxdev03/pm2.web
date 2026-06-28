@@ -15,7 +15,9 @@ export default function ProcessItemMetric({
     <Badge variant="light" radius="md" size="lg" h="30px">
       <Group align="center" gap="xs">
         <Icon size="1.2rem" />
-        <Text size="sm" fw={600}>{value || ""}</Text>
+        <Text size="sm" fw={600}>
+          {value || ""}
+        </Text>
       </Group>
     </Badge>
   );

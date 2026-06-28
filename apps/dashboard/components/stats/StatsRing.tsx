@@ -1,4 +1,4 @@
-import { Box, Flex, Group, Card, RingProgress, Text } from "@mantine/core";
+import { Box, Card, Flex, Group, RingProgress, Text } from "@mantine/core";
 
 interface StatsRingProps {
   title: string;
