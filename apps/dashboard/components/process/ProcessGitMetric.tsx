@@ -1,9 +1,7 @@
-import { Anchor, Flex, Paper, Popover, Text } from "@mantine/core";
+import { Anchor, Group, Badge, Popover, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IProcess } from "@pm2.web/typings";
 import { IconGitMerge } from "@tabler/icons-react";
-
-import classes from "@/styles/process.module.css";
 
 export default function ProcessGitMetric({ versioning }: { versioning?: IProcess["versioning"] }) {
   const [opened, { close, open }] = useDisclosure(false);
@@ -11,22 +9,23 @@ export default function ProcessGitMetric({ versioning }: { versioning?: IProcess
   return (
     <Popover withArrow shadow="md" opened={opened} trapFocus>
       <Popover.Target>
-        <Paper
-          className={classes.processMetric}
+        <Badge
+          variant="light"
           radius="md"
-          p={"4px"}
-          px={"10px"}
+          size="lg"
+          h="30px"
           onMouseEnter={open}
           onMouseLeave={close}
+          style={{ cursor: 'pointer' }}
         >
-          <Flex align={"center"} justify={"space-between"} gap={"5px"} w={"5em"}>
+          <Group align="center" gap="xs">
             <IconGitMerge size="1.2rem" />
             <Anchor href={`${versioning?.url}/commit/${versioning?.revision}`} target="_blank" underline="hover">
               {versioning?.branch}
               {versioning?.unstaged && "*"}
             </Anchor>
-          </Flex>
-        </Paper>
+          </Group>
+        </Badge>
       </Popover.Target>
       <Popover.Dropdown style={{ pointerEvents: "none" }}>
         {versioning?.comment?.split("\n")?.map((t, tIdx) => (

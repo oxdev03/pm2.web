@@ -5,7 +5,7 @@ import {
   Checkbox,
   CopyButton,
   Flex,
-  Grid,
+  SimpleGrid,
   Input,
   NumberInput,
   PinInput,
@@ -20,8 +20,6 @@ import { IconCheck, IconCopy, IconDeviceFloppy, IconRefresh } from "@tabler/icon
 
 import { sendNotification } from "@/utils/notification";
 import { trpc } from "@/utils/trpc";
-
-import classes from "./UpdateConfiguration.module.css";
 
 interface UpdateConfigurationProps {
   settings: ISetting;
@@ -62,9 +60,8 @@ export default function UpdateConfiguration({ settings }: UpdateConfigurationPro
       </Accordion.Control>
       <Accordion.Panel px="xs">
         <form onSubmit={globalConfiguration.onSubmit((values) => updateSetting.mutate(values))}>
-          <Grid grow>
-            <Grid.Col span={2}>
-              <Stack my={"xs"}>
+          <SimpleGrid cols={{ base: 1, md: 2 }} spacing="md">
+            <Stack>
                 <NumberInput
                   label="Backend Update Interval"
                   description="In ms"
@@ -84,9 +81,7 @@ export default function UpdateConfiguration({ settings }: UpdateConfigurationPro
                   step={500}
                 />
               </Stack>
-            </Grid.Col>
-            <Grid.Col span={2}>
-              <Stack my={"xs"}>
+            <Stack>
                 <NumberInput
                   label="Log Rotation"
                   description="automatically rotate logs,to meet max logs length"
@@ -105,9 +100,7 @@ export default function UpdateConfiguration({ settings }: UpdateConfigurationPro
                     <PinInput
                       length={6}
                       {...globalConfiguration.getInputProps("registrationCode")}
-                      classNames={{
-                        input: classes.pinInput,
-                      }}
+                      size="sm"
                     />
                     <ActionIcon
                       type="button"
@@ -131,21 +124,20 @@ export default function UpdateConfiguration({ settings }: UpdateConfigurationPro
                     </CopyButton>
                   </Flex>
                 </Input.Wrapper>
-              </Stack>
-              <Flex justify={"flex-end"}>
+              <Flex justify="flex-end" mt="auto">
                 <Button
                   type="submit"
                   variant="light"
                   color="teal"
                   leftSection={<IconDeviceFloppy />}
-                  mt={"sm"}
+                  mt="sm"
                   loading={updateSetting.isPending}
                 >
                   Save
                 </Button>
               </Flex>
-            </Grid.Col>
-          </Grid>
+            </Stack>
+          </SimpleGrid>
         </form>
       </Accordion.Panel>
     </Accordion.Item>

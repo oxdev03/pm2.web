@@ -1,4 +1,4 @@
-import { Flex, Indicator, Text } from "@mantine/core";
+import { Flex, Group, Indicator, Text } from "@mantine/core";
 import { IProcess } from "@pm2.web/typings";
 import {
   IconBrandCSharp,
@@ -54,13 +54,13 @@ export default function ProcessHeader({
   }, [interpreter]);
 
   return (
-    <Flex align={"center"} rowGap={"10px"} columnGap={"5px"}>
+    <Group align="center" gap="sm">
       <Indicator color={statusColor || "gray"} position="bottom-end" size={10} offset={5} zIndex={1}>
         <InterpreterIcon />
       </Indicator>
       <Text size="xl" fw={600}>
         {name}
       </Text>
-    </Flex>
+    </Group>
   );
 }

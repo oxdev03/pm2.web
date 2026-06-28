@@ -7,8 +7,6 @@ import { GoogleIcon } from "@/components/icons/google";
 import { actionNotification } from "@/utils/notification";
 import { trpc } from "@/utils/trpc";
 
-import classes from "./UserItem.module.css";
-
 interface UserItemProps {
   selected: boolean;
   selectUser: (userId: string) => void;
@@ -60,7 +58,7 @@ export default function UserItem({
   });
 
   return (
-    <Table.Tr className={cx({ [classes.rowSelected]: selected })} data-cy="user-item" data-cy-id={email}>
+    <Table.Tr bg={selected ? "var(--mantine-color-blue-light)" : undefined} data-cy="user-item" data-cy-id={email}>
       <Table.Td>
         <Checkbox
           checked={selected}

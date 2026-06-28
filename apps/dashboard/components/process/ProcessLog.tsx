@@ -1,6 +1,4 @@
-import { Paper, ScrollArea, Text } from "@mantine/core";
-
-import classes from "@/styles/process.module.css";
+import { Card, ScrollArea, Text } from "@mantine/core";
 import { trpc } from "@/utils/trpc";
 
 interface ProcessActionProps {
@@ -17,8 +15,8 @@ export default function ProcessLog({ processId, refetchInterval }: ProcessAction
   );
 
   return (
-    <Paper radius="md" p="xs" className={classes.processLog} h={"100px"} m="xs">
-      <ScrollArea h={"100%"} style={{ overflowX: "hidden" }}>
+    <Card radius="md" p="xs" h="150px" m="xs" withBorder>
+      <ScrollArea h="100%" style={{ overflowX: "hidden" }}>
         <Text fw="bold">Logs</Text>
         <div>
           {getLogs?.data?.map((log) => (
@@ -36,6 +34,6 @@ export default function ProcessLog({ processId, refetchInterval }: ProcessAction
           {getLogs.error && <div>Error: {getLogs.error.message}</div>}
         </div>
       </ScrollArea>
-    </Paper>
+    </Card>
   );
 }

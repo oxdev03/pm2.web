@@ -1,4 +1,4 @@
-import { Accordion, Badge, Grid, Overlay, Paper, ScrollArea, Title } from "@mantine/core";
+import { Accordion, Badge, Grid, Overlay, Card, ScrollArea, Title } from "@mantine/core";
 import { InferGetServerSidePropsType } from "next";
 import Head from "next/head";
 import { useSession } from "next-auth/react";
@@ -33,16 +33,9 @@ export default function Settings({}: InferGetServerSidePropsType<typeof getServe
       </Head>
 
       <Dashboard>
-        <Grid
-          flex={1}
-          styles={{
-            root: {
-              display: "flex",
-            },
-          }}
-        >
-          <Grid.Col span={{ lg: 8, md: 7, sm: 6, xs: 12 }}>
-            <Paper shadow="sm" radius="md" p={"md"} mih={"100%"} h={"100%"}>
+        <Grid flex={1}>
+          <Grid.Col span={{ base: 12, md: 7, lg: 8 }}>
+            <Card shadow="sm" radius="md" p="md" mih="100%" h="100%" withBorder>
               <Title order={3} style={{ marginBottom: "1rem" }}>
                 Configuration
               </Title>
@@ -59,10 +52,10 @@ export default function Settings({}: InferGetServerSidePropsType<typeof getServe
                   </Overlay>
                 )}
               </ScrollArea>
-            </Paper>
+            </Card>
           </Grid.Col>
-          <Grid.Col span={{ lg: 4, md: 5, sm: 6, xs: 12 }}>
-            <Paper shadow="sm" radius="md" p={"md"} style={{ height: "100%" }}>
+          <Grid.Col span={{ base: 12, md: 5, lg: 4 }}>
+            <Card shadow="sm" radius="md" p="md" h="100%" withBorder>
               <Title order={3} style={{ marginBottom: "1rem" }}>
                 User Settings
               </Title>
@@ -71,7 +64,7 @@ export default function Settings({}: InferGetServerSidePropsType<typeof getServe
                 <DeleteAccount />
                 {isOAuth2 && <UnlinkOAuth2 />}
               </Accordion>
-            </Paper>
+            </Card>
           </Grid.Col>
         </Grid>
       </Dashboard>
