@@ -1,6 +1,4 @@
-import { Box, Flex, Group, Paper, RingProgress, Text } from "@mantine/core";
-
-import classes from "./StatsRing.module.css";
+import { Box, Card, Flex, Group, RingProgress, Text } from "@mantine/core";
 
 interface StatsRingProps {
   title: string;
@@ -16,7 +14,7 @@ interface StatsRingProps {
 
 export function StatsRing({ stat }: { stat: StatsRingProps }) {
   return (
-    <Paper radius="md" p="xs" key={stat.title} shadow="sm" className={classes.statsRing}>
+    <Card radius="md" p="md" key={stat.title} shadow="sm" withBorder>
       <Group align="top">
         <RingProgress
           roundCaps
@@ -33,16 +31,16 @@ export function StatsRing({ stat }: { stat: StatsRingProps }) {
           </Text>
           {stat.stats.map((s) => (
             <Flex gap={"xs"} key={s.label} align={"end"}>
-              <Text fw={700} size="xl" className={classes.statsRingLabel}>
+              <Text fw={700} size="md" c="dimmed">
                 {s.label}:
               </Text>
-              <Text fw={600} size="lg" className={classes.statsRingValue}>
+              <Text fw={600} size="md">
                 {s.value}
               </Text>
             </Flex>
           ))}
         </Box>
       </Group>
-    </Paper>
+    </Card>
   );
 }

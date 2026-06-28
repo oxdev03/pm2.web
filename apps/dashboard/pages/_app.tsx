@@ -15,7 +15,7 @@ const App = ({ Component, pageProps }: AppProps) => {
   return (
     <>
       <SessionProvider session={pageProps.session}>
-        <MantineProvider theme={theme}>
+        <MantineProvider>
           <Notifications />
           <Component {...pageProps} />
         </MantineProvider>

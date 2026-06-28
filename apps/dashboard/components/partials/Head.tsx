@@ -1,4 +1,4 @@
-import { ActionIcon, AppShell, Box, Center, Flex, Group, Modal, rem, Stack } from "@mantine/core";
+import { ActionIcon, AppShell, Box, Burger, Center, Flex, Group, Modal, rem, Stack } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IProcess } from "@pm2.web/typings";
 import { IconCircleFilled, IconDatabaseCog, IconFilterCog, IconLock, IconServerCog } from "@tabler/icons-react";
@@ -9,9 +9,8 @@ import Access from "@/utils/access";
 
 import { useSelected } from "../context/SelectedProvider";
 import { CustomMultiSelect, IItem } from "../misc/MultiSelect/CustomMultiSelect";
-import classes from "./Head.module.css";
 
-export function Head() {
+export function Head({ mobileOpened, toggleMobile }: { mobileOpened?: boolean; toggleMobile?: () => void }) {
   const { servers, selectItem, selectedItem } = useSelected();
   const { data: session } = useSession();
   const [opened, { open, close }] = useDisclosure(false);
@@ -36,7 +35,7 @@ export function Head() {
                 value: server._id,
                 label: server.name,
                 status: new Date(server.updatedAt).getTime() > Date.now() - 1000 * 60 ? "online" : "offline",
-                disabled: !server.processes.some((process) => hasAccess(server._id, process._id)), // check whether user has access to any process
+                disabled: !server.processes.some((process) => hasAccess(server._id, process._id)),
               })) || []
             }
             onChange={(values) => {
@@ -45,15 +44,9 @@ export function Head() {
             itemComponent={itemComponent}
             placeholder="Select Server"
             searchable
-            w={{
-              md: "25rem",
-            }}
-            radius={"md"}
-            classNames={{
-              pillsList: classes.values,
-            }}
+            w={{ md: "15rem", base: "100%" }}
+            radius="md"
             hidePickedOptions
-            // zIndex={204}
           />
           <CustomMultiSelect
             leftSection={<IconDatabaseCog />}
@@ -79,23 +72,13 @@ export function Head() {
             }}
             placeholder="Select Process"
             searchable
-            w={{
-              md: "25rem",
-            }}
+            w={{ md: "15rem", base: "100%" }}
             maxValues={4}
-            radius={"md"}
+            radius="md"
             withScrollArea
             maxDropdownHeight={200}
-            classNames={{
-              pillsList: classes.values,
-            }}
-            style={{
-              zIndex: 204,
-            }}
-            comboboxProps={{
-              position: "bottom",
-              middlewares: { flip: false, shift: false },
-            }}
+            style={{ zIndex: 204 }}
+            comboboxProps={{ position: "bottom", middlewares: { flip: false, shift: false } }}
             hidePickedOptions
           />
         </>
@@ -105,32 +88,36 @@ export function Head() {
 
   return (
     <AppShell.Header>
-      <Modal opened={opened} onClose={close} title="Server/Process Filter" className={classes.modal} zIndex={200}>
-        <Stack
-          style={{
-            zIndex: 203,
-          }}
-        >
-          {MultiSelectItems}
-        </Stack>
+      <Modal opened={opened} onClose={close} title="Server/Process Filter" zIndex={200}>
+        <Stack style={{ zIndex: 203 }}>{MultiSelectItems}</Stack>
       </Modal>
-      <Flex h={"100%"} justify={"space-between"}>
-        <Group h={"100%"}>
-          <Center
-            w={{
-              base: rem(42),
-              xs: rem(70),
-            }}
-          >
-            <Image alt="logo" src="/logo.png" width={25} height={25} />
+      <Flex h="100%" justify="space-between" align="center" pr="xl">
+        <Group h="100%" gap={0}>
+          {toggleMobile && <Burger opened={mobileOpened} onClick={toggleMobile} hiddenFrom="sm" size="sm" ml="md" />}
+          <Center w={80} h="100%">
+            <Image
+              alt="logo"
+              src="/logo.png"
+              width={30}
+              height={30}
+              style={{ filter: "drop-shadow(0px 0px 8px rgba(0,0,0,0.5))" }}
+            />
           </Center>
         </Group>
-        <Group h={"100%"} justify="right" px={"lg"} className={classes.defaultSelectGroup}>
-          {MultiSelectItems}
-        </Group>
-        <Group h={"100%"} justify="right" px={"xs"} className={classes.filterIcon}>
-          <ActionIcon variant="light" color="blue" onClick={open}>
-            <IconFilterCog size={"1.2rem"} />
+
+        <Group h="100%" justify="right" gap="md">
+          <Group display={{ base: "none", lg: "flex" }} gap="md">
+            {MultiSelectItems}
+          </Group>
+          <ActionIcon
+            variant="light"
+            color="cyan"
+            onClick={open}
+            size="lg"
+            radius="md"
+            display={{ base: "flex", lg: "none" }}
+          >
+            <IconFilterCog size="1.2rem" />
           </ActionIcon>
         </Group>
       </Flex>

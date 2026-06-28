@@ -1,4 +1,4 @@
-import { Flex } from "@mantine/core";
+import { Group, Progress, Stack, Text, Tooltip } from "@mantine/core";
 import { IProcess } from "@pm2.web/typings";
 import { IconCpu, IconDeviceSdCard, IconHistory } from "@tabler/icons-react";
 import ms from "ms";
@@ -7,7 +7,6 @@ import { formatBytes } from "@/utils/format";
 import { trpc } from "@/utils/trpc";
 
 import ProcessGitMetric from "./ProcessGitMetric";
-import ProcessItemMetric from "./ProcessMetric";
 
 interface ProcessActionProps {
   process: IProcess;
@@ -23,16 +22,53 @@ export default function ProcessMetricRow({ process, refetchInterval, showMetric 
     },
   );
 
+  const cpuValue = showMetric ? getStat.data?.cpu || 0 : 0;
+  const memValue = showMetric ? getStat.data?.memory || 0 : 0;
+
   return (
-    <Flex align={"center"} gap={"xs"} wrap={"wrap"}>
+    <Group align="center" gap="xl" wrap="nowrap" style={{ flexGrow: 1 }}>
       {process?.versioning?.url && <ProcessGitMetric versioning={process.versioning} />}
-      <ProcessItemMetric
-        w="75px"
-        Icon={IconDeviceSdCard}
-        value={showMetric && formatBytes(getStat.data?.memory || 0)}
-      />
-      <ProcessItemMetric w="55px" Icon={IconCpu} value={showMetric && (getStat.data?.cpu?.toFixed(0) || 0) + "%"} />
-      <ProcessItemMetric w="57px" Icon={IconHistory} value={showMetric && ms(getStat.data?.uptime || 0)} />
-    </Flex>
+
+      <Tooltip label={`CPU: ${cpuValue.toFixed(1)}%`}>
+        <Stack gap={4} style={{ width: 120 }}>
+          <Group justify="space-between">
+            <Group gap={4}>
+              <IconCpu size={14} color="gray" />
+              <Text size="xs" fw={700} c="dimmed">
+                CPU
+              </Text>
+            </Group>
+            <Text size="xs" fw={700}>
+              {showMetric ? `${cpuValue.toFixed(0)}%` : "-"}
+            </Text>
+          </Group>
+          <Progress value={Math.min(cpuValue, 100)} color="blue" size="sm" radius="xl" />
+        </Stack>
+      </Tooltip>
+
+      <Tooltip label={`RAM: ${formatBytes(memValue)}`}>
+        <Stack gap={4} style={{ width: 120 }}>
+          <Group justify="space-between">
+            <Group gap={4}>
+              <IconDeviceSdCard size={14} color="gray" />
+              <Text size="xs" fw={700} c="dimmed">
+                RAM
+              </Text>
+            </Group>
+            <Text size="xs" fw={700}>
+              {showMetric ? formatBytes(memValue) : "-"}
+            </Text>
+          </Group>
+          <Progress value={Math.min((memValue / (1024 * 1024 * 1024)) * 100, 100)} color="teal" size="sm" radius="xl" />
+        </Stack>
+      </Tooltip>
+
+      <Group gap={4}>
+        <IconHistory size={16} color="gray" />
+        <Text size="sm" fw={700}>
+          {showMetric ? ms(getStat.data?.uptime || 0) : "-"}
+        </Text>
+      </Group>
+    </Group>
   );
 }

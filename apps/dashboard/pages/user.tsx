@@ -3,11 +3,11 @@ import {
   Badge,
   Box,
   Button,
+  Card,
   Divider,
   Flex,
   Grid,
   Overlay,
-  Paper,
   rem,
   ScrollArea,
   Title,
@@ -27,8 +27,6 @@ import { getServerSideHelpers } from "@/server/helpers";
 import { actionNotification } from "@/utils/notification";
 import { IPermissionConstants, Permission, PERMISSIONS } from "@/utils/permission";
 import { trpc } from "@/utils/trpc";
-
-import classes from "../styles/user.module.css";
 
 export default function User({}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const dashboardQuery = trpc.server.getDashBoardData.useQuery(true);
@@ -138,14 +136,7 @@ export default function User({}: InferGetServerSidePropsType<typeof getServerSid
         <link rel="icon" type="image/png" href="/logo.png" />
       </Head>
       <Dashboard>
-        <Grid
-          flex={1}
-          styles={{
-            root: {
-              display: "flex",
-            },
-          }}
-        >
+        <Grid flex={1}>
           <UserManagement
             refreshUsers={usersQuery.refetch}
             users={users}
@@ -153,33 +144,17 @@ export default function User({}: InferGetServerSidePropsType<typeof getServerSid
             setSelection={setSelection}
           />
           <Grid.Col span={{ lg: 6, md: 12 }}>
-            <Paper shadow="sm" radius="md" style={{ height: "100%" }} p={"lg"} px={"md"} pb={"sm"}>
-              <Flex direction={"column"} h="100%">
+            <Card shadow="sm" radius="md" style={{ height: "100%" }} p="lg" withBorder>
+              <Flex direction="column" h="100%">
                 <Title order={4} style={{ marginBottom: "1rem" }}>
                   Custom Permissions
                 </Title>
-                <Flex direction={"column"} justify={"space-between"} h="100%">
-                  <ScrollArea h={490}>
-                    <Accordion
-                      chevronPosition="left"
-                      classNames={{
-                        content: classes.content,
-                      }}
-                    >
+                <Flex direction="column" h="100%">
+                  <ScrollArea flex={1} mb="md">
+                    <Accordion chevronPosition="left">
                       {servers.map((item) => (
                         <Accordion.Item value={item._id} key={item._id}>
-                          <Flex
-                            align={"center"}
-                            direction={"row"}
-                            justify={{
-                              base: "start",
-                              sm: "space-between",
-                            }}
-                            wrap={{
-                              base: "wrap",
-                              sm: "nowrap",
-                            }}
-                          >
+                          <Flex align="center" justify="space-between" wrap="wrap" gap="sm">
                             <Accordion.Control>
                               <Flex align={"center"} direction={"row"} gap={rem(4)}>
                                 <IconCircleFilled
@@ -196,10 +171,6 @@ export default function User({}: InferGetServerSidePropsType<typeof getServerSid
                               </Flex>
                             </Accordion.Control>
                             <CustomMultiSelect
-                              classNames={{
-                                pill: classes.value,
-                                pillsList: classes.values,
-                              }}
                               value={getSelectedPerms(item._id)}
                               onChange={(values) => updatePermsState(item._id, "", values)}
                               data={permissionData}
@@ -222,15 +193,7 @@ export default function User({}: InferGetServerSidePropsType<typeof getServerSid
                             {item.processes?.map((process) => (
                               <div key={process._id}>
                                 <Box py={"xs"}>
-                                  <Flex
-                                    align={"center"}
-                                    direction={"row"}
-                                    justify={"space-between"}
-                                    wrap={{
-                                      base: "wrap",
-                                      sm: "nowrap",
-                                    }}
-                                  >
+                                  <Flex align="center" justify="space-between" wrap="wrap" gap="sm">
                                     <Flex align={"center"} direction={"row"} gap={rem(4)}>
                                       <IconCircleFilled
                                         size={10}
@@ -247,10 +210,6 @@ export default function User({}: InferGetServerSidePropsType<typeof getServerSid
                                       {process.name}
                                     </Flex>
                                     <CustomMultiSelect
-                                      classNames={{
-                                        pill: classes.value,
-                                        pillsList: classes.values,
-                                      }}
                                       value={getSelectedPerms(item._id, process._id)}
                                       data={permissionData}
                                       itemComponent={SelectItemComponent}
@@ -281,7 +240,7 @@ export default function User({}: InferGetServerSidePropsType<typeof getServerSid
                       )}
                     </Transition>
                   </ScrollArea>
-                  <Flex justify={"flex-end"} direction={"row"}>
+                  <Flex justify="flex-end" mt="auto">
                     <Button
                       variant="light"
                       color="teal"
@@ -302,7 +261,7 @@ export default function User({}: InferGetServerSidePropsType<typeof getServerSid
                   </Flex>
                 </Flex>
               </Flex>
-            </Paper>
+            </Card>
           </Grid.Col>
         </Grid>
       </Dashboard>

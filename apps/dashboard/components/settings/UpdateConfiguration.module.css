@@ -1,7 +1,0 @@
-.pinInput {
-  @media (max-width: $mantine-breakpoint-xs) {
-    width: 1.5rem;
-    height: 1.5rem;
-    min-height: auto;
-  }
-}

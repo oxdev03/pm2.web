@@ -1,8 +1,6 @@
-import { Flex, Paper, Text } from "@mantine/core";
+import { Badge, Group, Text } from "@mantine/core";
 import { Icon, IconProps } from "@tabler/icons-react";
 import { ForwardRefExoticComponent, RefAttributes } from "react";
-
-import classes from "@/styles/process.module.css";
 
 export default function ProcessItemMetric({
   w,
@@ -14,11 +12,13 @@ export default function ProcessItemMetric({
   value?: string | undefined | boolean;
 }) {
   return (
-    <Paper className={classes.processMetric} radius="md" p={"4px"} px={"10px"}>
-      <Flex align={"center"} justify={"space-between"} gap={"5px"} w={w || "50px"}>
+    <Badge variant="light" radius="md" size="lg" h="30px">
+      <Group align="center" gap="xs">
         <Icon size="1.2rem" />
-        <Text size="md">{value || ""}</Text>
-      </Flex>
-    </Paper>
+        <Text size="sm" fw={600}>
+          {value || ""}
+        </Text>
+      </Group>
+    </Badge>
   );
 }
