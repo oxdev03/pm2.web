@@ -34,7 +34,7 @@
     "@mantine/core": "^9.3.2",
     "@mantine/form": "^9.3.2",
     "@mantine/hooks": "^9.3.2",
-    "@mantine/notifications": "^9.3.2",
+    "@mantine/notifications": "^9.4.1",
     "@pm2.web/mongoose-models": "workspace:*",
     "@pm2.web/typings": "workspace:*",
     "@tabler/icons-react": "^3.44.0",
