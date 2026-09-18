@@ -190,11 +190,7 @@ export default function HomePage({}: InferGetServerSidePropsType<typeof getServe
   });
   const data = dashboardQuery.data!;
 
-  if (dashboardQuery.status !== "success") {
-    return <></>;
-  }
-
-  return (
+  return dashboardQuery.status === "success" ? (
     <>
       <Head>
         <title>pm2.web</title>
@@ -208,6 +204,8 @@ export default function HomePage({}: InferGetServerSidePropsType<typeof getServe
         </Dashboard>
       </SelectedProvider>
     </>
+  ) : (
+    <></>
   );
 }
 

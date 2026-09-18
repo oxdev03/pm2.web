@@ -66,8 +66,9 @@ export function SelectedProvider({ children, servers }: { children: React.ReactN
     if (!user || !user.acl) return false;
     if (!user?.acl?.owner && !user?.acl?.admin) {
       const serverAccess = new Access(user.acl?.servers ?? []);
-      if (permission) return serverAccess.getPerms(serverId, processId).has(PERMISSIONS[permission]);
-      return !!serverAccess.getPermsValue(serverId, processId);
+      return permission
+        ? serverAccess.getPerms(serverId, processId).has(PERMISSIONS[permission])
+        : !!serverAccess.getPermsValue(serverId, processId);
     }
     return true;
   };

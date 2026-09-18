@@ -57,6 +57,12 @@ export default tsEslint.config(
       "unicorn/no-top-level-assignment-in-function": "off",
       "unicorn/no-top-level-side-effects": "off",
       "unicorn/prefer-export-from": "off",
+      "unicorn/no-array-reduce": "off",
+      "unicorn/prefer-ternary": "off",
+      "unicorn/no-computed-property-existence-check": "off",
+      "unicorn/no-immediate-mutation": "off",
+      "unicorn/prefer-simple-condition-first": "off",
+      "unicorn/single-line-block-comment-style": "off",
       "import/newline-after-import": "off",
       "unicorn/filename-case": [
         "error",

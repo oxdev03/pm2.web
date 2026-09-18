@@ -39,15 +39,13 @@ function NavbarLink({ icon: Icon, label, active, href, onClick }: NavbarLinkProp
     </Tooltip>
   );
 
-  if (href) {
-    return (
-      <Link href={href} style={{ textDecoration: "none" }}>
-        {content}
-      </Link>
-    );
-  }
-
-  return content;
+  return href ? (
+    <Link href={href} style={{ textDecoration: "none" }}>
+      {content}
+    </Link>
+  ) : (
+    content
+  );
 }
 
 const navLinks = [

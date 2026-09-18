@@ -17,7 +17,7 @@
     "@pm2.web/typescript-config": "workspace:*",
     "@pm2.web/typings": "workspace:*",
     "bcrypt": "^6.0.0",
-    "mongoose": "^9.7.1"
+    "mongoose": "^9.10.1"
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",

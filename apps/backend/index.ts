@@ -17,10 +17,12 @@ async function createInterval() {
     await updateData(logCapture.clear(), await getCachedSettings());
     const settings = await getCachedSettings();
     // if polling changed clear interval and create new one
-    if (settings.polling.backend !== polling.backend) {
-      clearInterval(interval);
-      await createInterval();
+    if (settings.polling.backend === polling.backend) {
+      return;
     }
+
+    clearInterval(interval);
+    await createInterval();
   }, polling.backend);
 }
 
