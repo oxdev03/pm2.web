@@ -50,7 +50,7 @@ const onChange = async (serverId: string) => {
       await new Promise<void>((resolve, reject) => {
         pm2.restart(change.fullDocument.pm_id, (err) => {
           if (err) {
-            reject(err);
+            return reject(err);
           }
           resolve();
         });
@@ -72,7 +72,7 @@ const onChange = async (serverId: string) => {
           if (_status === "online") {
             pm2.stop(process.pm_id, (err) => {
               if (err) {
-                reject(err);
+                return reject(err);
               }
               resolve();
               _status = "stopped";
@@ -80,7 +80,7 @@ const onChange = async (serverId: string) => {
           } else {
             pm2.restart(process.pm_id, (err) => {
               if (err) {
-                reject(err);
+                return reject(err);
               }
               resolve();
               _status = "online";
@@ -100,17 +100,19 @@ const onChange = async (serverId: string) => {
         },
       );
     }
-    if (change.updateDescription?.updatedFields?.deleteCount) {
-      console.log(`[STREAM] Process ${change.fullDocument.name} deleted`);
-      await new Promise<void>((resolve, reject) => {
-        pm2.delete(change.fullDocument.pm_id, (err) => {
-          if (err) {
-            reject(err);
-          }
-          resolve();
-        });
-      });
+    if (!change.updateDescription?.updatedFields?.deleteCount) {
+      return;
     }
+
+    console.log(`[STREAM] Process ${change.fullDocument.name} deleted`);
+    await new Promise<void>((resolve, reject) => {
+      pm2.delete(change.fullDocument.pm_id, (err) => {
+        if (err) {
+          return reject(err);
+        }
+        resolve();
+      });
+    });
   });
 };
 export default onChange;

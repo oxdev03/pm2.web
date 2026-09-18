@@ -19,11 +19,7 @@ export default function Settings({}: InferGetServerSidePropsType<typeof getServe
   const hasPermission = session?.user?.acl?.owner || session?.user?.acl?.admin;
   const isOAuth2 = !!session?.user?.oauth2?.provider;
 
-  if (getSettingsQuery.status !== "success") {
-    return <></>;
-  }
-
-  return (
+  return getSettingsQuery.status === "success" ? (
     <>
       <Head>
         <title>pm2.web</title>
@@ -69,6 +65,8 @@ export default function Settings({}: InferGetServerSidePropsType<typeof getServe
         </Grid>
       </Dashboard>
     </>
+  ) : (
+    <></>
   );
 }
 

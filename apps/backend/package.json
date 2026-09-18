@@ -34,16 +34,16 @@
     "bcrypt": "^6.0.0",
     "bytes-iec": "^3.1.1",
     "dotenv": "^17.4.2",
-    "mongoose": "^9.7.1",
-    "pm2": "^7.0.1",
-    "systeminformation": "^5.31.7"
+    "mongoose": "^9.10.1",
+    "pm2": "^7.0.4",
+    "systeminformation": "^5.33.11"
   },
   "devDependencies": {
     "@pm2.web/eslint-config": "workspace:*",
     "@pm2.web/typescript-config": "workspace:*",
     "@types/bcrypt": "^6.0.0",
     "dotenv-cli": "^11.0.0",
-    "eslint": "^10.5.0",
+    "eslint": "^10.10.0",
     "typescript": "^6.0.3"
   }
 }

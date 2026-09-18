@@ -12,8 +12,7 @@ class Access {
     const serverPerms = this.userPerms.find((x) => x.server.toString() === server);
     if (serverPerms == undefined) return 0;
     const processPerms = serverPerms.processes.find((x) => x.process.toString() === process);
-    if (processPerms == undefined) return serverPerms.perms;
-    return processPerms.perms;
+    return processPerms == undefined ? serverPerms.perms : processPerms.perms;
   }
 
   public getPerms(server: string, process: string) {

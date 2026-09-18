@@ -18,10 +18,9 @@ export function Head({ mobileOpened, toggleMobile }: { mobileOpened?: boolean; t
   const hasAccess = (server_id: string, process_id: string) => {
     const user = session?.user;
     if (!user || !user.acl) return false;
-    if (!user?.acl?.owner && !user?.acl?.admin) {
-      return !!new Access(user.acl?.servers ?? []).getPermsValue(server_id, process_id);
-    }
-    return true;
+    return !user?.acl?.owner && !user?.acl?.admin
+      ? !!new Access(user.acl?.servers ?? []).getPermsValue(server_id, process_id)
+      : true;
   };
 
   const MultiSelectItems = (
